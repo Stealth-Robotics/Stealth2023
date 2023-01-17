@@ -164,7 +164,7 @@ public class Limelight extends SubsystemBase {
 
     public Pose2d getRobotPose() {
         double[] arr = botpose.getDoubleArray(new double[]{Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN});
-        if (getTagID() != -1) return new Pose2d(arr[0],arr[2],Rotation2d.fromDegrees(arr[5])); 
+        if (getTagID() != -1) return new Pose2d(arr[0],arr[1],Rotation2d.fromDegrees(arr[5])); 
         else return new Pose2d();        
     }
 
