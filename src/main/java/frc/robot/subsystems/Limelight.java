@@ -71,16 +71,17 @@ public class Limelight extends SubsystemBase {
         ShuffleboardTab tab = Shuffleboard.getTab("April Tags");
         tab.getLayout("Bot X", BuiltInLayouts.kList)
                  .withSize(1, 1)
-                 .withPosition(1, 0)
+                 .withPosition(0, 0)
                  .addNumber("Current X", () -> Math.round(getRobotPose().getX() * 100d)/100d);
         tab.getLayout("Bot Y", BuiltInLayouts.kList)
                  .withSize(1, 1)
-                 .withPosition(2, 0)
+                 .withPosition(1, 0)
                  .addNumber("Current Y", () -> Math.round(getRobotPose().getY() * 100d)/100d);
         tab.getLayout("Bot Rot", BuiltInLayouts.kList)
                  .withSize(1, 1)
-                 .withPosition(3, 0)
+                 .withPosition(2, 0)
                  .addNumber("Current Rot", () -> Math.round(getRobotPose().getRotation().getDegrees() * 100d)/100d);
+        
         
             
     }
