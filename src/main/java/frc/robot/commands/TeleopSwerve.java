@@ -34,8 +34,6 @@ public class TeleopSwerve extends CommandBase {
 
     @Override
     public void execute() {
-        SmartDashboard.putNumber("Tag ID:", limelight.getTagID());
-        SmartDashboard.putNumber("Robot X", limelight.getRobotPose().getX());
         /* Get Values, Deadband*/
         double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.stickDeadband);
         double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.stickDeadband);

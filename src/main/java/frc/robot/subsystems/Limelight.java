@@ -5,6 +5,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 // TODO: Add Limelight Heartbeat Functionality ("hb" NetworkTableEntry)
@@ -64,6 +67,22 @@ public class Limelight extends SubsystemBase {
 
         tid = table.getEntry("tid");
         botpose = table.getEntry("botpose");
+
+        ShuffleboardTab tab = Shuffleboard.getTab("April Tags");
+        tab.getLayout("Bot X", BuiltInLayouts.kList)
+                 .withSize(1, 1)
+                 .withPosition(1, 0)
+                 .addNumber("Current X", () -> Math.round(getRobotPose().getX() * 100d)/100d);
+        tab.getLayout("Bot Y", BuiltInLayouts.kList)
+                 .withSize(1, 1)
+                 .withPosition(2, 0)
+                 .addNumber("Current Y", () -> Math.round(getRobotPose().getY() * 100d)/100d);
+        tab.getLayout("Bot Rot", BuiltInLayouts.kList)
+                 .withSize(1, 1)
+                 .withPosition(3, 0)
+                 .addNumber("Current Rot", () -> Math.round(getRobotPose().getRotation().getDegrees() * 100d)/100d);
+        
+            
     }
 
     public boolean hasTarget()
@@ -166,11 +185,6 @@ public class Limelight extends SubsystemBase {
         double[] arr = botpose.getDoubleArray(new double[]{Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN});
         if (getTagID() != -1) return new Pose2d(arr[0],arr[1],Rotation2d.fromDegrees(arr[5])); 
         else return new Pose2d();        
-    }
-
-    public double getRobotPoseX(){
-        double[] arr = botpose.getDoubleArray(new double[]{0, 0, 0, 0, 0, 0});
-        return arr[0];
     }
 
     public NetworkTable getTable() {
