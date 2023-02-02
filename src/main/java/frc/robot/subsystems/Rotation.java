@@ -18,8 +18,6 @@ public class Rotation extends TrapezoidProfileSubsystem {
    private final WPI_TalonFX rotationMotor;
    private final PIDController rotationController;
 
-   public int targetPostition = 0;
-
    private final ArmFeedforward m_feedforward = new ArmFeedforward(
          0, 0, 0, 0);
 
@@ -42,14 +40,16 @@ public class Rotation extends TrapezoidProfileSubsystem {
       return Commands.runOnce(() -> setGoal(kArmOffsetRads), this);
     }
 
+   
+
 
    @Override
    public void useState(TrapezoidProfile.State setpoint) {
       // Calculate the feedforward from the sepoint
       double feedforward = m_feedforward.calculate(setpoint.position, setpoint.velocity);
       // Add the feedforward to the PID output to get the motor output
-      rotationMotor.setSetpoint(
-          setpoint.kPosition, setpoint.position, feedforward / 12.0);
+      rotationController.setSetpoint(
+        rotationController.PIDMode.kPosition, setpoint.position, feedforward / 12.0);
     }
   
    
