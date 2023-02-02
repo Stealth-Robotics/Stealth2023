@@ -62,4 +62,7 @@ public class Intake extends SubsystemBase{
     public void setIntakePower(double motorPower) {
         rightIntakeMotor.set(ControlMode.PercentOutput, motorPower);
     }
+    public boolean isIntakeOut(){
+        return intakeSolenoid.get();
+    }
 }
