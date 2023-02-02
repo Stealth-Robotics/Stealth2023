@@ -5,9 +5,10 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 
-public class Intake {
+public class Intake extends SubsystemBase{
     private final Solenoid intakeSolenoid;
     private final WPI_TalonFX rightIntakeMotor;
     private final WPI_TalonFX leftIntakeMotor;
@@ -20,8 +21,8 @@ public class Intake {
             RobotMap.Pneumatics.INTAKE_DEPLOY_PCM_CHANNEL);
 
         // Finding the motors for right and left.
-        rightIntakeMotor = new WPI_TalonFX(RobotMap.Intake.RIGHT_INTAKE_MOTOR_ID);
-        leftIntakeMotor = new WPI_TalonFX(RobotMap.Intake.LEFT_INTAKE_MOTOR_ID);
+        rightIntakeMotor = new WPI_TalonFX(RobotMap.IntakeIDs.RIGHT_INTAKE_MOTOR_ID);
+        leftIntakeMotor = new WPI_TalonFX(RobotMap.IntakeIDs.LEFT_INTAKE_MOTOR_ID);
 
         // Sets the mode to brake when the motor is not powered.
         rightIntakeMotor.setNeutralMode(NeutralMode.Brake);
