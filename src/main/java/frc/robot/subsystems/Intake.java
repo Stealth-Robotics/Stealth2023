@@ -59,7 +59,7 @@ public class Intake extends SubsystemBase{
 
     }
     
-    public void setIntakePower(double moterPower) {
-        rightIntakeMotor.set(ControlMode.PercentOutput, moterPower);
+    public void setIntakePower(double motorPower) {
+        rightIntakeMotor.set(ControlMode.PercentOutput, motorPower);
     }
 }
