@@ -98,6 +98,18 @@ public class Swerve extends SubsystemBase {
         return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(360 - gyro.getYaw()) : Rotation2d.fromDegrees(gyro.getYaw());
     }
 
+    public double getYawAsDouble() {
+        return gyro.getYaw();
+    }
+
+    public double getPitchAsDouble() {
+        return gyro.getPitch();
+    }
+
+    public double getRollAsDouble(){
+        return gyro.getRoll();
+    }
+
     @Override
     public void periodic(){
         swerveOdometry.update(getYaw(), getModulePositions());  
