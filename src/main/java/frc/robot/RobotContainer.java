@@ -60,8 +60,11 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
+
         //zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
         driverController.a().onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        driverController.b().whileTrue(new LevelRobot(s_Swerve));
+        //driverController.a().onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
     }
 
     /**

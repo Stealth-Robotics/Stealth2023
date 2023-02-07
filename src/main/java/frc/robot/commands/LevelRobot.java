@@ -37,7 +37,7 @@ public class LevelRobot extends CommandBase{
         double calculationHeading = headingPid.calculate(deltaYaw * -1, 0);
         calculationMovement = MathUtil.clamp(calculationMovement, -0.45, 0.45);
         calculationHeading = MathUtil.clamp(calculationHeading, -0.5, 0.5);
-        drive.drive(new Translation2d(calculationMovement, 0), calculationHeading, false, true);
+        drive.drive(new Translation2d(calculationMovement, 0), 0, false, true);
         System.out.printf("Calculation: %5.2f | Gyro: %5.2f | CalculationHeading: %5.2f | GyroYaw: %5.2f | HeadingError: %5.2f\n",calculationMovement, roll, calculationHeading, yaw, deltaYaw);
         
     }
