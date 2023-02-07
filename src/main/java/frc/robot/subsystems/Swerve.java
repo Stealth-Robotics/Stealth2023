@@ -10,10 +10,15 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 import com.ctre.phoenix.sensors.Pigeon2;
 
+import edu.wpi.first.math.controller.HolonomicDriveController;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -21,7 +26,25 @@ public class Swerve extends SubsystemBase {
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
+
     private Pose2d targetPose = null;
+
+
+    private Rotation2d lastGivenRotation;
+    private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
+
+    private final ProfiledPIDController thetaController = new ProfiledPIDController(
+            Constants.AutoConstants.kPThetaController, 0, 0,
+            Constants.AutoConstants.kThetaControllerConstraints);
+
+    private final PIDController xController = new PIDController(Constants.AutoConstants.kPXController, 0, 0);
+    private final PIDController yController = new PIDController(Constants.AutoConstants.kPYController, 0, 0);
+
+    private final HolonomicDriveController pathController = new HolonomicDriveController(
+            xController,
+            yController,
+            thetaController);
+    
 
     public Swerve() {
         targetPose = Constants.ScoringPositions.left;
@@ -59,6 +82,27 @@ public class Swerve extends SubsystemBase {
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
         }
     }    
+
+        /**
+     * Moves the drivebase around by running the swerve modules.
+     * 
+     * @param chassisSpeeds The x, y, and theta the drivebase must move in.
+     */
+    public void drive(ChassisSpeeds chassisSpeeds) {
+        this.chassisSpeeds = chassisSpeeds;
+    }
+
+    public void drive(Trajectory.State targetState, Rotation2d targetRotation) {
+        // determine ChassisSpeeds from path state and positional feedback control from
+        // HolonomicDriveController
+        lastGivenRotation = targetRotation;
+        ChassisSpeeds targetChassisSpeeds = pathController.calculate(
+                getPose(),
+                targetState,
+                targetRotation);
+        // command robot to reach the target ChassisSpeeds
+        drive(targetChassisSpeeds);
+    }
 
     /* Used by SwerveControllerCommand in Auto */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
