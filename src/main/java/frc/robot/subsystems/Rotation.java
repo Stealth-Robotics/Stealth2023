@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import frc.robot.RobotMap;
@@ -18,11 +19,22 @@ public class Rotation extends SubsystemBase {
       rotationController = new PIDController(0, 0, 0);
       feedforward = new ArmFeedforward(
             0, 0, 0, 0);
+           
+   }
+   public void setSetpoint(double setpoint)
+   {
+      rotationController.setSetpoint(setpoint);
+   }
+   
+   public double getRotationPositionRadians()
+   {
+      //convert this from raw sensor unit to radians
+      return Math.toRadians(rotationMotor.getSelectedSensorPosition());
    }
 
-   public void setPosition(double setpoint) {
-      rotationMotor.setVoltage(feedforward.calculate(rotationMotor.getSelectedSensorPosition(),0.1)
-            + rotationController.calculate(setpoint));
+   public void updatePosition() {
+      rotationMotor.setVoltage(feedforward.calculate(getRotationPositionRadians(), 0.1)
+            + rotationController.calculate(getRotationPositionRadians()));
    }
 
 }
