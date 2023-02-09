@@ -13,13 +13,13 @@ public class PhotonVisionCameraWrapper {
     PhotonPoseEstimator photonPoseEstimator;
 
     public PhotonVisionCameraWrapper() {
-        camera = new PhotonCamera(Constants.PhotonVisionConstants.cameraName);
+        camera = new PhotonCamera(Constants.PhotonVisionConstants.CAMERA_NAME);
 
         photonPoseEstimator = new PhotonPoseEstimator(
-            Constants.PhotonVisionConstants.aprilTagFieldLayout,
-            Constants.PhotonVisionConstants.poseStrategy, 
+            Constants.PhotonVisionConstants.APRIL_TAG_FIELD_LAYOUT,
+            Constants.PhotonVisionConstants.POSE_STRATEGY, 
             camera, 
-            Constants.PhotonVisionConstants.robotCenterToCamera
+            Constants.PhotonVisionConstants.ROBOT_CENTER_TO_CAMERA
         );
     }
 

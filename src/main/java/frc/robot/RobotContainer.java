@@ -21,7 +21,7 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
     /* Controllers */
     private final Joystick driver = new Joystick(0);
-    private final CommandXboxController driverController = new CommandXboxController(Constants.IOConstants.kDriverControllerPort);
+    private final CommandXboxController driverController = new CommandXboxController(Constants.IOConstants.DRIVER_CONTROLLER_PORT);
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
