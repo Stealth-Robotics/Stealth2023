@@ -78,7 +78,7 @@ public class SwerveControllerFollower extends CommandBase {
             targetRotation = ((PathPlannerState) targetState).holonomicRotation;
         }
 
-        drivetrain.drive(targetState, targetRotation);
+        drivetrain.drive(targetState, targetRotation, true);
 
         // Pose2d targetPose = targetState.poseMeters;
         // SmartDashboard.putNumber("Target Heading",

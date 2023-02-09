@@ -33,22 +33,18 @@ public class Swerve extends SubsystemBase {
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
 
-
-    private Rotation2d lastGivenRotation;
-    private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
+    private final PIDController xController = new PIDController(Constants.AutoConstants.X_CONTROLLER_P_COEFF, 0, 0);
+    private final PIDController yController = new PIDController(Constants.AutoConstants.Y_CONTROLLER_P_COEFF, 0, 0);
 
     private final ProfiledPIDController thetaController = new ProfiledPIDController(
-            Constants.AutoConstants.kPThetaController, 0, 0,
-            Constants.AutoConstants.kThetaControllerConstraints);
-
-    private final PIDController xController = new PIDController(Constants.AutoConstants.kPXController, 0, 0);
-    private final PIDController yController = new PIDController(Constants.AutoConstants.kPYController, 0, 0);
+            Constants.AutoConstants.THETA_CONTROLLER_P_COEFF, 0, 0,
+            Constants.AutoConstants.THETA_CONTROLLER_CONSTRAINTS);
 
     private final HolonomicDriveController pathController = new HolonomicDriveController(
             xController,
             yController,
             thetaController);
-    
+
 
     public Swerve() {
         pcw = new PhotonVisionCameraWrapper();
@@ -86,27 +82,28 @@ public class Swerve extends SubsystemBase {
         for(SwerveModule mod : mSwerveMods){
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
         }
-    }    
-
-        /**
-     * Moves the drivebase around by running the swerve modules.
-     * 
-     * @param chassisSpeeds The x, y, and theta the drivebase must move in.
-     */
-    public void drive(ChassisSpeeds chassisSpeeds) {
-        this.chassisSpeeds = chassisSpeeds;
     }
 
-    public void drive(Trajectory.State targetState, Rotation2d targetRotation) {
+    public void drive(ChassisSpeeds chassisSpeeds, boolean isOpenLoop)
+    {
+        SwerveModuleState[] swerveModuleStates = Constants.Swerve.SWERVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
+
+        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.MAX_SPEED);
+
+        for(SwerveModule mod : mSwerveMods){
+            mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
+        }
+    }
+
+    public void drive(Trajectory.State targetState, Rotation2d targetRotation, boolean isOpenLoop) {
         // determine ChassisSpeeds from path state and positional feedback control from
         // HolonomicDriveController
-        lastGivenRotation = targetRotation;
         ChassisSpeeds targetChassisSpeeds = pathController.calculate(
                 getPose(),
                 targetState,
                 targetRotation);
         // command robot to reach the target ChassisSpeeds
-        drive(targetChassisSpeeds);
+        drive(targetChassisSpeeds, isOpenLoop);
     }
 
     /* Used by SwerveControllerCommand in Auto */
@@ -164,6 +161,7 @@ public class Swerve extends SubsystemBase {
 
     @Override
     public void periodic(){
+
         swerveOdometry.update(getYaw(), getModulePositions());
 
         Optional<EstimatedRobotPose> result =

@@ -183,9 +183,10 @@ public final class Constants {
         public static final double MAX_ANGULAR_SPEED_RAD_PER_SEC = Math.PI;
         public static final double MAX_ANGULAR_SPEED_RAD_PER_SEC_SQUARED = Math.PI;
 
-        public static final double X_CONTROLLER_P_COEFF = 1;
-        public static final double Y_CONTROLLER_P_COEFF = 1;
-        public static final double THETA_CONTROLLER_P_COEFF = 1;
+        // TODO: Tune - Current Values From FRC 4089 2022
+        public static final double X_CONTROLLER_P_COEFF = 3;
+        public static final double Y_CONTROLLER_P_COEFF = 3;
+        public static final double THETA_CONTROLLER_P_COEFF = 4;
 
         /* Constraint for the motion profilied robot angle controller */
         public static final TrapezoidProfile.Constraints THETA_CONTROLLER_CONSTRAINTS = new TrapezoidProfile.Constraints(
