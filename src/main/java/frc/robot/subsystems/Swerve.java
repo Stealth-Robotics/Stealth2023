@@ -32,7 +32,7 @@ public class Swerve extends SubsystemBase {
     public Swerve() {
         pcw = new PhotonVisionCameraWrapper();
 
-        gyro = new Pigeon2(RobotMap.Drivebase.pigeonID);
+        gyro = new Pigeon2(RobotMap.Drivebase.PIGEON_ID);
         gyro.configFactoryDefault();
         zeroGyro();
 

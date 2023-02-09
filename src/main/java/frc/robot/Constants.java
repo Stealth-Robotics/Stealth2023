@@ -137,9 +137,9 @@ public final class Constants {
         public static final class Mod0 { // TODO: This must be tuned to specific robot
             public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(112.84);
             public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(
-                    RobotMap.Drivebase.Mod0.driveMotorID,
-                    RobotMap.Drivebase.Mod0.angleMotorID,
-                    RobotMap.Drivebase.Mod0.canCoderID,
+                    RobotMap.Drivebase.Mod0.DRIVE_MOTOR_ID,
+                    RobotMap.Drivebase.Mod0.ANGLE_MOTOR_ID,
+                    RobotMap.Drivebase.Mod0.CANCODER_ID,
                     ANGLE_OFFSET);
         }
 
@@ -147,9 +147,9 @@ public final class Constants {
         public static final class Mod1 { // TODO: This must be tuned to specific robot
             public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(68.936);
             public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(
-                    RobotMap.Drivebase.Mod1.driveMotorID,
-                    RobotMap.Drivebase.Mod1.angleMotorID,
-                    RobotMap.Drivebase.Mod1.canCoderID,
+                    RobotMap.Drivebase.Mod1.DRIVE_MOTOR_ID,
+                    RobotMap.Drivebase.Mod1.ANGLE_MOTOR_ID,
+                    RobotMap.Drivebase.Mod1.CANCODER_ID,
                     ANGLE_OFFSET);
         }
 
@@ -157,9 +157,9 @@ public final class Constants {
         public static final class Mod2 { // TODO: This must be tuned to specific robot
             public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(75.434);
             public static final SwerveModuleConstants OFFSET = new SwerveModuleConstants(
-                    RobotMap.Drivebase.Mod2.driveMotorID,
-                    RobotMap.Drivebase.Mod2.angleMotorID,
-                    RobotMap.Drivebase.Mod2.canCoderID,
+                    RobotMap.Drivebase.Mod2.DRIVE_MOTOR_ID,
+                    RobotMap.Drivebase.Mod2.ANGLE_MOTOR_ID,
+                    RobotMap.Drivebase.Mod2.CANCODER_ID,
                     ANGLE_OFFSET);
         }
 
@@ -167,9 +167,9 @@ public final class Constants {
         public static final class Mod3 { // TODO: This must be tuned to specific robot
             public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(-104.003);
             public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(
-                    RobotMap.Drivebase.Mod3.driveMotorID,
-                    RobotMap.Drivebase.Mod3.angleMotorID,
-                    RobotMap.Drivebase.Mod3.canCoderID,
+                    RobotMap.Drivebase.Mod3.DRIVE_MOTOR_ID,
+                    RobotMap.Drivebase.Mod3.ANGLE_MOTOR_ID,
+                    RobotMap.Drivebase.Mod3.CANCODER_ID,
                     ANGLE_OFFSET);
         }
     }
