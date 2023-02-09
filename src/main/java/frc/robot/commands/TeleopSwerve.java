@@ -38,10 +38,10 @@ public class TeleopSwerve extends CommandBase {
         double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.stickDeadband);
         double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.stickDeadband);
         double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.stickDeadband);
-        
-        if (limelight.getTagID() != -1){
-            drivebase.addVisionMeasurement(limelight.getRobotPose(), limelight.getPipelineLatency());
-        }
+        /*
+        if (limelight.hasTarget()){
+            drivebase.addVisionMeasurement(limelight.getRobotPose(), limelight.getPipelineLatency() / 1000);
+        }*/
 
         /* Drive */
         drivebase.drive(

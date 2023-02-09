@@ -34,6 +34,7 @@ public class RobotContainer {
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
+    private final Limelight limelight = new Limelight();
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -44,7 +45,8 @@ public class RobotContainer {
                 () -> -driverController.getRawAxis(translationAxis), 
                 () -> -driverController.getRawAxis(strafeAxis), 
                 () -> -driverController.getRawAxis(rotationAxis), 
-                () -> driverController.b().getAsBoolean()
+                () -> driverController.b().getAsBoolean(),
+                limelight
             )
         );
 

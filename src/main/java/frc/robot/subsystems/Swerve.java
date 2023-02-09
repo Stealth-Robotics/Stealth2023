@@ -72,7 +72,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public void addVisionMeasurement(Pose2d pose, double latency) {
-        swerveOdometry.addVisionMeasurement(pose, latency);
+        swerveOdometry.addVisionMeasurement(pose, 0.01);
     }
 
     public void resetOdometry(Pose2d pose) {
@@ -118,7 +118,7 @@ public class Swerve extends SubsystemBase {
     @Override
     public void periodic(){
         swerveOdometry.update(getYaw(), getModulePositions());  
-
+        System.out.println(swerveOdometry.getEstimatedPosition());
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getPosition().angle.getDegrees());
