@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import java.util.function.BooleanSupplier;
+
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
@@ -12,6 +14,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Swerve;
@@ -28,13 +31,26 @@ public class SwerveControllerFollower extends CommandBase {
     private final Trajectory trajectory;
     private Timer timer = new Timer();
     private Pose2d initialPathPlannerPose = null;
+    private BooleanSupplier button = null;
 
     public SwerveControllerFollower(Swerve drivetrain, Trajectory trajectory) {
         this.drivetrain = drivetrain;
         this.trajectory = trajectory;
+        this.button = null;
 
         addRequirements(drivetrain);
     }
+    public SwerveControllerFollower(Swerve drivetrain, BooleanSupplier button) {
+        this.drivetrain = drivetrain;
+        this.trajectory = TrajectoryGenerator.generateTrajectory(drivetrain.getPose(), 
+            null, 
+            drivetrain.getTargetPosition(), 
+        null);
+        this.button = button;
+
+        addRequirements(drivetrain);
+    }
+
 
     public SwerveControllerFollower(Swerve drivetrain, String pathFilename, TrajectoryConfig config,
             boolean isReversed, boolean isInitial) {
@@ -44,7 +60,7 @@ public class SwerveControllerFollower extends CommandBase {
         PathPlannerTrajectory ppTrajectory = PathPlanner.loadPath(pathFilename, config.getMaxVelocity(),
                 config.getMaxAcceleration(), isReversed);
         this.trajectory = ppTrajectory;
-
+        this.button = null;
         if (isInitial) {
             initialPathPlannerPose = new Pose2d(
                     ppTrajectory.getInitialPose().getTranslation(),
@@ -97,6 +113,6 @@ public class SwerveControllerFollower extends CommandBase {
     @Override
     public boolean isFinished() {
         // the path is time parametrized and takes a certain number of seconds
-        return timer.hasElapsed(trajectory.getTotalTimeSeconds());
+        return (timer.hasElapsed(trajectory.getTotalTimeSeconds()) || (button != null && !button.getAsBoolean()));
     }
 }

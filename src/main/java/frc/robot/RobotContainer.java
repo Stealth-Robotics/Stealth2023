@@ -1,5 +1,7 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -64,9 +66,11 @@ public class RobotContainer {
         //zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
         driverController.a().onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
         driverController.b().whileTrue(new LevelRobot(s_Swerve));
+        driverController.x().onTrue(new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(0.0, 0.0, new Rotation2d(0)))));
+        driverController.y().onTrue(new SwerveControllerFollower(s_Swerve, () -> driverController.y().getAsBoolean()));
 
 
-        
+
         controlBoard.button(1).onTrue(new InstantCommand(() -> s_Swerve.setTargetPosition(Constants.ScoringPositions.left)));
         controlBoard.button(2).onTrue(new InstantCommand(() -> s_Swerve.setTargetPosition(Constants.ScoringPositions.middle)));
         controlBoard.button(3).onTrue(new InstantCommand(() -> s_Swerve.setTargetPosition(Constants.ScoringPositions.right)));

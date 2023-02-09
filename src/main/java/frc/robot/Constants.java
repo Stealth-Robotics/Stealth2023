@@ -162,7 +162,7 @@ public final class Constants {
     }
     public static final class ScoringPositions{
         public static final Pose2d left = new Pose2d(0.0, 0.0, new Rotation2d(0));
-        public static final Pose2d middle = new Pose2d(1.0, 0.0, new Rotation2d(0));
-        public static final Pose2d right = new Pose2d(2.0, 0.0, new Rotation2d(0));
+        public static final Pose2d middle = new Pose2d(Units.feetToMeters(1.0), 0.0, Rotation2d.fromDegrees(0.0));
+        public static final Pose2d right = new Pose2d(Units.feetToMeters(2.0), 0.0, Rotation2d.fromDegrees(0.0));
     }
 }
