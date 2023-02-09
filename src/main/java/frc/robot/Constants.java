@@ -51,7 +51,6 @@ public final class Constants {
     }
 
     public static final class Swerve {
-        public static final int pigeonID = 1;
         public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
 
         public static final COTSFalconSwerveConstants chosenModule = COTSFalconSwerveConstants

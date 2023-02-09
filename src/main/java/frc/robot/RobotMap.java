@@ -3,10 +3,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 public class RobotMap {
-    public static final class Pigeon{
-        public static final int PIGEON_ID = 2;
-    }
     public static final class Drivebase {
+        public static final int pigeonID = 2;
+
         /* Front Left Module - Module 0 */
         public static final class Mod0 {
             public static final int driveMotorID = 14;
