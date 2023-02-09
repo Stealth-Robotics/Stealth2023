@@ -2,10 +2,15 @@ package frc.robot.subsystems;
 
 import frc.robot.SwerveModule;
 import frc.robot.Constants;
+import frc.robot.PhotonVisionCameraWrapper;
 import frc.robot.RobotMap;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+
+import java.util.Optional;
+
+import org.photonvision.EstimatedRobotPose;
 
 import com.ctre.phoenix.sensors.Pigeon2;
 
@@ -18,11 +23,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Swerve extends SubsystemBase {
+    public PhotonVisionCameraWrapper pcw;
+
     public SwerveDrivePoseEstimator swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
 
     public Swerve() {
+        pcw = new PhotonVisionCameraWrapper();
+
         gyro = new Pigeon2(RobotMap.Pigeon.PIGEON_ID);
         gyro.configFactoryDefault();
         zeroGyro();
@@ -71,10 +80,6 @@ public class Swerve extends SubsystemBase {
         return swerveOdometry.getEstimatedPosition();
     }
 
-    public void addVisionMeasurement(Pose2d pose, double latency) {
-        swerveOdometry.addVisionMeasurement(pose, 0.01);
-    }
-
     public void resetOdometry(Pose2d pose) {
         swerveOdometry.resetPosition(getYaw(), getModulePositions(), pose);
     }
@@ -117,8 +122,22 @@ public class Swerve extends SubsystemBase {
 
     @Override
     public void periodic(){
-        swerveOdometry.update(getYaw(), getModulePositions());  
+        swerveOdometry.update(getYaw(), getModulePositions());
+
+        Optional<EstimatedRobotPose> result =
+                pcw.getEstimatedGlobalPose(swerveOdometry.getEstimatedPosition());
+
+        if(result.isPresent())
+        {
+            EstimatedRobotPose camPose = result.get();
+            swerveOdometry.addVisionMeasurement(
+                    camPose.estimatedPose.toPose2d(), 
+                    camPose.timestampSeconds
+            );
+        }
+
         System.out.println(swerveOdometry.getEstimatedPosition());
+        
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getPosition().angle.getDegrees());
