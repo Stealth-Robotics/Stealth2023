@@ -212,5 +212,6 @@ public class Limelight extends SubsystemBase {
 
     @Override
     public void periodic() {
+        System.out.println(getPipelineLatency());
     }
 }
