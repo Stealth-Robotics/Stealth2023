@@ -21,8 +21,10 @@ public class Swerve extends SubsystemBase {
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
+    private Pose2d targetPose = null;
 
     public Swerve() {
+        targetPose = Constants.ScoringPositions.left;
         gyro = new Pigeon2(RobotMap.Pigeon.PIGEON_ID);
         gyro.configFactoryDefault();
         zeroGyro();
@@ -111,6 +113,13 @@ public class Swerve extends SubsystemBase {
         return gyro.getRoll();
     }
 
+    public void setTargetPosition(Pose2d targetPose){
+        this.targetPose = targetPose;
+        System.out.println(targetPose.getX() + " " + targetPose.getY() + " " + targetPose.getRotation().getDegrees());
+    }
+    public Pose2d getTargetPosition(){
+        return targetPose;
+    }
     @Override
     public void periodic(){
         swerveOdometry.update(getYaw(), getModulePositions());  

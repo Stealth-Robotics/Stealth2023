@@ -2,6 +2,7 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -15,6 +16,7 @@ public final class Constants {
     public static final class IOConstants{
         public static final int kDriverControllerPort = 0;
         public static final int kOperatorControllerPort = 1;
+        public static final int controlBoardPort = 2;
     }
     public static final class Swerve {
         public static final int pigeonID = 1;
@@ -99,7 +101,7 @@ public final class Constants {
                 new SwerveModuleConstants(
                     RobotMap.Drivebase.Mod0.driveMotorID, 
                     RobotMap.Drivebase.Mod0.angleMotorID, 
-                    RobotMap.Drivebase.Mod0.canCoderID, 
+                    RobotMap.Drivebase.Mod0.canCoderID,
                     angleOffset
                 );
         }
@@ -156,5 +158,10 @@ public final class Constants {
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
             new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+    }
+    public static final class ScoringPositions{
+        public static final Pose2d left = new Pose2d(0.0, 0.0, new Rotation2d(0));
+        public static final Pose2d middle = new Pose2d(1.0, 0.0, new Rotation2d(0));
+        public static final Pose2d right = new Pose2d(2.0, 0.0, new Rotation2d(0));
     }
 }

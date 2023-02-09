@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -22,6 +22,7 @@ public class RobotContainer {
     /* Controllers */
     private final Joystick driver = new Joystick(0);
     private final CommandXboxController driverController = new CommandXboxController(Constants.IOConstants.kDriverControllerPort);
+    private final CommandXboxController controlBoard = new CommandXboxController(Constants.IOConstants.controlBoardPort);
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
@@ -30,7 +31,6 @@ public class RobotContainer {
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
@@ -64,6 +64,14 @@ public class RobotContainer {
         //zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
         driverController.a().onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
         driverController.b().whileTrue(new LevelRobot(s_Swerve));
+
+
+        
+        controlBoard.button(1).onTrue(new InstantCommand(() -> s_Swerve.setTargetPosition(Constants.ScoringPositions.left)));
+        controlBoard.button(2).onTrue(new InstantCommand(() -> s_Swerve.setTargetPosition(Constants.ScoringPositions.middle)));
+        controlBoard.button(3).onTrue(new InstantCommand(() -> s_Swerve.setTargetPosition(Constants.ScoringPositions.right)));
+
+        
         //driverController.a().onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
     }
 
