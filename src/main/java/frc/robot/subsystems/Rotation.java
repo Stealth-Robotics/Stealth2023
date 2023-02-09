@@ -13,12 +13,18 @@ public class Rotation extends SubsystemBase {
    private final PIDController rotationController;
    private final ArmFeedforward feedforward;
 
+   private final double ticksPerRev = 2048;
+   private final double steering_reduction = 1;
+   private final double positionCoefficient =  2.0 * Math.PI / ticksPerRev * steering_reduction;
+ 
+  
    public Rotation() {
       rotationMotor = new WPI_TalonFX(RobotMap.ArmHardware.ROTATION_MOTOR);
       rotationMotor.setNeutralMode(NeutralMode.Brake);
-      rotationController = new PIDController(0, 0, 0);
+      rotationController = new PIDController(1, 0, 0);
       feedforward = new ArmFeedforward(
-            0, 0, 0, 0);
+            1, 1, 0.5, 0.1);
+       
            
    }
    public void setSetpoint(double setpoint)
@@ -29,7 +35,7 @@ public class Rotation extends SubsystemBase {
    public double getRotationPositionRadians()
    {
       //convert this from raw sensor unit to radians
-      return Math.toRadians(rotationMotor.getSelectedSensorPosition());
+      return (rotationMotor.getSelectedSensorPosition() * positionCoefficient);
    }
 
    public void updatePosition() {
