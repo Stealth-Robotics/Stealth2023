@@ -5,11 +5,11 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 
-
-public class IntakeDefaultCommand extends CommandBase{
+public class IntakeDefaultCommand extends CommandBase {
     private final Intake intake;
     private final DoubleSupplier trigger;
-    public IntakeDefaultCommand (Intake intake, DoubleSupplier trigger){
+
+    public IntakeDefaultCommand(Intake intake, DoubleSupplier trigger) {
         this.intake = intake;
         this.trigger = trigger;
         addRequirements(intake);
@@ -17,6 +17,13 @@ public class IntakeDefaultCommand extends CommandBase{
 
     @Override
     public void execute() {
-        intake.setIntakePower(trigger.getAsDouble());
+        if(trigger.getAsDouble() > 0.05){
+            intake.deployIntake();
+            intake.setIntakePower(trigger.getAsDouble());
+        }
+        else{
+            intake.retractIntake();
+            intake.setIntakePower(0);
+        }
     }
 }
