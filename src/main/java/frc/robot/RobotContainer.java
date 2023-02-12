@@ -15,16 +15,21 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in
+ * the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of
+ * the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
     /* Controllers */
     private final Joystick driver = new Joystick(0);
-    private final CommandXboxController driverController = new CommandXboxController(Constants.IOConstants.kDriverControllerPort);
-    private final CommandXboxController controlBoard = new CommandXboxController(Constants.IOConstants.controlBoardPort);
+    private final CommandXboxController driverController = new CommandXboxController(
+            Constants.IOConstants.kDriverControllerPort);
+    private final CommandXboxController controlBoard = new CommandXboxController(
+            Constants.IOConstants.controlBoardPort);
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
@@ -37,46 +42,51 @@ public class RobotContainer {
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
 
-
-    /** The container for the robot. Contains subsystems, OI devices, and commands. */
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+     */
     public RobotContainer() {
         s_Swerve.setDefaultCommand(
-            new TeleopSwerve(
-                s_Swerve, 
-                () -> -driverController.getRawAxis(translationAxis), 
-                () -> -driverController.getRawAxis(strafeAxis), 
-                () -> -driverController.getRawAxis(rotationAxis), 
-                () -> driverController.b().getAsBoolean()
-            )
-        );
+                new TeleopSwerve(
+                        s_Swerve,
+                        () -> -driverController.getRawAxis(translationAxis),
+                        () -> -driverController.getRawAxis(strafeAxis),
+                        () -> -driverController.getRawAxis(rotationAxis),
+                        () -> driverController.leftBumper().getAsBoolean(),
+                        () -> driverController.rightBumper().getAsBoolean()));
 
         // Configure the button bindings
         configureButtonBindings();
     }
 
     /**
-     * Use this method to define your button->command mappings. Buttons can be created by
+     * Use this method to define your button->command mappings. Buttons can be
+     * created by
      * instantiating a {@link GenericHID} or one of its subclasses ({@link
-     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
+     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
+     * it to a {@link
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
 
-        //zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        // zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
         driverController.a().onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
         driverController.b().whileTrue(new LevelRobot(s_Swerve));
-        driverController.x().onTrue(new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(0.0, 0.0, new Rotation2d(0)))));
+        driverController.x()
+                .onTrue(new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(0.0, 0.0, new Rotation2d(0)))));
         driverController.y().onTrue(new SwerveControllerFollower(s_Swerve, () -> driverController.y().getAsBoolean()));
+        driverController.start().onTrue(new InstantCommand(() -> System.out
+                .println("Current pose: " + s_Swerve.getPose().getX() + " " + s_Swerve.getPose().getY())));
 
+        controlBoard.button(1)
+                .onTrue(new InstantCommand(() -> s_Swerve.setTargetPosition(Constants.ScoringPositions.left)));
+        controlBoard.button(2)
+                .onTrue(new InstantCommand(() -> s_Swerve.setTargetPosition(Constants.ScoringPositions.middle)));
+        controlBoard.button(3)
+                .onTrue(new InstantCommand(() -> s_Swerve.setTargetPosition(Constants.ScoringPositions.right)));
 
-
-        controlBoard.button(1).onTrue(new InstantCommand(() -> s_Swerve.setTargetPosition(Constants.ScoringPositions.left)));
-        controlBoard.button(2).onTrue(new InstantCommand(() -> s_Swerve.setTargetPosition(Constants.ScoringPositions.middle)));
-        controlBoard.button(3).onTrue(new InstantCommand(() -> s_Swerve.setTargetPosition(Constants.ScoringPositions.right)));
-
-        
-        //driverController.a().onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        // driverController.a().onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
     }
 
     /**
