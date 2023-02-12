@@ -22,11 +22,11 @@ public class Rotator extends ProfiledPIDSubsystem {
    public Rotator() {
       super(
             new ProfiledPIDController(
-                  Constants.ArmConstants.ARM_P_COEFF,
-                  Constants.ArmConstants.ARM_I_COEFF,
-                  Constants.ArmConstants.ARM_D_COEFF,
+                  Constants.RotatorConstants.ROTATOR_P_COEFF,
+                  Constants.RotatorConstants.ROTATOR_I_COEFF,
+                  Constants.RotatorConstants.ROTATOR_D_COEFF,
                   new TrapezoidProfile.Constraints(
-                        Constants.ArmConstants.MAX_VELOCITY,
+                        Constants.RotatorConstants.MAX_VELOCITY,
                         Constants.ArmConstants.MAX_ACCELERATION)),
             0);
 
@@ -36,10 +36,10 @@ public class Rotator extends ProfiledPIDSubsystem {
       encoder = new DutyCycleEncoder(RobotMap.Arm.ENCODER_PORT);
 
       feedforward = new ArmFeedforward(
-            Constants.ArmConstants.ARM_KS_COEFF,
-            Constants.ArmConstants.ARM_KG_COEFF,
-            Constants.ArmConstants.ARM_KV_COEFF,
-            Constants.ArmConstants.ARM_KA_COEFF);
+            Constants.RotatorConstants.ROTATOR_KS_COEFF,
+            Constants.RotatorConstants.ROTATOR_KG_COEFF,
+            Constants.RotatorConstants.ROTATOR_KV_COEFF,
+            Constants.RotatorConstants.ROTATOR_KA_COEFF);
 
       encoder.setDistancePerRotation(getMeasurement());
    }
@@ -67,7 +67,7 @@ public class Rotator extends ProfiledPIDSubsystem {
       super.periodic();
 
       // TODO: Test If Accurate After Entering Constants
-      System.out.println("Current Arm Degrees: " + (encoder.getAbsolutePosition()
+      System.out.println("Current Rotation Degrees: " + (encoder.getAbsolutePosition()
             * (360 * Constants.ArmConstants.GEAR_RATIO / Constants.ArmConstants.ENCODER_CPR))
             + Constants.ArmConstants.ENCODER_OFFSET);
    }
