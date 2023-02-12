@@ -17,13 +17,6 @@ public class IntakeDefaultCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if(trigger.getAsDouble() > 0.05){
-            intake.deployIntake();
-            intake.setIntakePower(trigger.getAsDouble());
-        }
-        else{
-            intake.retractIntake();
-            intake.setIntakePower(0);
-        }
+        intake.setIntakePower(trigger.getAsDouble());
     }
 }
