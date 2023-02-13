@@ -23,6 +23,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -45,6 +46,7 @@ public class Swerve extends SubsystemBase {
             yController,
             thetaController);
 
+    private Field2d field2d;
 
     public Swerve() {
         pcw = new PhotonVisionCameraWrapper();
@@ -61,6 +63,9 @@ public class Swerve extends SubsystemBase {
         };
         //TODO: Set the actual pose
         swerveOdometry = new SwerveDrivePoseEstimator(Constants.Swerve.SWERVE_KINEMATICS, getYaw(), getModulePositions(), new Pose2d());
+
+        field2d = new Field2d();
+        SmartDashboard.putData(field2d);
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
@@ -176,7 +181,7 @@ public class Swerve extends SubsystemBase {
             );
         }
 
-        System.out.println(swerveOdometry.getEstimatedPosition());
+        field2d.setRobotPose(getPose());
         
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
