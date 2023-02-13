@@ -63,6 +63,11 @@ public class Rotator extends ProfiledPIDSubsystem {
    }
 
    @Override
+   public void setGoal(double goal){
+      super.setGoal(goal);
+   }
+
+   @Override
    public void periodic() {
       super.periodic();
 
