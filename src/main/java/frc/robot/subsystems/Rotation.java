@@ -43,4 +43,8 @@ public class Rotation extends SubsystemBase {
             + rotationController.calculate(getRotationPositionRadians()));
    }
 
+   public boolean atSetpoint(){
+      return rotationController.atSetpoint();
+   }
+
 }

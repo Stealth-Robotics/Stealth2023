@@ -16,4 +16,8 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+
+  public static final class ArmConstants{
+    public static final int ARM_TICKS_PER_MILLISECOND = 1;
+  }
 }
