@@ -161,8 +161,34 @@ public final class Constants {
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
     public static final class ScoringPositions{
+        //FOR TESTING
         public static final Pose2d left = new Pose2d(0.0, 0.0, new Rotation2d(0));
         public static final Pose2d middle = new Pose2d(Units.feetToMeters(1.0), 0.0, Rotation2d.fromDegrees(0.0));
         public static final Pose2d right = new Pose2d(Units.feetToMeters(2.0), 0.0, Rotation2d.fromDegrees(0.0));
+
+
+        //REAL SCORING POSITIONS, numbers get larger as moving right
+        public static final Pose2d BLUE_CONE_1 = new Pose2d(1.5, 0.5, new Rotation2d(0));
+        public static final Pose2d BLUE_CONE_2 = new Pose2d(1.5, 1.65, new Rotation2d(0));
+        public static final Pose2d BLUE_CONE_3 = new Pose2d(1.5, 2.2, new Rotation2d(0));
+        public static final Pose2d BLUE_CONE_4 = new Pose2d(1.5, 3.3, new Rotation2d(0));
+        public static final Pose2d BLUE_CONE_5 = new Pose2d(1.5, 3.85, new Rotation2d(0));
+        public static final Pose2d BLUE_CONE_6 = new Pose2d(1.5, 5.0, new Rotation2d(0));
+        
+        public static final Pose2d BLUE_CUBE_1 = new Pose2d(1.5, 1.05, new Rotation2d(0));
+        public static final Pose2d BLUE_CUBE_2 = new Pose2d(1.5, 2.75, new Rotation2d(0));
+        public static final Pose2d BLUE_CUBE_3 = new Pose2d(1.5, 4.40, new Rotation2d(0));
+
+        public static final Pose2d RED_CONE_1 = new Pose2d(15.1, 0.5, new Rotation2d(0));
+        public static final Pose2d RED_CONE_2 = new Pose2d(15.1, 1.65, new Rotation2d(0));
+        public static final Pose2d RED_CONE_3 = new Pose2d(15.1, 2.2, new Rotation2d(0));
+        public static final Pose2d RED_CONE_4 = new Pose2d(15.1, 3.3, new Rotation2d(0));
+        public static final Pose2d RED_CONE_5 = new Pose2d(15.1, 3.85, new Rotation2d(0));
+        public static final Pose2d RED_CONE_6 = new Pose2d(15.1, 5.0, new Rotation2d(0));
+
+        public static final Pose2d RED_CUBE_1 = new Pose2d(15.1, 1.05, new Rotation2d(0));
+        public static final Pose2d RED_CUBE_2 = new Pose2d(15.1, 2.75, new Rotation2d(0));
+        public static final Pose2d RED_CUBE_3 = new Pose2d(15.1, 4.40, new Rotation2d(0));
+
     }
 }
