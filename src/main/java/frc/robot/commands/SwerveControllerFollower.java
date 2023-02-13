@@ -40,17 +40,18 @@ public class SwerveControllerFollower extends CommandBase {
 
         addRequirements(drivetrain);
     }
+
     public SwerveControllerFollower(Swerve drivetrain, BooleanSupplier button) {
         this.drivetrain = drivetrain;
-        this.trajectory = TrajectoryGenerator.generateTrajectory(drivetrain.getPose(), 
-            null, 
-            drivetrain.getTargetPosition(), 
-        null);
+        this.trajectory = TrajectoryGenerator.generateTrajectory(
+            drivetrain.getPose(),
+            null,
+            drivetrain.getTargetPosition(),
+            null);
         this.button = button;
 
         addRequirements(drivetrain);
     }
-
 
     public SwerveControllerFollower(Swerve drivetrain, String pathFilename, TrajectoryConfig config,
             boolean isReversed, boolean isInitial) {
