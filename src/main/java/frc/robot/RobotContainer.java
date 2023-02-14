@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
-import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.Swerve.SwerveSubsystem;
@@ -61,8 +60,10 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
+
         //zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
         driverController.a().onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        //driverController.a().onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
     }
 
     /**

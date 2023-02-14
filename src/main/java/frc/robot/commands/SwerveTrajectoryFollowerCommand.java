@@ -8,14 +8,14 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.Swerve;
 
-public class SwerveTrajectoryFollower extends CommandBase{
+public class SwerveTrajectoryFollowerCommand extends CommandBase{
 
     private final ProfiledPIDController thetaController;
     private final Swerve drivetrain;
     private final Trajectory trajectory;
     private Timer m_timer = new Timer();
     
-    public SwerveTrajectoryFollower(Trajectory traj, Swerve drivetrain) {
+    public SwerveTrajectoryFollowerCommand(Trajectory traj, Swerve drivetrain) {
         thetaController = new ProfiledPIDController(
             Constants.AutoConstants.kPThetaController, 0, 0, 
             Constants.AutoConstants.kThetaControllerConstraints);
