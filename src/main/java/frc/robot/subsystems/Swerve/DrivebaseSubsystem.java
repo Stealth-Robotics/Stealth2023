@@ -143,6 +143,18 @@ public class DrivebaseSubsystem extends SubsystemBase {
         return (Constants.DrivebaseConstants.INVERT_GYRO) ? Rotation2d.fromDegrees(360 - gyro.getYaw()) : Rotation2d.fromDegrees(gyro.getYaw());
     }
 
+    public double getYawAsDouble(){
+        return gyro.getYaw();
+    }
+
+    public double getPitch(){
+        return gyro.getPitch();
+    }
+
+    public double getRoll(){
+        return gyro.getRoll();
+    }
+
     @Override
     public void periodic(){
         swerveOdometry.update(getYaw(), getModulePositions());  
