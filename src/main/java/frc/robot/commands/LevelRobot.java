@@ -6,15 +6,22 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.Swerve.SwerveSubsystem;
 public class LevelRobot extends CommandBase{
-    private final Swerve drive;
-    private final PIDController pid = new PIDController(0.1, 0.001, 0.005);
-    private final PIDController headingPid = new PIDController(0.04, 0, 0.0025);
+    private final SwerveSubsystem drive;
+    private final PIDController pid = new PIDController(
+        Constants.LevelRobotConstants.PID_kP, 
+        Constants.LevelRobotConstants.PID_kI, 
+        Constants.LevelRobotConstants.PID_kD);
+    private final PIDController headingPid = new PIDController(
+        Constants.LevelRobotConstants.HEADING_PID_kP,
+        Constants.LevelRobotConstants.HEADING_PID_kI,
+        Constants.LevelRobotConstants.HEADING_PID_kD);
     private double startingYaw;
     
-    public LevelRobot(Swerve drivetrain){
+    public LevelRobot(SwerveSubsystem drivetrain){
         drive = drivetrain;
         addRequirements(drive);
     }
@@ -24,21 +31,19 @@ public class LevelRobot extends CommandBase{
         pid.setTolerance(0);
         pid.setSetpoint(0);
         startingYaw = drive.getYawAsDouble() % 360;
-        System.out.println("Command Init");
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double roll = drive.getRollAsDouble();
+        double roll = drive.getRoll();
         double yaw = drive.getYawAsDouble() % 360;
         double deltaYaw = yaw-startingYaw;
         double calculationMovement = pid.calculate(roll, 0);
         double calculationHeading = headingPid.calculate(deltaYaw * -1, 0);
-        calculationMovement = MathUtil.clamp(calculationMovement, -0.45, 0.45);
-        calculationHeading = MathUtil.clamp(calculationHeading, -0.5, 0.5);
+        calculationMovement = MathUtil.clamp(calculationMovement, -Constants.LevelRobotConstants.LEVELING_DRIVE_SPEED_LIMIT, Constants.LevelRobotConstants.LEVELING_DRIVE_SPEED_LIMIT);
+        calculationHeading = MathUtil.clamp(calculationHeading, -Constants.LevelRobotConstants.LEVELING_ROTATION_SPEED_LIMIT, Constants.LevelRobotConstants.LEVELING_ROTATION_SPEED_LIMIT);
         drive.drive(new Translation2d(calculationMovement, 0), 0, false, true);
-        System.out.printf("Calculation: %5.2f | Gyro: %5.2f | CalculationHeading: %5.2f | GyroYaw: %5.2f | HeadingError: %5.2f\n",calculationMovement, roll, calculationHeading, yaw, deltaYaw);
         
     }
 
@@ -50,8 +55,7 @@ public class LevelRobot extends CommandBase{
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        //return pid.atSetpoint() && pid;
-        return false;
+        return pid.atSetpoint();
     }
 
 }

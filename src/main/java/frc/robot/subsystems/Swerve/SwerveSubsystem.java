@@ -100,7 +100,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     /* Used by SwerveControllerCommand in Auto */
-    public void setModuleStates(SwerveModuleState[] desiredStates) {
+    private void setModuleStates(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Swerve.maxSpeed);
         
         for(SwerveModule mod : mSwerveMods){
@@ -138,21 +138,20 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void zeroGyro(){
         gyro.setYaw(0);
-        System.out.println("Hi " + gyro.getYaw());
     }
     public Rotation2d getYaw() {
         return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(360 - gyro.getYaw()) : Rotation2d.fromDegrees(gyro.getYaw());
     }
 
-    public double getYawAsDouble() {
+    public double getYawAsDouble(){
         return gyro.getYaw();
     }
 
-    public double getPitchAsDouble() {
+    public double getPitch() {
         return gyro.getPitch();
     }
 
-    public double getRollAsDouble(){
+    public double getRoll(){
         return gyro.getRoll();
     }
 
