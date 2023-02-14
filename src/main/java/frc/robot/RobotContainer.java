@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.Swerve.SwerveSubsystem;
+import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -21,7 +21,7 @@ import frc.robot.subsystems.Swerve.SwerveSubsystem;
 public class RobotContainer {
     /* Controllers */
     private final Joystick driver = new Joystick(0);
-    private final CommandXboxController driverController = new CommandXboxController(Constants.IOConstants.kDriverControllerPort);
+    private final CommandXboxController driverController = new CommandXboxController(Constants.IOConstants.k_DRIVER_CONTROLLER_PORT);
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
@@ -33,13 +33,13 @@ public class RobotContainer {
 
 
     /* Subsystems */
-    private final SwerveSubsystem s_Swerve = new SwerveSubsystem();
+    private final DrivebaseSubsystem s_Swerve = new DrivebaseSubsystem();
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
         s_Swerve.setDefaultCommand(
-            new TeleopSwerveDefaultCommand(
+            new TeleopDrivebaseDefaultCommand(
                 s_Swerve, 
                 () -> -driverController.getRawAxis(translationAxis), 
                 () -> -driverController.getRawAxis(strafeAxis), 

@@ -6,19 +6,19 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants;
-import frc.robot.Constants.Swerve;
+import frc.robot.Constants.DrivebaseConstants;
 
-public class SwerveTrajectoryFollowerCommand extends CommandBase{
+public class FollowPathCommand extends CommandBase{
 
     private final ProfiledPIDController thetaController;
-    private final Swerve drivetrain;
+    private final DrivebaseConstants drivetrain;
     private final Trajectory trajectory;
     private Timer m_timer = new Timer();
     
-    public SwerveTrajectoryFollowerCommand(Trajectory traj, Swerve drivetrain) {
+    public FollowPathCommand(Trajectory traj, DrivebaseConstants drivetrain) {
         thetaController = new ProfiledPIDController(
-            Constants.AutoConstants.kPThetaController, 0, 0, 
-            Constants.AutoConstants.kThetaControllerConstraints);
+            Constants.AutoConstants.k_P_THETA_CONTROLLER, 0, 0, 
+            Constants.AutoConstants.k_THETA_CONTROLLER_CONSTRAINTS);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
         trajectory = traj;
