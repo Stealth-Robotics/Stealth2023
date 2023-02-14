@@ -176,8 +176,7 @@ public final class Constants {
         }
     }
 
-    public static final class AutoConstants { // TODO: The below constants are used in the example auto, and must be
-                                              // tuned to specific robot
+    public static final class AutoConstants {
         public static final double MAX_SPEED_METERS_PER_SEC = 3;
         public static final double MAX_ACCEL_METERS_PER_SEC_SQUARED = 3;
         public static final double MAX_ANGULAR_SPEED_RAD_PER_SEC = Math.PI;
