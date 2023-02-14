@@ -14,14 +14,33 @@ import frc.robot.subsystems.ArmSubsystem;
 public class ArmDefaultCommand extends CommandBase {
 
   private final PIDController pid;
+  private long startLoop, endLoop;
+  private final DoubleSupplier joystick;
+  private final ArmSubsystem subsystem;
   
-  public ArmDefaultCommand(ArmSubsystem subsystem, DoubleSupplier doubleSupplier) {
+  public ArmDefaultCommand(ArmSubsystem subsystem, DoubleSupplier joystick) {
     pid = new PIDController(0, 0, 0);
+    this.joystick = joystick;
+    this.subsystem =subsystem;
     addRequirements(subsystem);
   }
-
+  @Override
+  public void initialize(){
+    //gets time in milliseconds
+    startLoop = System.nanoTime() / (long)Math.pow(10, 6);
+  }
+  @Override
   public void execute() {
-    
+    endLoop = System.nanoTime() / (long)Math.pow(10, 6);
+    long deltaTime = endLoop - startLoop;
+    //TODO: Make constant, 1 is placeholder for ticks per millisecond
+    pid.setSetpoint(joystick.getAsDouble() * deltaTime * 1);
+    subsystem.setMotorPower(pid.calculate(subsystem.getEncoderValue()));
+    startLoop = System.nanoTime() / (long)Math.pow(10, 6);
+  }
+  @Override
+  public boolean isFinished(){
+    return pid.atSetpoint();
   }
 
 }
