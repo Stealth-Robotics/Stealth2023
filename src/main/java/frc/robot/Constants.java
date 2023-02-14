@@ -11,7 +11,9 @@ import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
-    public static final double stickDeadband = 0.1;
+    public static final class TeleopConstants{
+        public static final double stickDeadband = 0.1;
+    }
     public static final class IOConstants{
         public static final int kDriverControllerPort = 0;
         public static final int kOperatorControllerPort = 1;
