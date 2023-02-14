@@ -14,7 +14,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.Swerve.SwerveSubsystem;
 
 /**
  * Custom implementation of
@@ -24,19 +24,19 @@ import frc.robot.subsystems.Swerve;
  */
 public class SwerveControllerFollower extends CommandBase {
 
-    private final Swerve drivetrain;
+    private final SwerveSubsystem drivetrain;
     private final Trajectory trajectory;
     private Timer timer = new Timer();
     private Pose2d initialPathPlannerPose = null;
 
-    public SwerveControllerFollower(Swerve drivetrain, Trajectory trajectory) {
+    public SwerveControllerFollower(SwerveSubsystem drivetrain, Trajectory trajectory) {
         this.drivetrain = drivetrain;
         this.trajectory = trajectory;
 
         addRequirements(drivetrain);
     }
 
-    public SwerveControllerFollower(Swerve drivetrain, String pathFilename, TrajectoryConfig config,
+    public SwerveControllerFollower(SwerveSubsystem drivetrain, String pathFilename, TrajectoryConfig config,
             boolean isReversed, boolean isInitial) {
         this.drivetrain = drivetrain;
         addRequirements(drivetrain);

@@ -1,6 +1,5 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.Swerve;
 
-import frc.robot.SwerveModule;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -21,7 +20,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Swerve extends SubsystemBase {
+public class SwerveSubsystem extends SubsystemBase {
     public SwerveDrivePoseEstimator swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
@@ -43,7 +42,7 @@ public class Swerve extends SubsystemBase {
             thetaController);
     
 
-    public Swerve() {
+    public SwerveSubsystem() {
         gyro = new Pigeon2(RobotMap.Pigeon.PIGEON_ID);
         gyro.configFactoryDefault();
         zeroGyro();
