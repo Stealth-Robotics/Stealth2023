@@ -22,21 +22,21 @@ import frc.robot.subsystems.Swerve.SwerveSubsystem;
  * SwerveControllerCommand}
  * to simplify construction, allow PathPlanner paths, and enable custom logging
  */
-public class SwerveControllerFollower extends CommandBase {
+public class SwerveControllerFollowerCommand extends CommandBase {
 
     private final SwerveSubsystem drivetrain;
     private final Trajectory trajectory;
     private Timer timer = new Timer();
     private Pose2d initialPathPlannerPose = null;
 
-    public SwerveControllerFollower(SwerveSubsystem drivetrain, Trajectory trajectory) {
+    public SwerveControllerFollowerCommand(SwerveSubsystem drivetrain, Trajectory trajectory) {
         this.drivetrain = drivetrain;
         this.trajectory = trajectory;
 
         addRequirements(drivetrain);
     }
 
-    public SwerveControllerFollower(SwerveSubsystem drivetrain, String pathFilename, TrajectoryConfig config,
+    public SwerveControllerFollowerCommand(SwerveSubsystem drivetrain, String pathFilename, TrajectoryConfig config,
             boolean isReversed, boolean isInitial) {
         this.drivetrain = drivetrain;
         addRequirements(drivetrain);
