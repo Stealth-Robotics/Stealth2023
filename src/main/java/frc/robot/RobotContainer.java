@@ -44,8 +44,9 @@ public class RobotContainer {
                 () -> -driverController.getRawAxis(translationAxis), 
                 () -> -driverController.getRawAxis(strafeAxis), 
                 () -> -driverController.getRawAxis(rotationAxis), 
-                () -> driverController.b().getAsBoolean(),
-                () -> driverController.leftBumper().getAsBoolean()
+                () -> driverController.b().getAsBoolean()//,
+                //() -> driverController.leftBumper().getAsBoolean()
+                // TODO: Uncomment When Other Half Of This Commit Comes in Through LevelRobotPR 
             )
         );
 
@@ -73,7 +74,7 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        // An ExampleCommand will run in autonomous
-        return null;
+        // TODO: Replace with Auto command
+        return new InstantCommand();
     }
 }
