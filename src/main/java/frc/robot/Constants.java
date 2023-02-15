@@ -22,5 +22,8 @@ public final class Constants {
     public static final int MID_TICKS = 0;
     public static final int LOW_TICKS = 0;
     public static final int TICKS_PER_SECOND = 0;
+    public static final int UPPER_BOUND_TICKS = 0;
+    public static final int LOWER_BOUND_INTAKE_IN_TICKS = 0;
+    public static final int LOWER_BOUND_INTAKE_OUT_TICKS = 0;
   }
 }
