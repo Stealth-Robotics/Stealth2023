@@ -36,7 +36,7 @@ public class ArmDefaultCommand extends CommandBase {
     //gets end of loop time in seconds to find deltaTime
     endLoop = System.nanoTime() / (long)Math.pow(10, 9);
     long deltaTime = endLoop - temp;
-    pid.setSetpoint(joystick.getAsDouble() * deltaTime * Constants.ArmConstants.TICKS_PER_SECOND);
+    pid.setSetpoint(pid.getSetpoint() + (joystick.getAsDouble() * deltaTime * Constants.ArmConstants.TICKS_PER_SECOND));
     subsystem.setMotorPower(pid.calculate(subsystem.getEncoderValue()));
   }
 }
