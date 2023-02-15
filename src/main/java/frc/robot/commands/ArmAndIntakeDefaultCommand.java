@@ -55,7 +55,7 @@ public class ArmAndIntakeDefaultCommand extends CommandBase {
         double setpoint = MathUtil.clamp(pid.getSetpoint() + (armDoubleSupplier.getAsDouble() * deltaTime * Constants.ArmConstants.TICKS_PER_SECOND), ArmConstants.LOWER_BOUND_INTAKE_OUT_TICKS, ArmConstants.UPPER_BOUND_TICKS);
         //checks if setpoint will kill the robot, if so, schedules command that will deploy intake and update setpoint after half a second to make sure we don't kill the robot
         if ((setpoint < ArmConstants.LOWER_BOUND_INTAKE_IN_TICKS) && !intake.isIntakeOut()) {
-            CommandScheduler.getInstance().schedule(new IntakeOutUpdateSetpoint(intake, pid, deltaTime));
+            CommandScheduler.getInstance().schedule(new IntakeOutUpdateSetpoint(intake, pid, setpoint));
         }
         //if setpoint won't kill the robot, we just set the setpoint
         else{
