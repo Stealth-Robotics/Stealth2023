@@ -16,4 +16,11 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+  public static final class ArmConstants{
+    //TODO: TUNE ON REAL ROBOT
+    public static final int HIGH_TICKS = 0;
+    public static final int MID_TICKS = 0;
+    public static final int LOW_TICKS = 0;
+    public static final int TICKS_PER_SECOND = 0;
+  }
 }
