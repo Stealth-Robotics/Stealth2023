@@ -1,13 +1,10 @@
 package frc.robot.commands;
 
-import com.ctre.phoenix.sensors.WPI_Pigeon2;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
 public class LevelRobot extends CommandBase{
     private final DrivebaseSubsystem drive;
@@ -21,7 +18,7 @@ public class LevelRobot extends CommandBase{
         Constants.LevelRobotConstants.HEADING_PID_kD);
     private double startingYaw;
     
-    public LevelRobot(SwerveSubsystem drivetrain){
+    public LevelRobot(DrivebaseSubsystem drivetrain){
         drive = drivetrain;
         addRequirements(drive);
     }
