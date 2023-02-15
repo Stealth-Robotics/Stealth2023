@@ -28,9 +28,6 @@ public class RobotContainer {
 
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
-    private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-
-
     /* Subsystems */
     private final DrivebaseSubsystem s_Swerve = new DrivebaseSubsystem();
 
@@ -43,9 +40,8 @@ public class RobotContainer {
                 () -> -driverController.getRawAxis(translationAxis), 
                 () -> -driverController.getRawAxis(strafeAxis), 
                 () -> -driverController.getRawAxis(rotationAxis), 
-                () -> driverController.b().getAsBoolean()//,
-                //() -> driverController.leftBumper().getAsBoolean()
-                // TODO: Uncomment When Other Half Of This Commit Comes in Through LevelRobotPR 
+                () -> driverController.b().getAsBoolean(),
+                () -> driverController.leftBumper().getAsBoolean()
             )
         );
 

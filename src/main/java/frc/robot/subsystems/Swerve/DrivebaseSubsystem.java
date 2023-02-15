@@ -26,9 +26,6 @@ public class DrivebaseSubsystem extends SubsystemBase {
     public Pigeon2 gyro;
 
 
-    private Rotation2d lastGivenRotation;
-    private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
-
     private final ProfiledPIDController thetaController = new ProfiledPIDController(
             Constants.AutoConstants.k_P_THETA_CONTROLLER, 0, 0,
             Constants.AutoConstants.k_THETA_CONTROLLER_CONSTRAINTS);
@@ -84,13 +81,9 @@ public class DrivebaseSubsystem extends SubsystemBase {
      * @param chassisSpeeds The x, y, and theta the drivebase must move in.
      */
     public void drive(ChassisSpeeds chassisSpeeds) {
-        this.chassisSpeeds = chassisSpeeds;
     }
 
     public void drive(Trajectory.State targetState, Rotation2d targetRotation) {
-        // determine ChassisSpeeds from path state and positional feedback control from
-        // HolonomicDriveController
-        lastGivenRotation = targetRotation;
         ChassisSpeeds targetChassisSpeeds = pathController.calculate(
                 getPose(),
                 targetState,
@@ -110,10 +103,6 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
     public Pose2d getPose() {
         return swerveOdometry.getEstimatedPosition();
-    }
-
-    private void addVisionMeasurement(Pose2d pose, double latency) {
-        swerveOdometry.addVisionMeasurement(pose, latency);
     }
 
     public void resetOdometry(Pose2d pose) {
