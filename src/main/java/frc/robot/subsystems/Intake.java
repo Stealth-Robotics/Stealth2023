@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
@@ -12,6 +13,7 @@ public class Intake extends SubsystemBase{
     private final Solenoid intakeSolenoid;
     private final WPI_TalonFX rightIntakeMotor;
     private final WPI_TalonFX leftIntakeMotor;
+    private final DigitalInput beamBreak;
 
     public Intake() {
         // Allowing the PCM to find the intake solenoid and what type it is.
@@ -40,6 +42,10 @@ public class Intake extends SubsystemBase{
         leftIntakeMotor.setStatusFramePeriod(2, 255);
         rightIntakeMotor.setStatusFramePeriod(1, 255);
         rightIntakeMotor.setStatusFramePeriod(2, 255);
+        
+
+        //TODO: set correct DIO port
+        beamBreak = new DigitalInput(0);
     }
 
     public void deployIntake() {
@@ -61,5 +67,13 @@ public class Intake extends SubsystemBase{
     
     public void setIntakePower(double motorPower) {
         rightIntakeMotor.set(ControlMode.PercentOutput, motorPower);
+    }
+    
+    public boolean isIntakeOut(){
+        return intakeSolenoid.get();
+    }
+
+    public boolean getBeamBreak(){
+        return beamBreak.get();
     }
 }
