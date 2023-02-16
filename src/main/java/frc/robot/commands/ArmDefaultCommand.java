@@ -15,15 +15,11 @@ import frc.robot.subsystems.ArmSubsystem;
 
 /** An example command that uses an example subsystem. */
 public class ArmDefaultCommand extends CommandBase {
-
-  private final PIDController pid;
-  private long endLoop;
   private final DoubleSupplier joystick;
   private final ArmSubsystem telescope;
   private final BooleanSupplier intake;
 
   public ArmDefaultCommand(ArmSubsystem telescope, DoubleSupplier joystick, BooleanSupplier intake) {
-    pid = new PIDController(0, 0, 0);
     this.joystick = joystick;
     this.telescope = telescope;
     this.intake = intake;
@@ -31,24 +27,14 @@ public class ArmDefaultCommand extends CommandBase {
   }
 
   @Override
-  public void initialize() {
-    // gets time in seconds
-    endLoop = System.nanoTime() / (long) Math.pow(10, 9);
-  }
-
-  @Override
   public void execute() {
-    long temp = endLoop;
-    // gets end of loop time in seconds to find deltaTime
-    endLoop = System.nanoTime() / (long) Math.pow(10, 9);
-    double deltaTime = endLoop - temp;
     if (intake.getAsBoolean()) {
       telescope.setSetpoint(MathUtil.clamp(
-          (telescope.getSetpoint() + (joystick.getAsDouble() * deltaTime * Constants.ArmConstants.TICKS_PER_SECOND)),
+          (telescope.getSetpoint() + (joystick.getAsDouble() * Constants.ArmConstants.TICKS_PER_SECOND)),
           Constants.ArmConstants.LOWER_BOUND_INTAKE_OUT_TICKS, Constants.ArmConstants.UPPER_BOUND_TICKS));
     } else {
       telescope.setSetpoint(MathUtil.clamp(
-          (telescope.getSetpoint() + (joystick.getAsDouble() * deltaTime * Constants.ArmConstants.TICKS_PER_SECOND)),
+          (telescope.getSetpoint() + (joystick.getAsDouble() * Constants.ArmConstants.TICKS_PER_SECOND)),
           Constants.ArmConstants.LOWER_BOUND_INTAKE_IN_TICKS, Constants.ArmConstants.UPPER_BOUND_TICKS));
     }
 
