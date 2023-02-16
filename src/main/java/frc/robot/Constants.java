@@ -68,5 +68,13 @@ public final class Constants {
     // TODO: Measure and set gear ratio between the output shaft and the encoder
     public static final double GEAR_RATIO = 1.0 / 1.0;
 
+    //TODO: actually set this to a real number after tuning
+    public static final double ROTATOR_SPEED = 0;
+
+    //TODO: tune these
+    public static final double HIGH_BOUND = 0;
+    public static final double LOW_BOUND_INTAKE = 0;
+    public static final double LOW_BOUND = 0;
+
   }
 }
