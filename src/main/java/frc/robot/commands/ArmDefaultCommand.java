@@ -31,11 +31,11 @@ public class ArmDefaultCommand extends CommandBase {
     if (intake.getAsBoolean()) {
       telescope.setSetpoint(MathUtil.clamp(
           (telescope.getSetpoint() + joystick.getAsDouble()),
-          Constants.ArmConstants.LOWER_BOUND_INTAKE_OUT_TICKS, Constants.ArmConstants.UPPER_BOUND_TICKS));
+          Constants.TelescopeConstants.LOWER_BOUND_INTAKE_OUT_TICKS, Constants.TelescopeConstants.UPPER_BOUND_TICKS));
     } else {
       telescope.setSetpoint(MathUtil.clamp(
           (telescope.getSetpoint() + joystick.getAsDouble()),
-          Constants.ArmConstants.LOWER_BOUND_INTAKE_IN_TICKS, Constants.ArmConstants.UPPER_BOUND_TICKS));
+          Constants.TelescopeConstants.LOWER_BOUND_INTAKE_IN_TICKS, Constants.TelescopeConstants.UPPER_BOUND_TICKS));
     }
 
   }

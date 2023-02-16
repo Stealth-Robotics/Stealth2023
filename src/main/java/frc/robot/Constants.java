@@ -16,12 +16,11 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
-  public static final class ArmConstants{
+  public static final class TelescopeConstants{
     //TODO: TUNE ON REAL ROBOT
     public static final int HIGH_TICKS = 0;
     public static final int MID_TICKS = 0;
     public static final int LOW_TICKS = 0;
-    public static final int TICKS_PER_SECOND = 0;
     public static final int UPPER_BOUND_TICKS = 0;
     public static final int LOWER_BOUND_INTAKE_IN_TICKS = 0;
     public static final int LOWER_BOUND_INTAKE_OUT_TICKS = 0;
