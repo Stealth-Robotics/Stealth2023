@@ -44,11 +44,11 @@ public class ArmDefaultCommand extends CommandBase {
     double deltaTime = endLoop - temp;
     if (intake.getAsBoolean()) {
       telescope.setSetpoint(MathUtil.clamp(
-          (pid.getSetpoint() + (joystick.getAsDouble() * deltaTime * Constants.ArmConstants.TICKS_PER_SECOND)),
+          (telescope.getSetpoint() + (joystick.getAsDouble() * deltaTime * Constants.ArmConstants.TICKS_PER_SECOND)),
           Constants.ArmConstants.LOWER_BOUND_INTAKE_OUT_TICKS, Constants.ArmConstants.UPPER_BOUND_TICKS));
     } else {
       telescope.setSetpoint(MathUtil.clamp(
-          (pid.getSetpoint() + (joystick.getAsDouble() * deltaTime * Constants.ArmConstants.TICKS_PER_SECOND)),
+          (telescope.getSetpoint() + (joystick.getAsDouble() * deltaTime * Constants.ArmConstants.TICKS_PER_SECOND)),
           Constants.ArmConstants.LOWER_BOUND_INTAKE_IN_TICKS, Constants.ArmConstants.UPPER_BOUND_TICKS));
     }
 

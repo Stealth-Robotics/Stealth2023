@@ -41,6 +41,10 @@ public class ArmSubsystem extends SubsystemBase {
     return telescopePID.atSetpoint();
   }
 
+  public double getSetpoint(){
+    return telescopePID.getSetpoint();
+  }
+
   @Override
   public void periodic() {
     System.out.println(getEncoderValue());
