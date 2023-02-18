@@ -57,9 +57,7 @@ public class Rotator extends ProfiledPIDSubsystem {
 
    @Override
    protected double getMeasurement() {
-      return Math.toRadians((encoder.getAbsolutePosition()
-            * (360 * Constants.ArmConstants.GEAR_RATIO / Constants.ArmConstants.ENCODER_CPR))
-            + Constants.ArmConstants.ENCODER_OFFSET);
+      return Math.toRadians((encoder.getAbsolutePosition() * 360) - Constants.ArmConstants.ENCODER_OFFSET);
    }
 
    @Override
@@ -74,9 +72,7 @@ public class Rotator extends ProfiledPIDSubsystem {
    public void periodic() {
       super.periodic();
 
-      // TODO: Test If Accurate After Entering Constants
-      System.out.println("Current Rotation Degrees: " + (encoder.getAbsolutePosition()
-            * (360 * Constants.ArmConstants.GEAR_RATIO / Constants.ArmConstants.ENCODER_CPR))
-            + Constants.ArmConstants.ENCODER_OFFSET);
+      // TODO: Test If Accurate
+      System.out.println("Current Rotation Degrees: " + ((encoder.getAbsolutePosition() * 360) - Constants.ArmConstants.ENCODER_OFFSET));
    }
 }

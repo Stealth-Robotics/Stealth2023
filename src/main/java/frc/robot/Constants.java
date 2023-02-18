@@ -38,14 +38,8 @@ public final class Constants {
     // Volt Second Squared Per Rad
     public static final double ROTATOR_KA_COEFF = 0.0;
 
-    
-
     // TODO: Measure and set encoder offset to make 0 perfectly horizontal
     public static final double ENCODER_OFFSET = 0.0;
-    // TODO: Verify
-    public static final double ENCODER_CPR = 2048.0;
-    // TODO: Measure and set gear ratio between the output shaft and the encoder
-    public static final double GEAR_RATIO = 1.0 / 1.0;
 }
 
   public final class ArmConstants {
