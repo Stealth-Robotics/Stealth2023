@@ -3,6 +3,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 public class RobotMap {
+
+    public static final class Claw {
+        public static final int TIME_OF_FLIGHT = 0;
+    }
+
     public static final class Pneumatics {
         public static final int PCM = 41;
         public static final PneumaticsModuleType PCM_TYPE = PneumaticsModuleType.CTREPCM;
