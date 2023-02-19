@@ -25,7 +25,7 @@ public class ArmSubsystem extends SubsystemBase {
     this.telescopePID = new PIDController(0, 0, 0);
   }
 
-  private void setMotorPower(double motorPower) {
+  public void setMotorPower(double motorPower) {
     armMotor.set(ControlMode.PercentOutput, motorPower);
   }
 

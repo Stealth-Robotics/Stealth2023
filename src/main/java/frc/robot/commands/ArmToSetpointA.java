@@ -4,10 +4,6 @@
 
 package frc.robot.commands;
 
-<<<<<<< HEAD
-import edu.wpi.first.math.controller.PIDController;
-=======
->>>>>>> 2b3ee9b70f2bf007028e2860c3a1fe60ea0769b2
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
 

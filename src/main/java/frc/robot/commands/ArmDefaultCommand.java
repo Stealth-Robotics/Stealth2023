@@ -8,7 +8,6 @@ import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
@@ -21,19 +20,9 @@ public class ArmDefaultCommand extends CommandBase {
 
   public ArmDefaultCommand(ArmSubsystem telescope, DoubleSupplier joystick, BooleanSupplier intake) {
     this.joystick = joystick;
-<<<<<<< HEAD
-    this.subsystem = subsystem;
-    addRequirements(subsystem);
-  }
-  @Override
-  public void initialize(){
-    //gets time in milliseconds
-    startLoop = System.nanoTime() / (long)Math.pow(10, 6);
-=======
     this.telescope = telescope;
     this.intake = intake;
     addRequirements(telescope);
->>>>>>> 2b3ee9b70f2bf007028e2860c3a1fe60ea0769b2
   }
 
   @Override
