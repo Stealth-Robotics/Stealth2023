@@ -21,7 +21,7 @@ public class ArmDefaultCommand extends CommandBase {
   public ArmDefaultCommand(ArmSubsystem subsystem, DoubleSupplier joystick) {
     pid = new PIDController(0, 0, 0);
     this.joystick = joystick;
-    this.subsystem =subsystem;
+    this.subsystem = subsystem;
     addRequirements(subsystem);
   }
   @Override
