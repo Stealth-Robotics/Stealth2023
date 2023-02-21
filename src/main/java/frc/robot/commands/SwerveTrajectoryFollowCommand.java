@@ -10,6 +10,7 @@ import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.Timer;
@@ -90,6 +91,8 @@ public class SwerveTrajectoryFollowCommand extends CommandBase {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
+        //Default constructor of chassisSpeeds is 0 on everything
+        if (interrupted) drivetrain.drive(new ChassisSpeeds());
         timer.stop();
     }
 
