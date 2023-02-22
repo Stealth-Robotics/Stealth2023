@@ -5,25 +5,26 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.subsystems.Rotator;
 
 public class ArmDefaultCommand extends CommandBase {
     private final Rotator rotator;
-    private final BooleanSupplier intakeOut;
-    private final DoubleSupplier telescopePosition, joystick;
+    private final DoubleSupplier joystick;
 
-    public ArmDefaultCommand(Rotator rotator, BooleanSupplier intakeOut, DoubleSupplier telescopePosition,
-            DoubleSupplier joystick) {
+    public ArmDefaultCommand(Rotator rotator, DoubleSupplier joystick) {
         this.rotator = rotator;
-        this.intakeOut = intakeOut;
-        this.telescopePosition = telescopePosition;
         this.joystick = joystick;
+        addRequirements(rotator);
     }
-
+    @Override
+    public void initialize() {
+        rotator.setGoal(Constants.RotatorConstants.ENCODER_OFFSET);
+    }
     @Override
     public void execute() {
-        double lowBound = intakeOut.getAsBoolean() ? ArmConstants.LOW_BOUND : ArmConstants.LOW_BOUND_INTAKE;
+        double lowBound = ArmConstants.LOW_BOUND_INTAKE;
         rotator.setGoal(MathUtil.clamp((rotator.getSetpoint() + joystick.getAsDouble() * ArmConstants.ROTATOR_SPEED),
                 lowBound, ArmConstants.HIGH_BOUND));
     }

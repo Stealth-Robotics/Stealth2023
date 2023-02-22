@@ -30,10 +30,10 @@ public class Rotator extends ProfiledPIDSubsystem {
                         Constants.ArmConstants.MAX_ACCELERATION)),
             0);
 
-      rotationMotor = new WPI_TalonFX(RobotMap.Arm.ROTATOR_MOTOR);
+      rotationMotor = new WPI_TalonFX(RobotMap.Rotator.ROTATOR_MOTOR);
       rotationMotor.setNeutralMode(NeutralMode.Brake);
 
-      encoder = new DutyCycleEncoder(RobotMap.Arm.ENCODER_PORT);
+      encoder = new DutyCycleEncoder(RobotMap.Rotator.ENCODER_PORT);
 
       feedforward = new ArmFeedforward(
             Constants.RotatorConstants.ROTATOR_KS_COEFF,
@@ -53,11 +53,12 @@ public class Rotator extends ProfiledPIDSubsystem {
       rotationMotor.set(
             ControlMode.Current,
             output + (feedforward.calculate(setpoint.position, setpoint.velocity)));
+      System.out.println(output + (feedforward.calculate(setpoint.position, setpoint.velocity)));
    }
 
    @Override
    protected double getMeasurement() {
-      return Math.toRadians((encoder.getAbsolutePosition() * 360) - Constants.ArmConstants.ENCODER_OFFSET);
+      return ((encoder.getAbsolutePosition() * 360) - Constants.ArmConstants.ENCODER_OFFSET);
    }
 
    @Override
@@ -71,8 +72,8 @@ public class Rotator extends ProfiledPIDSubsystem {
    @Override
    public void periodic() {
       super.periodic();
-
+      
       // TODO: Test If Accurate
-      System.out.println("Current Rotation Degrees: " + ((encoder.getAbsolutePosition() * 360) - Constants.ArmConstants.ENCODER_OFFSET));
+      //System.out.println("Current Rotation Degrees: " + ((encoder.getAbsolutePosition() * 360) - Constants.ArmConstants.ENCODER_OFFSET));
    }
 }
