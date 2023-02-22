@@ -43,6 +43,7 @@ public class RobotMap {
         //TODO: Change to fit the IDs on the robot.
         public static final int RIGHT_INTAKE_MOTOR_ID = 0;
         public static final int LEFT_INTAKE_MOTOR_ID = 1;
+        public static final int ROLLER_MOTOR_ID = 2;
     }
 
 }
