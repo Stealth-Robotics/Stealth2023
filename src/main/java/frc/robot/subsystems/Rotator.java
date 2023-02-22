@@ -27,7 +27,7 @@ public class Rotator extends ProfiledPIDSubsystem {
                   Constants.RotatorConstants.ROTATOR_D_COEFF,
                   new TrapezoidProfile.Constraints(
                         Constants.RotatorConstants.MAX_VELOCITY,
-                        Constants.ArmConstants.MAX_ACCELERATION)),
+                        Constants.RotatorConstants.MAX_ACCELERATION)),
             0);
 
       rotationMotor = new WPI_TalonFX(RobotMap.Rotator.ROTATOR_MOTOR);
@@ -58,7 +58,7 @@ public class Rotator extends ProfiledPIDSubsystem {
 
    @Override
    protected double getMeasurement() {
-      return Math.toRadians((encoder.getAbsolutePosition() * 360) - Constants.ArmConstants.ENCODER_OFFSET);
+      return Math.toRadians((encoder.getAbsolutePosition() * 360) - Constants.RotatorConstants.ENCODER_OFFSET);
    }
 
    @Override
