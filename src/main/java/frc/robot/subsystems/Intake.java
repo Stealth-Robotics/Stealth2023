@@ -68,9 +68,9 @@ public class Intake extends SubsystemBase {
 
     }
 
-    public void setIntakePower(double motorPower, double rollerPower) {
+    public void setIntakePower(double motorPower) {
         rightIntakeMotor.set(ControlMode.PercentOutput, motorPower);
-        rollerMotor.set(rollerPower);
+        rollerMotor.set(motorPower);
     }
 
     public boolean isIntakeOut() {
