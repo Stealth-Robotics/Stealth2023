@@ -6,15 +6,15 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.Swerve;
+import frc.robot.RobotMap.Drivebase;
+import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
 public class LevelRobot extends CommandBase{
-    private final Swerve drive;
+    private final frc.robot.subsystems.Swerve.DrivebaseSubsystem drive;
     private final PIDController pid = new PIDController(0.1, 0.001, 0.005);
     private final PIDController headingPid = new PIDController(0.04, 0, 0.0025);
     private double startingYaw;
     
-    public LevelRobot(Swerve drivetrain){
+    public LevelRobot(DrivebaseSubsystem drivetrain){
         drive = drivetrain;
         addRequirements(drive);
     }

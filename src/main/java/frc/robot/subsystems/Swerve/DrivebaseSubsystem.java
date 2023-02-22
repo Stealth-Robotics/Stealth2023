@@ -1,12 +1,15 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.Swerve;
 
-import frc.robot.SwerveModule;
 import frc.robot.Constants;
+import frc.robot.PhotonVisionCameraWrapper;
 import frc.robot.RobotMap;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+
+import java.util.Optional;
+
+import org.photonvision.EstimatedRobotPose;
 
 import com.ctre.phoenix.sensors.Pigeon2;
 
@@ -19,52 +22,55 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Swerve extends SubsystemBase {
-    public SwerveDriveOdometry swerveOdometry;
+public class DrivebaseSubsystem extends SubsystemBase {
+    public PhotonVisionCameraWrapper pcw;
+    public SwerveDrivePoseEstimator swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
-
-    private Pose2d targetPose = null;
 
 
     private Rotation2d lastGivenRotation;
     private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
 
     private final ProfiledPIDController thetaController = new ProfiledPIDController(
-            Constants.AutoConstants.kPThetaController, 0, 0,
-            Constants.AutoConstants.kThetaControllerConstraints);
+            Constants.AutoConstants.k_P_THETA_CONTROLLER, 0, 0,
+            Constants.AutoConstants.k_THETA_CONTROLLER_CONSTRAINTS);
 
-    private final PIDController xController = new PIDController(Constants.AutoConstants.kPXController, 0, 0);
-    private final PIDController yController = new PIDController(Constants.AutoConstants.kPYController, 0, 0);
+    private final PIDController xController = new PIDController(Constants.AutoConstants.k_PX_CONTROLLER, 0, 0);
+    private final PIDController yController = new PIDController(Constants.AutoConstants.k_PY_CONTROLLER, 0, 0);
 
     private final HolonomicDriveController pathController = new HolonomicDriveController(
             xController,
             yController,
             thetaController);
     
+    private Field2d field2d;
 
-    public Swerve() {
-        targetPose = Constants.ScoringPositions.left;
-        gyro = new Pigeon2(RobotMap.Pigeon.PIGEON_ID);
+    public DrivebaseSubsystem() {
+        pcw = new PhotonVisionCameraWrapper();
+        gyro = new Pigeon2(RobotMap.Drivebase.PIGEON_ID);
         gyro.configFactoryDefault();
         zeroGyro();
 
         mSwerveMods = new SwerveModule[] {
-            new SwerveModule(0, Constants.Swerve.Mod0.constants),
-            new SwerveModule(1, Constants.Swerve.Mod1.constants),
-            new SwerveModule(2, Constants.Swerve.Mod2.constants),
-            new SwerveModule(3, Constants.Swerve.Mod3.constants)
+            new SwerveModule(0, Constants.DrivebaseConstants.MOD_0.constants),
+            new SwerveModule(1, Constants.DrivebaseConstants.MOD_1.constants),
+            new SwerveModule(2, Constants.DrivebaseConstants.MOD_2.constants),
+            new SwerveModule(3, Constants.DrivebaseConstants.MOD_3.constants)
         };
-
-        swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw(), getModulePositions());
+        //TODO: Set the actual pose
+        field2d = new Field2d();
+        SmartDashboard.putData(field2d);
+        swerveOdometry = new SwerveDrivePoseEstimator(Constants.DrivebaseConstants.SWERVE_KINEMATICS, getYaw(), getModulePositions(), new Pose2d());
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
         SwerveModuleState[] swerveModuleStates =
-            Constants.Swerve.swerveKinematics.toSwerveModuleStates(
+            Constants.DrivebaseConstants.SWERVE_KINEMATICS.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
                                     translation.getX(), 
                                     translation.getY(), 
@@ -76,7 +82,7 @@ public class Swerve extends SubsystemBase {
                                     translation.getY(), 
                                     rotation)
                                 );
-        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
+        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.DrivebaseConstants.MAX_SPEED);
 
         for(SwerveModule mod : mSwerveMods){
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
@@ -106,7 +112,7 @@ public class Swerve extends SubsystemBase {
 
     /* Used by SwerveControllerCommand in Auto */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
-        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Swerve.maxSpeed);
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.DrivebaseConstants.MAX_SPEED);
         
         for(SwerveModule mod : mSwerveMods){
             mod.setDesiredState(desiredStates[mod.moduleNumber], false);
@@ -114,13 +120,15 @@ public class Swerve extends SubsystemBase {
     }    
 
     public Pose2d getPose() {
-        return swerveOdometry.getPoseMeters();
+        return swerveOdometry.getEstimatedPosition();
+    }
+
+    private void addVisionMeasurement(Pose2d pose, double latency) {
+        swerveOdometry.addVisionMeasurement(pose, latency);
     }
 
     public void resetOdometry(Pose2d pose) {
         swerveOdometry.resetPosition(getYaw(), getModulePositions(), pose);
-        System.out.println("Pose reset! Current Pose: " + getPose().getX() + " " + getPose().getY());
-        
     }
 
     public SwerveModuleState[] getModuleStates(){
@@ -130,6 +138,9 @@ public class Swerve extends SubsystemBase {
         }
         return states;
     }
+
+
+    
 
     public SwerveModulePosition[] getModulePositions(){
         SwerveModulePosition[] positions = new SwerveModulePosition[4];
@@ -141,10 +152,9 @@ public class Swerve extends SubsystemBase {
 
     public void zeroGyro(){
         gyro.setYaw(0);
-        System.out.println("Hi " + gyro.getYaw());
     }
     public Rotation2d getYaw() {
-        return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(360 - gyro.getYaw()) : Rotation2d.fromDegrees(gyro.getYaw());
+        return (Constants.DrivebaseConstants.INVERT_GYRO) ? Rotation2d.fromDegrees(360 - gyro.getYaw()) : Rotation2d.fromDegrees(gyro.getYaw());
     }
 
     public double getYawAsDouble() {
@@ -158,18 +168,25 @@ public class Swerve extends SubsystemBase {
     public double getRollAsDouble(){
         return gyro.getRoll();
     }
+    
 
-    public void setTargetPosition(Pose2d targetPose){
-        this.targetPose = targetPose;
-        System.out.println(targetPose.getX() + " " + targetPose.getY() + " " + targetPose.getRotation().getDegrees());
-    }
-    public Pose2d getTargetPosition(){
-        return targetPose;
-    }
     @Override
     public void periodic(){
-        swerveOdometry.update(getYaw(), getModulePositions());  
+        swerveOdometry.update(getYaw(), getModulePositions());
 
+        Optional<EstimatedRobotPose> result =
+                pcw.getEstimatedGlobalPose(swerveOdometry.getEstimatedPosition());
+
+        if(result.isPresent())
+        {
+            EstimatedRobotPose camPose = result.get();
+            swerveOdometry.addVisionMeasurement(
+                    camPose.estimatedPose.toPose2d(), 
+                    camPose.timestampSeconds
+            );
+        }
+
+        field2d.setRobotPose(getPose());
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getPosition().angle.getDegrees());
