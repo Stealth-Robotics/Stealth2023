@@ -58,12 +58,13 @@ public class Rotator extends ProfiledPIDSubsystem {
 
    @Override
    protected double getMeasurement() {
-      return ((encoder.getAbsolutePosition() * 360) - Constants.ArmConstants.ENCODER_OFFSET);
+      return Math.toRadians((encoder.getAbsolutePosition() * 360) - Constants.ArmConstants.ENCODER_OFFSET);
    }
 
    @Override
    public void setGoal(double goal){
       super.setGoal(goal);
+      super.enable();
    }
    public double getSetpoint(){
       return super.getController().getSetpoint().position;

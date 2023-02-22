@@ -26,7 +26,7 @@ public final class Constants {
     public static final double MAX_ACCELERATION = 10.0;
 
     // TODO: Tune After Feedforward is tuned
-    public static final double ROTATOR_P_COEFF = 1;
+    public static final double ROTATOR_P_COEFF = 1.7633e-05;
     public static final double ROTATOR_I_COEFF = 0.0;
     public static final double ROTATOR_D_COEFF = 5.8364e-08;
 
