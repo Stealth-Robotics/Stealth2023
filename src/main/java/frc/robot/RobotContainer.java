@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.autos.*;
 
 import frc.robot.commands.*;
 import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
@@ -29,7 +28,7 @@ public class RobotContainer {
     private final Joystick driver = new Joystick(0);
 
     private final CommandXboxController controlBoard = new CommandXboxController(
-            Constants.IOConstants.controlBoardPort);
+            Constants.IOConstants.CONTROL_BOARD_PORT);
     private final CommandXboxController driverController = new CommandXboxController(Constants.IOConstants.k_DRIVER_CONTROLLER_PORT);
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;

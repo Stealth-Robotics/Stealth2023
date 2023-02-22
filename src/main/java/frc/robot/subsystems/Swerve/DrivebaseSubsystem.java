@@ -31,7 +31,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
     public SwerveDrivePoseEstimator swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
-
+    private Pose2d targetPose = null;
 
     private Rotation2d lastGivenRotation;
     private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
@@ -169,6 +169,13 @@ public class DrivebaseSubsystem extends SubsystemBase {
         return gyro.getRoll();
     }
     
+    public void setTargetPosition(Pose2d targetPose){
+        this.targetPose = targetPose;
+        System.out.println(targetPose.getX() + " " + targetPose.getY() + " " + targetPose.getRotation().getDegrees());
+    }
+    public Pose2d getTargetPosition(){
+        return targetPose;
+    }
 
     @Override
     public void periodic(){

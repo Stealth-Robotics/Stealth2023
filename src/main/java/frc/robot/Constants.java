@@ -24,9 +24,9 @@ import edu.wpi.first.math.geometry.Translation3d;
 public final class Constants {
     public static final double stickDeadband = 0.1;
     public static final class IOConstants{
-        public static final int kDriverControllerPort = 0;
-        public static final int kOperatorControllerPort = 1;
-        public static final int controlBoardPort = 2;
+        public static final int k_DRIVER_CONTROLLER_PORT = 0;
+        public static final int k_OPERATOR_CONTROLLER_PORT = 1;
+        public static final int CONTROL_BOARD_PORT = 2;
     }
     public static final class Swerve {
         public static final int pigeonID = 1;
@@ -57,10 +57,7 @@ public final class Constants {
     public static final class TeleopConstants{
         public static final double SITCK_DEADBAND = 0.1;
     }
-    public static final class IOConstants{
-        public static final int k_DRIVER_CONTROLLER_PORT = 0;
-        public static final int k_OPERATOR_CONTROLLER_PORT = 1;
-    }
+
     public static final class DrivebaseConstants {
         public static final int PIGEON_ID = 1;
         public static final boolean INVERT_GYRO = false; // Always ensure Gyro is CCW+ CW-
