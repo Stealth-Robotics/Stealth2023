@@ -62,7 +62,8 @@ public class RobotContainer {
         .onTrue(
             Commands.runOnce(
                 () -> {
-                  rotator.setGoal(Constants.RotatorConstants.ENCODER_OFFSET);
+                  rotator.setGoal(0);
+                  rotator.enable();
                 },
                 rotator));
   }

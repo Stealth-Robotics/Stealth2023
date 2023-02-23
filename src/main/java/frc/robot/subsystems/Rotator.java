@@ -30,18 +30,18 @@ public class Rotator extends ProfiledPIDSubsystem {
                         Constants.RotatorConstants.MAX_ACCELERATION)),
             0);
 
+      super.m_controller.setTolerance(100);
+      this.encoder = new DutyCycleEncoder(0);
+
       rotationMotor = new WPI_TalonFX(RobotMap.Rotator.ROTATOR_MOTOR);
       rotationMotor.setNeutralMode(NeutralMode.Brake);
-
-      encoder = new DutyCycleEncoder(RobotMap.Rotator.ENCODER_PORT);
 
       feedforward = new ArmFeedforward(
             Constants.RotatorConstants.ROTATOR_KS_COEFF,
             Constants.RotatorConstants.ROTATOR_KG_COEFF,
             Constants.RotatorConstants.ROTATOR_KV_COEFF,
             Constants.RotatorConstants.ROTATOR_KA_COEFF);
-
-      encoder.setDistancePerRotation(getMeasurement());
+      
    }
 
    public void setSpeed(double speed) {
@@ -51,30 +51,31 @@ public class Rotator extends ProfiledPIDSubsystem {
    @Override
    protected void useOutput(double output, State setpoint) {
       rotationMotor.set(
-            ControlMode.Current,
-            output + (feedforward.calculate(setpoint.position, setpoint.velocity)));
-      System.out.println(output + (feedforward.calculate(setpoint.position, setpoint.velocity)));
+            ControlMode.PercentOutput,
+            (output) + (feedforward.calculate(setpoint.position, setpoint.velocity)));
+      System.out.printf("cal: %5.3f | measure: %f5.3\n", (output + (feedforward.calculate(setpoint.position, setpoint.velocity))), getMeasurement());
    }
 
    @Override
    protected double getMeasurement() {
-      return Math.toRadians((encoder.getAbsolutePosition() * 360) - Constants.RotatorConstants.ENCODER_OFFSET);
+      return Math.toRadians(((encoder.getAbsolutePosition() * 360) + Constants.RotatorConstants.ENCODER_OFFSET)%360);
    }
 
    @Override
-   public void setGoal(double goal){
+   public void setGoal(double goal) {
       super.setGoal(goal);
-      super.enable();
    }
-   public double getSetpoint(){
+
+   public double getSetpoint() {
       return super.getController().getSetpoint().position;
    }
 
    @Override
    public void periodic() {
       super.periodic();
-      
+      //System.out.printf("%5.3f\n", encoder.getAbsolutePosition());
       // TODO: Test If Accurate
-      //System.out.println("Current Rotation Degrees: " + ((encoder.getAbsolutePosition() * 360) - Constants.ArmConstants.ENCODER_OFFSET));
+      //   System.out.println("Current Rotation Degrees: "
+      //         + (((encoder.getAbsolutePosition() * 360) + Constants.RotatorConstants.ENCODER_OFFSET))%360);
    }
 }
