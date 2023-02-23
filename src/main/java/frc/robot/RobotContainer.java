@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.commands.*;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
 
 /**
@@ -33,10 +34,11 @@ public class RobotContainer {
 
     /* Subsystems */
     private final DrivebaseSubsystem s_Swerve = new DrivebaseSubsystem();
-
+    private final ArmSubsystem telescope = new ArmSubsystem();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
+      /* 
         s_Swerve.setDefaultCommand(
             new TeleopDrivebaseDefaultCommand(
                 s_Swerve, 
@@ -47,7 +49,13 @@ public class RobotContainer {
                 //() -> driverController.leftBumper().getAsBoolean()
                 // TODO: Uncomment When Other Half Of This Commit Comes in Through LevelRobotPR 
             )
-        );
+        );*/
+        /*
+        telescope.setDefaultCommand(
+          new ArmDefaultCommand(
+            telescope,
+            () -> driverController.getRawAxis(rotationAxis)
+        ));*/
 
         // Configure the button bindings
         configureButtonBindings();
@@ -61,6 +69,7 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
+        driverController.a().whileTrue(new ArmToSetpointA(telescope));
 
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
     }

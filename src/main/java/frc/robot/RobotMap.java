@@ -3,6 +3,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 public class RobotMap {
+    public static final class TelescopeConstants {
+        public static final int TELESCOPE_ID = 6;
+    }
     public static final class Drivebase {
         public static final int PIGEON_ID = 2;
 

@@ -15,6 +15,7 @@ public class ArmToSetpointA extends CommandBase {
   public ArmToSetpointA(ArmSubsystem subsystem) {
     this.subsystem = subsystem;
     addRequirements(subsystem);
+    
   }
 
   public void initialize() {

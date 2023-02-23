@@ -11,6 +11,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.RobotMap;
 
 public class ArmSubsystem extends SubsystemBase {
 
@@ -18,11 +20,12 @@ public class ArmSubsystem extends SubsystemBase {
   private final PIDController telescopePID;
 
   public ArmSubsystem() {
-    armMotor = new WPI_TalonFX(0);
+    armMotor = new WPI_TalonFX(RobotMap.TelescopeConstants.TELESCOPE_ID);
     armMotor.setNeutralMode(NeutralMode.Brake);
     armMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
     // TODO: update this with constants we tune, update tolerance
-    this.telescopePID = new PIDController(0, 0, 0);
+    this.telescopePID = new PIDController(0.0003, 0, 0);
+    telescopePID.setSetpoint(getEncoderValue());
   }
 
   public void setMotorPower(double motorPower) {

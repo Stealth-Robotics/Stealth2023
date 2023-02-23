@@ -29,6 +29,7 @@ public final class Constants {
     public static final int UPPER_BOUND_TICKS = 0;
     public static final int LOWER_BOUND_INTAKE_IN_TICKS = 0;
     public static final int LOWER_BOUND_INTAKE_OUT_TICKS = 0;
+    public static final double CONTROL_MULTIPLIER = 5;
   }
     public static final class PhotonVisionConstants {
         public final static String CAMERA_NAME = "photonvision";
