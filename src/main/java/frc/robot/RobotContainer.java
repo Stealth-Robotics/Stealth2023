@@ -70,7 +70,7 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
-        driverController.a().whileTrue(new ArmToSetpointA(telescope));
+        driverController.a().whileTrue(new TelescopeToPosition(telescope, 0));
 
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
     }
