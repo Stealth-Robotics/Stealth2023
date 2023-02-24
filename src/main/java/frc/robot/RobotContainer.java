@@ -7,9 +7,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
+import frc.robot.RobotMap.Telescope;
 import frc.robot.commands.*;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.TelescopeSubsystem;
 import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
 
 /**
@@ -34,7 +35,7 @@ public class RobotContainer {
 
     /* Subsystems */
     private final DrivebaseSubsystem s_Swerve = new DrivebaseSubsystem();
-    private final ArmSubsystem telescope = new ArmSubsystem();
+    private final TelescopeSubsystem telescope = new TelescopeSubsystem();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {

@@ -3,7 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 public class RobotMap {
-    public static final class TelescopeConstants {
+    public static final class Telescope {
         public static final int TELESCOPE_ID = 6;
     }
     public static final class Drivebase {
