@@ -5,7 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.ArmDefaultCommand;
+import frc.robot.commands.RotatorDefaultCommand;
 import frc.robot.subsystems.Rotator;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -34,7 +34,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
     rotator = new Rotator();
-    rotator.setDefaultCommand(new ArmDefaultCommand(
+    rotator.setDefaultCommand(new RotatorDefaultCommand(
         rotator,
         () -> m_driverController.getRightTriggerAxis()));
     // Configure the trigger bindings
@@ -63,7 +63,7 @@ public class RobotContainer {
             Commands.runOnce(
                 () -> {
                   rotator.setGoal(0);
-                  rotator.enable();
+                  //rotator.enable();
                 },
                 rotator));
   }

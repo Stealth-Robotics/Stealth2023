@@ -30,7 +30,7 @@ public class Rotator extends ProfiledPIDSubsystem {
                         Constants.RotatorConstants.MAX_ACCELERATION)),
             0);
 
-      super.m_controller.setTolerance(100);
+      super.m_controller.setTolerance(0.05);
       this.encoder = new DutyCycleEncoder(0);
 
       rotationMotor = new WPI_TalonFX(RobotMap.Rotator.ROTATOR_MOTOR);
@@ -41,10 +41,13 @@ public class Rotator extends ProfiledPIDSubsystem {
             Constants.RotatorConstants.ROTATOR_KG_COEFF,
             Constants.RotatorConstants.ROTATOR_KV_COEFF,
             Constants.RotatorConstants.ROTATOR_KA_COEFF);
+
+      super.m_controller.enableContinuousInput(0, 2*Math.PI);
+      enable();
       
    }
 
-   public void setSpeed(double speed) {
+   private void setSpeed(double speed) {
       rotationMotor.set(ControlMode.PercentOutput, speed);
    }
 
@@ -73,9 +76,9 @@ public class Rotator extends ProfiledPIDSubsystem {
    @Override
    public void periodic() {
       super.periodic();
-      //System.out.printf("%5.3f\n", encoder.getAbsolutePosition());
+      //System.out.printf("%5.3f\n",Math.toDegrees(encoder.getAbsolutePosition()) );
       // TODO: Test If Accurate
-      //   System.out.println("Current Rotation Degrees: "
-      //         + (((encoder.getAbsolutePosition() * 360) + Constants.RotatorConstants.ENCODER_OFFSET))%360);
+        //System.out.println("Current Rotation Degrees: "
+      //       + (((encoder.getAbsolutePosition() * 360) + Constants.RotatorConstants.ENCODER_OFFSET))%360);
    }
 }

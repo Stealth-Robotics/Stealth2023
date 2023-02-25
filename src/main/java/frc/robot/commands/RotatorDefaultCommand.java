@@ -7,11 +7,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Rotator;
 
-public class ArmDefaultCommand extends CommandBase {
+public class RotatorDefaultCommand extends CommandBase {
     private final Rotator rotator;
     private final DoubleSupplier joystick;
 
-    public ArmDefaultCommand(Rotator rotator, DoubleSupplier joystick) {
+    public RotatorDefaultCommand(Rotator rotator, DoubleSupplier joystick) {
         this.rotator = rotator;
         this.joystick = joystick;
         addRequirements(rotator);

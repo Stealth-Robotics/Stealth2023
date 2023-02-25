@@ -28,9 +28,9 @@ public final class Constants {
     public static final double MAX_ACCELERATION = 10.0;
 
     // TODO: Tune After Feedforward is tuned
-    public static final double ROTATOR_P_COEFF = 0.05;
+    public static final double ROTATOR_P_COEFF = 0.005;
     public static final double ROTATOR_I_COEFF = 0.0;
-    public static final double ROTATOR_D_COEFF = 0.008;
+    public static final double ROTATOR_D_COEFF = 0.0;
 
     // TODO: Gain values through SysID
     public static final double ROTATOR_KS_COEFF = 0.10451;
@@ -41,7 +41,7 @@ public final class Constants {
     public static final double ROTATOR_KA_COEFF = 0;
 
     // TODO: Measure and set encoder offset to make 0 perfectly horizontal
-    public static final double ENCODER_OFFSET = 45;
+    public static final double ENCODER_OFFSET = 314.8;
 
     public static final double HIGH_BOUND = 0;
     public static final double LOW_BOUND_INTAKE = 0;
