@@ -49,12 +49,12 @@ public class RobotContainer {
                 // TODO: Uncomment When Other Half Of This Commit Comes in Through LevelRobotPR 
             )
         );*/
-        /*
+        
         telescope.setDefaultCommand(
-          new ArmDefaultCommand(
+          new TelescopeDefault(
             telescope,
             () -> driverController.getRawAxis(rotationAxis)
-        ));*/
+        ));
 
         // Configure the button bindings
         configureButtonBindings();
@@ -69,6 +69,7 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         driverController.a().whileTrue(new TelescopeToPosition(telescope, 0));
+        driverController.b().onTrue(new ResetTelescope(telescope));
 
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
     }

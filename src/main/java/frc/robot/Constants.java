@@ -24,7 +24,7 @@ public final class Constants {
     public static final class TelescopeConstants {
         public static final double P_COEFF = 0.05;
         public static final double I_COEFF = 0.0;
-        public static final double D_COEFF = 0.5;
+        public static final double D_COEFF = 0.025;
         public static final double POSITIONAL_TOLERANCE = 10;
         public static final double VELOCITY_TOLERANCE = Double.POSITIVE_INFINITY;
         public static final double F_COEFF = 0;

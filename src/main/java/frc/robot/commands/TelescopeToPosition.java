@@ -26,7 +26,6 @@ public class TelescopeToPosition extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        telescopeSubsystem.setSpeed(0);
     }
 
     @Override
