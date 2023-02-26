@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import com.playingwithfusion.TimeOfFlight;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -8,10 +7,8 @@ import frc.robot.RobotMap;
 
 public class ClawSubsystem extends SubsystemBase{
     private Solenoid clawSolenoid;
-    private TimeOfFlight distanceSensor;
 
     public ClawSubsystem() {
-        distanceSensor = new TimeOfFlight(RobotMap.Claw.TIME_OF_FLIGHT);
 
         clawSolenoid = new Solenoid(
         RobotMap.Pneumatics.PCM, 
@@ -39,15 +36,5 @@ public class ClawSubsystem extends SubsystemBase{
 
     public boolean getIsOpen(){
         return clawSolenoid.get();
-    }
-
-    public double getRawDistance()
-    {
-        return distanceSensor.getRange();
-    }
-
-    public boolean getTrip()
-    {
-        return getRawDistance() < Constants.ClawConstants.DISTANCE_TRIP_THRESHOLD;
     }
 }

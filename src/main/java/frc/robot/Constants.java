@@ -190,7 +190,7 @@ public final class Constants {
           angleOffset);
     }
   }
-
+  
   public static final class AutoConstants { // TODO: The below constants are used in the example auto, and must be tuned
                                             // to specific robot
     public static final double k_MAX_SPEED_MPS = 3;
