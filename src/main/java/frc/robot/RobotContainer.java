@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.RotatorDefaultCommand;
 import frc.robot.commands.TeleopDrivebaseDefaultCommand;
 import frc.robot.subsystems.RotatorSubsystem;
@@ -40,49 +39,54 @@ public class RobotContainer {
   private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
 
   /* Subsystems */
-  private final DrivebaseSubsystem s_Swerve = new DrivebaseSubsystem();
+  private final DrivebaseSubsystem swerve;
   private final RotatorSubsystem rotator;
+  private final TelescopeSubsystem telescope;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    swerve = new DrivebaseSubsystem();
+    telescope = new TelescopeSubsystem();
     rotator = new RotatorSubsystem();
+
+    swerve.setDefaultCommand(
+        new TeleopDrivebaseDefaultCommand(
+            swerve,
+            () -> -driverController.getRawAxis(translationAxis),
+            () -> -driverController.getRawAxis(strafeAxis),
+            () -> -driverController.getRawAxis(rotationAxis),
+            () -> driverController.b().getAsBoolean() // ,
+        // () -> driverController.leftBumper().getAsBoolean()
+        ));
+
     rotator.setDefaultCommand(new RotatorDefaultCommand(
         rotator,
         () -> -driverController.getRightX()));
 
-    s_Swerve.setDefaultCommand(
-        new TeleopDrivebaseDefaultCommand(
-            s_Swerve,
-            () -> -driverController.getRawAxis(translationAxis),
-            () -> -driverController.getRawAxis(strafeAxis),
-            () -> -driverController.getRawAxis(rotationAxis),
-            () -> driverController.b().getAsBoolean() ,
-            () -> driverController.leftBumper().getAsBoolean()
-        ));
-        
-        telescope.setDefaultCommand(
-          new TelescopeDefault(
+    telescope.setDefaultCommand(
+        new TelescopeDefault(
             telescope,
-            () -> driverController.getRawAxis(rotationAxis)
-        ));
+            () -> driverController.getRawAxis(rotationAxis)));
 
     // Configure the button bindings
     configureButtonBindings();
   }
 
-    /**
-     * Use this method to define your button->command mappings. Buttons can be created by
-     * instantiating a {@link GenericHID} or one of its subclasses ({@link
-     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-     * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-     */
-    private void configureButtonBindings() {
-        /* Driver Buttons */
-        driverController.a().whileTrue(new TelescopeToPosition(telescope, 0));
-        driverController.b().onTrue(new ResetTelescope(telescope));
-    zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+  /**
+   * Use this method to define your button->command mappings. Buttons can be
+   * created by
+   * instantiating a {@link GenericHID} or one of its subclasses ({@link
+   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
+   * it to a {@link
+   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+   */
+  private void configureButtonBindings() {
+    /* Driver Buttons */
+    driverController.a().whileTrue(new TelescopeToPosition(telescope, 0));
+    driverController.b().onTrue(new ResetTelescope(telescope));
+    zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
 
     driverController
         .a()

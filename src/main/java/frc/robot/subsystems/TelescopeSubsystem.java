@@ -5,7 +5,6 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -14,7 +13,6 @@ import frc.robot.RobotMap;
 public class TelescopeSubsystem extends SubsystemBase {
     private final WPI_TalonFX armMotor;
     private Debouncer stallDebouncer = new Debouncer(0.010, Debouncer.DebounceType.kRising);
-
 
     private double currentSetpoint;
 
@@ -59,26 +57,29 @@ public class TelescopeSubsystem extends SubsystemBase {
     public void setPosition(double position) {
         armMotor.set(ControlMode.Position, position);
     }
+
     public boolean checkVelocity() {
 
         return stallDebouncer.calculate(
-            Math.abs(armMotor.getSelectedSensorVelocity()) < 50
-            );
+                Math.abs(armMotor.getSelectedSensorVelocity()) < 50);
     }
+
     public void completeReset() {
         setSpeed(0);
         armMotor.setSelectedSensorPosition(0);
     }
-    //check the elevator down
+
+    // check the elevator down
     public void setElevatorDown_Slowly_() {
         setSpeed(.30);
         stallDebouncer.calculate(false);
     }
-    public boolean atSetpoint()
-    {
+
+    public boolean atSetpoint() {
         return Math.abs(armMotor.getClosedLoopError()) < Constants.TelescopeConstants.POSITIONAL_TOLERANCE
-        && Math.abs(armMotor.getSelectedSensorVelocity()) < Constants.TelescopeConstants.VELOCITY_TOLERANCE;
+                && Math.abs(armMotor.getSelectedSensorVelocity()) < Constants.TelescopeConstants.VELOCITY_TOLERANCE;
     }
+
     @Override
     public void periodic() {
         System.out.println(armMotor.getSelectedSensorVelocity());
