@@ -28,25 +28,24 @@ public final class Constants {
     public static final double MAX_ACCELERATION = 10.0;
 
     // TODO: Tune After Feedforward is tuned
-    public static final double ROTATOR_P_COEFF = 0.005;
+    public static final double ROTATOR_P_COEFF = 1;
     public static final double ROTATOR_I_COEFF = 0.0;
     public static final double ROTATOR_D_COEFF = 0.0;
 
     // TODO: Gain values through SysID
-    public static final double ROTATOR_KS_COEFF = 0.10451;
+    public static final double ROTATOR_KS_COEFF = 0; //0.10451;
     public static final double ROTATOR_KG_COEFF = 0.20852;
     // Volt Second Per Rad
-    public static final double ROTATOR_KV_COEFF = 0.031835;
+    public static final double ROTATOR_KV_COEFF = 0; //0.031835;
     // Volt Second Squared Per Rad
     public static final double ROTATOR_KA_COEFF = 0;
 
     // TODO: Measure and set encoder offset to make 0 perfectly horizontal
-    public static final double ENCODER_OFFSET = 314.8;
+    public static final double ENCODER_OFFSET = 138;
 
-    public static final double HIGH_BOUND = 0;
-    public static final double LOW_BOUND_INTAKE = 0;
-    public static final double LOW_BOUND = 0;
+    public static final double HIGH_BOUND = 285;
+    public static final double LOW_BOUND = 70;
 
-    public static final double ROTATOR_SPEED_MULTIPLIER = 0;
+    public static final double ROTATOR_SPEED_MULTIPLIER = 1.0;
   }
 }

@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.RotatorDefaultCommand;
 import frc.robot.subsystems.Rotator;
+import frc.robot.subsystems.RotatorPIDOnly;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -22,7 +23,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  private final Rotator rotator;
+  private final RotatorPIDOnly rotator;
   // The robot's subsystems and commands are defined here...
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -33,10 +34,10 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    rotator = new Rotator();
+    rotator = new RotatorPIDOnly();
     rotator.setDefaultCommand(new RotatorDefaultCommand(
         rotator,
-        () -> m_driverController.getRightTriggerAxis()));
+        () -> -m_driverController.getRightX()));
     // Configure the trigger bindings
     configureBindings();
   }
@@ -62,8 +63,8 @@ public class RobotContainer {
         .onTrue(
             Commands.runOnce(
                 () -> {
-                  rotator.setGoal(0);
-                  //rotator.enable();
+                  rotator.setGoal(130);
+                  // rotator.enable();
                 },
                 rotator));
   }
