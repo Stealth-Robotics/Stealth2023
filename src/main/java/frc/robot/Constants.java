@@ -47,5 +47,7 @@ public final class Constants {
     public static final double LOW_BOUND = 70;
 
     public static final double ROTATOR_SPEED_MULTIPLIER = 1.0;
+
+    public static final double RotatorJoystickDeadband = 0.05;
   }
 }

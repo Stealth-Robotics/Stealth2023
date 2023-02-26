@@ -27,7 +27,7 @@ public class RotatorDefaultCommand extends CommandBase {
     @Override
     public void execute() {
         double joystickVal = joystick.getAsDouble();
-        if (Math.abs(joystickVal) > 0.05) {
+        if (Math.abs(joystickVal) > Constants.RotatorConstants.RotatorJoystickDeadband) {
             rotator.setGoal(MathUtil.clamp(
                     (rotator.getSetpoint() + joystickVal * Constants.RotatorConstants.ROTATOR_SPEED_MULTIPLIER),
                     Constants.RotatorConstants.LOW_BOUND, Constants.RotatorConstants.HIGH_BOUND));
