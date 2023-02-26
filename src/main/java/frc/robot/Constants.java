@@ -29,6 +29,8 @@ public final class Constants {
     public static final double VELOCITY_TOLERANCE = Double.POSITIVE_INFINITY;
     public static final double F_COEFF = 0;
     public static final double TELESCOPE_SPEED_MULTIPLIER = 1.0;
+
+    public static final int UPPER_BOUND = 97105;
   }
 
   public static final class PhotonVisionConstants {
@@ -37,7 +39,7 @@ public final class Constants {
     // TODO: Enter actual values (In meters and degrees)
     public static final Transform3d ROBOT_CENTER_TO_CAMERA = new Transform3d(
         new Translation3d(0.0, 0.0, 0.0),
-        new Rotation3d(0, 0, 0));
+        new Rotation3d(Math.toRadians(180), 0, Math.toRadians(180)));
 
     public final static AprilTagFieldLayout APRIL_TAG_FIELD_LAYOUT;
 
@@ -49,7 +51,7 @@ public final class Constants {
       }
     }
     // TODO: Choose Pose Strategy
-    public final static PoseStrategy POSE_STRATEGY = PoseStrategy.LOWEST_AMBIGUITY;
+    public final static PoseStrategy POSE_STRATEGY = PoseStrategy.CLOSEST_TO_CAMERA_HEIGHT;
   }
 
   public static final class TeleopConstants {
@@ -152,7 +154,7 @@ public final class Constants {
     /* Module Specific Constants */
     /* Front Left Module - Module 0 */
     public static final class MOD_0 { // TODO: This must be tuned to specific robot
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(292.840);
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(285.99609375);
       public static final SwerveModuleConstants constants = new SwerveModuleConstants(
           RobotMap.Drivebase.Mod0.DRIVE_MOTOR_ID,
           RobotMap.Drivebase.Mod0.ANGLE_MOTOR_ID,
@@ -162,7 +164,7 @@ public final class Constants {
 
     /* Front Right Module - Module 1 */
     public static final class MOD_1 { // TODO: This must be tuned to specific robot
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(248.936);
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(242.75390624999997);
       public static final SwerveModuleConstants constants = new SwerveModuleConstants(
           RobotMap.Drivebase.Mod1.DRIVE_MOTOR_ID,
           RobotMap.Drivebase.Mod1.ANGLE_MOTOR_ID,
@@ -172,7 +174,7 @@ public final class Constants {
 
     /* Back Left Module - Module 2 */
     public static final class MOD_2 { // TODO: This must be tuned to specific robot
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(178.651);
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(254.53125);
       public static final SwerveModuleConstants constants = new SwerveModuleConstants(
           RobotMap.Drivebase.Mod2.DRIVE_MOTOR_ID,
           RobotMap.Drivebase.Mod2.ANGLE_MOTOR_ID,
@@ -182,7 +184,7 @@ public final class Constants {
 
     /* Back Right Module - Module 3 */
     public static final class MOD_3 { // TODO: This must be tuned to specific robot
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(75.997);
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(76.640625);
       public static final SwerveModuleConstants constants = new SwerveModuleConstants(
           RobotMap.Drivebase.Mod3.DRIVE_MOTOR_ID,
           RobotMap.Drivebase.Mod3.ANGLE_MOTOR_ID,
@@ -198,9 +200,9 @@ public final class Constants {
     public static final double k_MAX_ANGULAR_SPEED_RADS_PER_SEC = Math.PI;
     public static final double k_MAX_ANGULAR_ACCEL_RADS_PER_SEC_SQUARED = Math.PI;
 
-    public static final double k_PX_CONTROLLER = 1;
-    public static final double k_PY_CONTROLLER = 1;
-    public static final double k_P_THETA_CONTROLLER = 1;
+    public static final double k_PX_CONTROLLER = 3;
+    public static final double k_PY_CONTROLLER = 3;
+    public static final double k_P_THETA_CONTROLLER = 4;
 
     /* Constraint for the motion profilied robot angle controller */
     public static final TrapezoidProfile.Constraints k_THETA_CONTROLLER_CONSTRAINTS = new TrapezoidProfile.Constraints(
@@ -214,9 +216,9 @@ public final class Constants {
     public static final double MAX_ACCELERATION = 10.0;
 
     // TODO: Tune After Feedforward is tuned
-    public static final double ROTATOR_P_COEFF = 1;
-    public static final double ROTATOR_I_COEFF = 0.0;
-    public static final double ROTATOR_D_COEFF = 0.0;
+    public static final double ROTATOR_P_COEFF = 0.75;
+    public static final double ROTATOR_I_COEFF = 0;
+    public static final double ROTATOR_D_COEFF = 0.025;
 
     // TODO: Gain values through SysID
     public static final double ROTATOR_KS_COEFF = 0; // 0.10451;

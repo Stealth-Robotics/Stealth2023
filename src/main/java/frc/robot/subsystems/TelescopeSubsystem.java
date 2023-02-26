@@ -23,6 +23,7 @@ public class TelescopeSubsystem extends SubsystemBase {
         armMotor.configFactoryDefault();
 
         armMotor.setNeutralMode(NeutralMode.Brake);
+
         armMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 
         armMotor.configAllowableClosedloopError(0, Constants.TelescopeConstants.POSITIONAL_TOLERANCE);
@@ -32,8 +33,9 @@ public class TelescopeSubsystem extends SubsystemBase {
         armMotor.config_kD(0, Constants.TelescopeConstants.D_COEFF);
         armMotor.config_kF(0, Constants.TelescopeConstants.F_COEFF);
 
-        currentSetpoint = getCurrentPosition();
+        armMotor.setSelectedSensorPosition(0);
 
+        currentSetpoint = getCurrentPosition();
         register();
     }
 
@@ -80,8 +82,14 @@ public class TelescopeSubsystem extends SubsystemBase {
                 && Math.abs(armMotor.getSelectedSensorVelocity()) < Constants.TelescopeConstants.VELOCITY_TOLERANCE;
     }
 
+    public boolean inBounds(){
+        return true;
+        //return Math.abs(getCurrentPosition()) <= Constants.TelescopeConstants.UPPER_BOUND ;
+    }
+
     @Override
     public void periodic() {
-        System.out.println(armMotor.getSelectedSensorVelocity());
+        //System.out.println(armMotor.getSelectedSensorVelocity());
+        //System.out.println(getCurrentPosition());
     }
 }

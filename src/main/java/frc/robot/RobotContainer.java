@@ -7,8 +7,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.RotatorDefaultCommand;
-import frc.robot.commands.TeleopDrivebaseDefaultCommand;
 import frc.robot.subsystems.RotatorSubsystem;
 import frc.robot.commands.*;
 import frc.robot.subsystems.TelescopeSubsystem;
@@ -28,6 +26,9 @@ public class RobotContainer {
   private final Joystick driver = new Joystick(0);
   private final CommandXboxController driverController = new CommandXboxController(
       Constants.IOConstants.k_DRIVER_CONTROLLER_PORT);
+
+      private final CommandXboxController mechController = new CommandXboxController(
+      Constants.IOConstants.k_OPERATOR_CONTROLLER_PORT);
 
   /* Drive Controls */
   private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -54,21 +55,22 @@ public class RobotContainer {
     swerve.setDefaultCommand(
         new TeleopDrivebaseDefaultCommand(
             swerve,
-            () -> -driverController.getRawAxis(translationAxis),
-            () -> -driverController.getRawAxis(strafeAxis),
-            () -> -driverController.getRawAxis(rotationAxis),
+            () -> driverController.getRawAxis(translationAxis),
+            () -> driverController.getRawAxis(strafeAxis),
+            () -> driverController.getRawAxis(rotationAxis),
             () -> driverController.b().getAsBoolean() // ,
         // () -> driverController.leftBumper().getAsBoolean()
         ));
 
     rotator.setDefaultCommand(new RotatorDefaultCommand(
         rotator,
-        () -> -driverController.getRightX()));
-
+        () -> -mechController.getRightX()));
+    
     telescope.setDefaultCommand(
+      
         new TelescopeDefault(
             telescope,
-            () -> driverController.getRawAxis(rotationAxis)));
+            () -> mechController.getLeftX()));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -82,12 +84,13 @@ public class RobotContainer {
    * it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
+
   private void configureButtonBindings() {
     /* Driver Buttons */
-    driverController.b().onTrue(new ResetTelescope(telescope));
+    mechController.b().onTrue(new ResetTelescope(telescope));
     zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
 
-    driverController
+    mechController
         .x()
         .onTrue(
             Commands.runOnce(
@@ -104,6 +107,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // TODO: Replace with Auto command
-    return Commands.none();
+    return new BlueTest(swerve);
   }
 }

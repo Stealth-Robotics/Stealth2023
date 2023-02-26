@@ -22,6 +22,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -51,6 +53,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
         gyro = new Pigeon2(RobotMap.Drivebase.PIGEON_ID);
         gyro.configFactoryDefault();
         zeroGyro();
+        thetaController.enableContinuousInput(Math.PI, -Math.PI);
+        pathController.setEnabled(true);
 
         mSwerveMods = new SwerveModule[] {
                 new SwerveModule(0, Constants.DrivebaseConstants.MOD_0.constants),
@@ -58,11 +62,23 @@ public class DrivebaseSubsystem extends SubsystemBase {
                 new SwerveModule(2, Constants.DrivebaseConstants.MOD_2.constants),
                 new SwerveModule(3, Constants.DrivebaseConstants.MOD_3.constants)
         };
+
+        Timer.delay(1.0);
+        resetModulesToAbsolute();
+
         // TODO: Set the actual pose
         field2d = new Field2d();
         SmartDashboard.putData(field2d);
-        swerveOdometry = new SwerveDrivePoseEstimator(Constants.DrivebaseConstants.SWERVE_KINEMATICS, getYaw(),
+        swerveOdometry = new SwerveDrivePoseEstimator(Constants.DrivebaseConstants.SWERVE_KINEMATICS, getGyroscopeRotation(),
                 getModulePositions(), new Pose2d());
+    }
+
+    public void resetModulesToAbsolute()
+    {
+        for(SwerveModule mod: mSwerveMods)
+        {
+            mod.resetToAbsolute();
+        }
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
@@ -71,7 +87,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
                         translation.getX(),
                         translation.getY(),
                         rotation,
-                        getYaw())
+                        getGyroscopeRotation())
                         : new ChassisSpeeds(
                                 translation.getX(),
                                 translation.getY(),
@@ -123,7 +139,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
     }
 
     public void resetOdometry(Pose2d pose) {
-        swerveOdometry.resetPosition(getYaw(), getModulePositions(), pose);
+        swerveOdometry.resetPosition(getGyroscopeRotation(), getModulePositions(), pose);
     }
 
     public SwerveModuleState[] getModuleStates() {
@@ -163,18 +179,25 @@ public class DrivebaseSubsystem extends SubsystemBase {
         return gyro.getRoll();
     }
 
+    public Rotation2d getGyroscopeRotation() {
+        double[] ypr = new double[3];
+        gyro.getYawPitchRoll(ypr);
+        return Rotation2d.fromDegrees(ypr[0]);
+    }
+
     @Override
     public void periodic() {
-        swerveOdometry.update(getYaw(), getModulePositions());
+
+        swerveOdometry.update(getGyroscopeRotation(), getModulePositions());
 
         Optional<EstimatedRobotPose> result = pcw.getEstimatedGlobalPose(swerveOdometry.getEstimatedPosition());
-
+        /* 
         if (result.isPresent()) {
             EstimatedRobotPose camPose = result.get();
             swerveOdometry.addVisionMeasurement(
                     camPose.estimatedPose.toPose2d(),
                     camPose.timestampSeconds);
-        }
+        }*/
 
         field2d.setRobotPose(getPose());
         for (SwerveModule mod : mSwerveMods) {

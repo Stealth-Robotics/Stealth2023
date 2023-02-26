@@ -62,7 +62,6 @@ public class SwerveTrajectoryFollowCommand extends CommandBase {
 
         timer.reset();
         timer.start();
-        // drivetrain.resetPathController(); // reset theta setpoint between different
         // trajectories
     }
 
