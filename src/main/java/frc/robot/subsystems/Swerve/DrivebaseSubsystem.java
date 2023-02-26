@@ -167,7 +167,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
         return gyro.getYaw();
     }
 
-    public double getPitch(){
+    public double getPitchAsDouble(){
         return gyro.getPitch();
     }
 

@@ -22,7 +22,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 public final class Constants {
 
   public static final class LevelRobotConstants {
-    public static final double PID_kP = 0.2;
+    public static final double PID_kP = 0.4;
     public static final double PID_kI = 0.001;
     public static final double PID_kD = 0.005;
 
@@ -30,7 +30,7 @@ public final class Constants {
     public static final double HEADING_PID_kI = 0;
     public static final double HEADING_PID_kD = 0.0025;
 
-    public static final double LEVELING_DRIVE_SPEED_LIMIT = 0.45;
+    public static final double LEVELING_DRIVE_SPEED_LIMIT = 0.7;
     public static final double LEVELING_ROTATION_SPEED_LIMIT = 0.5;
 }
 

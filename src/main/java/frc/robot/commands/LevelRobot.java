@@ -36,15 +36,15 @@ public class LevelRobot extends CommandBase{
     public void execute() {
         double yaw = drive.getYawAsDouble() % 360;
         double roll = drive.getRollAsDouble();
-        if (yaw < 180 || yaw > 180) {
-            roll = drive.getPitch();
-        }
-        double deltaYaw = yaw-startingYaw;
-        double calculationMovement = pid.calculate(roll, 0);
-        double calculationHeading = headingPid.calculate(deltaYaw * -1, 0);
+        double pitch = drive.getPitchAsDouble();
+
+        //double deltaYaw = yaw-startingYaw;
+        double calculationMovement = pid.calculate(pitch, 0);
+        double calculationHeading = headingPid.calculate(yaw * -1, 0);
         calculationMovement = MathUtil.clamp(calculationMovement, -Constants.LevelRobotConstants.LEVELING_DRIVE_SPEED_LIMIT, Constants.LevelRobotConstants.LEVELING_DRIVE_SPEED_LIMIT);
         calculationHeading = MathUtil.clamp(calculationHeading, -Constants.LevelRobotConstants.LEVELING_ROTATION_SPEED_LIMIT, Constants.LevelRobotConstants.LEVELING_ROTATION_SPEED_LIMIT);
-        drive.drive(new Translation2d(calculationMovement, 0), 0, true, true);
+        System.out.println(calculationMovement);
+        drive.drive(new Translation2d(calculationMovement, 0), calculationHeading, true, true);
         
     }
 
