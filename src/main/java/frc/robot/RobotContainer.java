@@ -7,10 +7,9 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.RotatorDefaultCommand;
-import frc.robot.commands.TeleopDrivebaseDefaultCommand;
 import frc.robot.subsystems.RotatorSubsystem;
+import frc.robot.commands.*;
+import frc.robot.subsystems.TelescopeSubsystem;
 import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
 
 /**
@@ -28,69 +27,77 @@ public class RobotContainer {
   private final CommandXboxController driverController = new CommandXboxController(
       Constants.IOConstants.k_DRIVER_CONTROLLER_PORT);
 
+      private final CommandXboxController mechController = new CommandXboxController(
+      Constants.IOConstants.k_OPERATOR_CONTROLLER_PORT);
+
   /* Drive Controls */
   private final int translationAxis = XboxController.Axis.kLeftY.value;
   private final int strafeAxis = XboxController.Axis.kLeftX.value;
   private final int rotationAxis = XboxController.Axis.kRightX.value;
 
   /* Driver Buttons */
-  private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
+  private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kA.value);
   private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
 
   /* Subsystems */
-  private final DrivebaseSubsystem s_Swerve = new DrivebaseSubsystem();
+  private final DrivebaseSubsystem swerve;
   private final RotatorSubsystem rotator;
+  private final TelescopeSubsystem telescope;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    swerve = new DrivebaseSubsystem();
+    telescope = new TelescopeSubsystem();
     rotator = new RotatorSubsystem();
-    rotator.setDefaultCommand(new RotatorDefaultCommand(
-        rotator,
-        () -> -driverController.getRightX()));
 
-    s_Swerve.setDefaultCommand(
+    swerve.setDefaultCommand(
         new TeleopDrivebaseDefaultCommand(
-            s_Swerve,
+            swerve,
             () -> -driverController.getRawAxis(translationAxis),
             () -> -driverController.getRawAxis(strafeAxis),
             () -> -driverController.getRawAxis(rotationAxis),
-            () -> driverController.b().getAsBoolean()// ,
+            () -> driverController.b().getAsBoolean() // ,
         // () -> driverController.leftBumper().getAsBoolean()
-        // TODO: Uncomment When Other Half Of This Commit Comes in Through LevelRobotPR
         ));
+    
+    // rotator.setDefaultCommand(new RotatorDefaultCommand(
+    //     rotator,
+    //     () -> -mechController.getRightX()));
+    
+    // telescope.setDefaultCommand(
+      
+    //     new TelescopeDefault(
+    //         telescope,
+    //         () -> mechController.getLeftX()));
 
     // Configure the button bindings
     configureButtonBindings();
   }
 
   /**
-   * Use this method to define your trigger->command mappings. Triggers can be
-   * created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with
-   * an arbitrary
-   * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for
-   * {@link
-   * CommandXboxController
-   * Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or
-   * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
+   * Use this method to define your button->command mappings. Buttons can be
+   * created by
+   * instantiating a {@link GenericHID} or one of its subclasses ({@link
+   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
+   * it to a {@link
+   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
+
   private void configureButtonBindings() {
     /* Driver Buttons */
-    zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+    // mechController.b().onTrue(new ResetTelescope(telescope));
+    zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
 
-    driverController
-        .a()
-        .onTrue(
-            Commands.runOnce(
-                () -> {
-                  rotator.setGoal(130);
-                },
-                rotator));
+    // mechController
+    //     .x()
+    //     .onTrue(
+    //         Commands.runOnce(
+    //             () -> {
+    //               rotator.setGoal(130);
+    //             },
+    //             rotator));
   }
 
   /**
@@ -100,6 +107,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // TODO: Replace with Auto command
-    return Commands.none();
+    return new BluePreloadPlusOneLeft(swerve);
   }
 }

@@ -62,7 +62,6 @@ public class SwerveTrajectoryFollowCommand extends CommandBase {
 
         timer.reset();
         timer.start();
-        // drivetrain.resetPathController(); // reset theta setpoint between different
         // trajectories
     }
 
@@ -79,7 +78,7 @@ public class SwerveTrajectoryFollowCommand extends CommandBase {
             targetRotation = ((PathPlannerState) targetState).holonomicRotation;
         }
 
-        drivetrain.drive(targetState, targetRotation);
+        drivetrain.drive(targetState, targetRotation, true);
 
         // Pose2d targetPose = targetState.poseMeters;
         // SmartDashboard.putNumber("Target Heading",
@@ -92,7 +91,7 @@ public class SwerveTrajectoryFollowCommand extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         //Default constructor of chassisSpeeds is 0 on everything
-        if (interrupted) drivetrain.drive(new ChassisSpeeds());
+        if (interrupted) drivetrain.drive(new ChassisSpeeds(), true);
         timer.stop();
     }
 

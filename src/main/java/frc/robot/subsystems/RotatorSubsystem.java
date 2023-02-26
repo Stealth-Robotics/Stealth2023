@@ -7,6 +7,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
@@ -66,6 +67,8 @@ public class RotatorSubsystem extends SubsystemBase {
             System.out.println(
                     "RotatorPIDOnly.getMeasurement: Current encoder position (adj): " + Math.toDegrees(result));
         }
+        SmartDashboard.putNumber("RotatorPIDOnly.getMeasurement: Current encoder position (raw): ", currentPosition);
+        SmartDashboard.putNumber("RotatorPIDOnly.getMeasurement: Current encoder position (adj): ", Math.toDegrees(result));
         return result;
     }
 
@@ -97,7 +100,16 @@ public class RotatorSubsystem extends SubsystemBase {
             System.out.println("RotatorPIDOnly.periodic: ff: " + ff);
             System.out.println("RotatorPIDOnly.periodic: safe speed: " + safeSpeed);
         }
-        setSpeed(safeSpeed);
+        SmartDashboard.putNumber("Setpoint: " , Math.toDegrees(pid.getSetpoint()));
+        SmartDashboard.putNumber("Speed: " , speed);        
+        SmartDashboard.putNumber("Setpoint: " , ff);
+        SmartDashboard.putNumber("safe speed: " , safeSpeed);
+        SmartDashboard.putNumber("Current Pos:", Math.toDegrees(getMeasurement()));
+
+        
+
+
+        setSpeed(speed+ff);
     }
 
 }
