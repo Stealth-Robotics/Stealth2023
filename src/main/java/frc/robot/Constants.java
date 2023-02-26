@@ -28,6 +28,7 @@ public final class Constants {
     public static final double POSITIONAL_TOLERANCE = 10;
     public static final double VELOCITY_TOLERANCE = Double.POSITIVE_INFINITY;
     public static final double F_COEFF = 0;
+    public static final double TELESCOPE_SPEED_MULTIPLIER = 1.0;
   }
 
   public static final class PhotonVisionConstants {
