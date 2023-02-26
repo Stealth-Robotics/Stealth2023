@@ -61,16 +61,16 @@ public class RobotContainer {
             () -> driverController.b().getAsBoolean() // ,
         // () -> driverController.leftBumper().getAsBoolean()
         ));
-
-    rotator.setDefaultCommand(new RotatorDefaultCommand(
-        rotator,
-        () -> -mechController.getRightX()));
     
-    telescope.setDefaultCommand(
+    // rotator.setDefaultCommand(new RotatorDefaultCommand(
+    //     rotator,
+    //     () -> -mechController.getRightX()));
+    
+    // telescope.setDefaultCommand(
       
-        new TelescopeDefault(
-            telescope,
-            () -> mechController.getLeftX()));
+    //     new TelescopeDefault(
+    //         telescope,
+    //         () -> mechController.getLeftX()));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -87,17 +87,17 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     /* Driver Buttons */
-    mechController.b().onTrue(new ResetTelescope(telescope));
+    // mechController.b().onTrue(new ResetTelescope(telescope));
     zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
 
-    mechController
-        .x()
-        .onTrue(
-            Commands.runOnce(
-                () -> {
-                  rotator.setGoal(130);
-                },
-                rotator));
+    // mechController
+    //     .x()
+    //     .onTrue(
+    //         Commands.runOnce(
+    //             () -> {
+    //               rotator.setGoal(130);
+    //             },
+    //             rotator));
   }
 
   /**
