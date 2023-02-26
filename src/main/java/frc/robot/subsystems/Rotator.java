@@ -1,84 +1,94 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
-import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 
-public class Rotator extends ProfiledPIDSubsystem {
-   private final WPI_TalonFX rotationMotor;
-   private final DutyCycleEncoder encoder;
+public class Rotator extends SubsystemBase {
+    private final WPI_TalonFX rotationMotor;
+    private final PIDController pid;
+    private final DutyCycleEncoder encoder;
 
-   private final ArmFeedforward feedforward;
+    // TODO: make public or private, move wherever you like.
+    private boolean log = true;
 
-   public Rotator() {
-      super(
-            new ProfiledPIDController(
-                  Constants.RotatorConstants.ROTATOR_P_COEFF,
-                  Constants.RotatorConstants.ROTATOR_I_COEFF,
-                  Constants.RotatorConstants.ROTATOR_D_COEFF,
-                  new TrapezoidProfile.Constraints(
-                        Constants.RotatorConstants.MAX_VELOCITY,
-                        Constants.RotatorConstants.MAX_ACCELERATION)),
-            0);
+    // TODO: make public or private, move wherever you like.
+    private double speedLimit = 1; // mmmfixme: test, start at 10%
+    private final ArmFeedforward feedforward;
 
-      super.m_controller.setTolerance(0.05);
-      this.encoder = new DutyCycleEncoder(0);
+    public Rotator() {
 
-      rotationMotor = new WPI_TalonFX(RobotMap.Rotator.ROTATOR_MOTOR);
-      rotationMotor.setNeutralMode(NeutralMode.Brake);
+        rotationMotor = new WPI_TalonFX(RobotMap.Rotator.ROTATOR_MOTOR);
+        rotationMotor.setNeutralMode(NeutralMode.Coast);
+        rotationMotor.setInverted(true);
 
-      feedforward = new ArmFeedforward(
-            Constants.RotatorConstants.ROTATOR_KS_COEFF,
-            Constants.RotatorConstants.ROTATOR_KG_COEFF,
-            Constants.RotatorConstants.ROTATOR_KV_COEFF,
-            Constants.RotatorConstants.ROTATOR_KA_COEFF);
+        pid = new PIDController(
+                Constants.RotatorConstants.ROTATOR_P_COEFF,
+                Constants.RotatorConstants.ROTATOR_I_COEFF,
+                Constants.RotatorConstants.ROTATOR_D_COEFF);
+        // pid.enableContinuousInput(0, Math.PI * 2);
+        pid.setTolerance(Math.toRadians(3));
+        feedforward = new ArmFeedforward(
+                Constants.RotatorConstants.ROTATOR_KS_COEFF,
+                Constants.RotatorConstants.ROTATOR_KG_COEFF,
+                Constants.RotatorConstants.ROTATOR_KV_COEFF,
+                Constants.RotatorConstants.ROTATOR_KA_COEFF);
 
-      super.m_controller.enableContinuousInput(0, 2*Math.PI);
-      enable();
-      
-   }
+        encoder = new DutyCycleEncoder(0);
+        reset();
+    }
 
-   private void setSpeed(double speed) {
-      rotationMotor.set(ControlMode.PercentOutput, speed);
-   }
+    public void reset() {
+        setSetpoint(Math.toDegrees(getMeasurement()));
+    }
 
-   @Override
-   protected void useOutput(double output, State setpoint) {
-      rotationMotor.set(
-            ControlMode.PercentOutput,
-            (output) + (feedforward.calculate(setpoint.position, setpoint.velocity)));
-      System.out.printf("cal: %5.3f | measure: %f5.3\n", (output + (feedforward.calculate(setpoint.position, setpoint.velocity))), getMeasurement());
-   }
+    private double getMeasurement() {
+        double currentPosition = encoder.getAbsolutePosition();
+        double result = Math.toRadians(((currentPosition * 360) + Constants.RotatorConstants.ENCODER_OFFSET) % 360);
+        if (log) {
+            System.out.println("RotatorPIDOnly.getMeasurement: Current encoder position (raw): " + currentPosition);
+            System.out.println(
+                    "RotatorPIDOnly.getMeasurement: Current encoder position (adj): " + Math.toDegrees(result));
+        }
+        return result;
+    }
 
-   @Override
-   protected double getMeasurement() {
-      return Math.toRadians(((encoder.getAbsolutePosition() * 360) + Constants.RotatorConstants.ENCODER_OFFSET)%360);
-   }
+    public double getSetpoint() {
+        return Math.toDegrees(pid.getSetpoint());
+    }
 
-   @Override
-   public void setGoal(double goal) {
-      super.setGoal(goal);
-   }
+    public void setSetpoint(double degrees) {
+        pid.setSetpoint(Math.toRadians(degrees));
+    }
 
-   public double getSetpoint() {
-      return super.getController().getSetpoint().position;
-   }
+    // TODO: tmp, just to keep the same interface as the other subsystem
+    public void setGoal(double setPoint) {
+        setSetpoint(setPoint);
+    }
 
-   @Override
-   public void periodic() {
-      super.periodic();
-      //System.out.printf("%5.3f\n",Math.toDegrees(encoder.getAbsolutePosition()) );
-      // TODO: Test If Accurate
-        //System.out.println("Current Rotation Degrees: "
-      //       + (((encoder.getAbsolutePosition() * 360) + Constants.RotatorConstants.ENCODER_OFFSET))%360);
-   }
+    private void setSpeed(double speed) {
+        rotationMotor.set(speed); // Defaults to PercentOutput
+    }
+
+    @Override
+    public void periodic() {
+        double ff = feedforward.calculate(pid.getSetpoint() - (Math.PI / 2), rotationMotor.getSelectedSensorVelocity());
+        double speed = pid.calculate(getMeasurement());
+        double safeSpeed = MathUtil.clamp(speed + ff, -speedLimit, speedLimit);
+        if (log) {
+            System.out.println("RotatorPIDOnly.periodic: current setpoint: " + Math.toDegrees(pid.getSetpoint()));
+            System.out.println("RotatorPIDOnly.periodic: speed: " + speed);
+            System.out.println("RotatorPIDOnly.periodic: ff: " + ff);
+            System.out.println("RotatorPIDOnly.periodic: safe speed: " + safeSpeed);
+        }
+        setSpeed(safeSpeed);
+    }
+
 }

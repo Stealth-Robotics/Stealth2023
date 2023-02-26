@@ -6,13 +6,13 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Rotator;
-import frc.robot.subsystems.RotatorPIDOnly;
+import frc.robot.subsystems.Rotator;
 
 public class RotatorDefaultCommand extends CommandBase {
-    private final RotatorPIDOnly rotator;
+    private final Rotator rotator;
     private final DoubleSupplier joystick;
 
-    public RotatorDefaultCommand(RotatorPIDOnly rotator, DoubleSupplier joystick) {
+    public RotatorDefaultCommand(Rotator rotator, DoubleSupplier joystick) {
         this.rotator = rotator;
         this.joystick = joystick;
         addRequirements(rotator);
