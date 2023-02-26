@@ -20,21 +20,19 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
 public final class Constants {
-    public static final class LevelRobotConstants {
-        public static final double PID_kP = 0.1;
-        public static final double PID_kI = 0.001;
-        public static final double PID_kD = 0.005;
 
-        public static final double HEADING_PID_kP = 0.04;
-        public static final double HEADING_PID_kI = 0;
-        public static final double HEADING_PID_kD = 0.0025;
+  public static final class LevelRobotConstants {
+    public static final double PID_kP = 0.2;
+    public static final double PID_kI = 0.001;
+    public static final double PID_kD = 0.005;
 
-        public static final double LEVELING_DRIVE_SPEED_LIMIT = 0.45;
-        public static final double LEVELING_ROTATION_SPEED_LIMIT = 0.5;
-    }
-    public static final class PhotonVisionConstants {
-        public final static String CAMERA_NAME = "photonvision";
-    }
+    public static final double HEADING_PID_kP = 0.04;
+    public static final double HEADING_PID_kI = 0;
+    public static final double HEADING_PID_kD = 0.0025;
+
+    public static final double LEVELING_DRIVE_SPEED_LIMIT = 0.45;
+    public static final double LEVELING_ROTATION_SPEED_LIMIT = 0.5;
+}
 
   public static final class TelescopeConstants {
     public static final double P_COEFF = 0.05;

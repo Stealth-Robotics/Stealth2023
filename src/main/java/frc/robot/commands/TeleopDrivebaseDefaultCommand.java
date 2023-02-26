@@ -17,16 +17,14 @@ public class TeleopDrivebaseDefaultCommand extends CommandBase {
     private DoubleSupplier strafeSup;
     private DoubleSupplier rotationSup;
     private BooleanSupplier robotCentricSup;
-    private BooleanSupplier slowModeSupplier;
 
-    public TeleopDrivebaseDefaultCommand(DrivebaseSubsystem s_Swerve, DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, BooleanSupplier robotCentricSup, BooleanSupplier slowModeSupplier) {
+    public TeleopDrivebaseDefaultCommand(DrivebaseSubsystem s_Swerve, DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, BooleanSupplier robotCentricSup) {
         this.drivebase = s_Swerve;
 
         this.translationSup = translationSup;
         this.strafeSup = strafeSup;
         this.rotationSup = rotationSup;
         this.robotCentricSup = robotCentricSup;
-        this.slowModeSupplier = slowModeSupplier;
 
         addRequirements(s_Swerve);
 
@@ -39,11 +37,6 @@ public class TeleopDrivebaseDefaultCommand extends CommandBase {
         double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.TeleopConstants.SITCK_DEADBAND);
         double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.TeleopConstants.SITCK_DEADBAND);
 
-        if (slowModeSupplier.getAsBoolean()) {
-            translationVal *= Constants.DrivebaseConstants.slowmodeMultiplier;
-            strafeVal *= Constants.DrivebaseConstants.slowmodeMultiplier;
-            rotationVal *= Constants.DrivebaseConstants.slowmodeMultiplier;
-        }
         /* Drive */
         drivebase.drive(
             new Translation2d(translationVal, strafeVal).times(Constants.DrivebaseConstants.MAX_SPEED), 

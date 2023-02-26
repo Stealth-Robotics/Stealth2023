@@ -35,7 +35,7 @@ public class LevelRobot extends CommandBase{
     @Override
     public void execute() {
         double yaw = drive.getYawAsDouble() % 360;
-        double roll = drive.getRoll();
+        double roll = drive.getRollAsDouble();
         if (yaw < 180 || yaw > 180) {
             roll = drive.getPitch();
         }
