@@ -3,7 +3,8 @@ we like to code röböt
 ## Coding Guidelines
 Here are some guidelines for writing code for our robot, for your reference when developing new systems for or reviers to cross-check during a pull request.
 ##### General:
-- Code should follow general formatting rules. Class names are upper camel case, and method and variable names are lower camel case
+- Code should follow general formatting rules. Class names are upper camel case, and method and variable names are lower camel case. Constants should be completely upper case, with underscores as separtors.
+- Stealth has a standard of calling subsystems _______Subsystem, Commands _______Command, and commands intended to be default commands _______DefaultCommand. Please stick to this standard for consistency.
 - Code should be formatted regularly to keep it readable (`Ctrl+Shift+I` on VSCode).
 - Code should be commented when appropriate. 
 ##### Safety:
