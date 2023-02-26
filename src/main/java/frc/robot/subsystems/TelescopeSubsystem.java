@@ -65,13 +65,13 @@ public class TelescopeSubsystem extends SubsystemBase {
     }
 
     public void completeReset() {
-        setSpeed(0);
+        armMotor.set(ControlMode.PercentOutput, 0);
         armMotor.setSelectedSensorPosition(0);
     }
 
     // check the elevator down
-    public void setElevatorDown_Slowly_() {
-        setSpeed(.30);
+    public void retractTelescope() {
+        armMotor.set(ControlMode.PercentOutput, 0.3);
         stallDebouncer.calculate(false);
     }
 

@@ -13,7 +13,7 @@ public class ResetTelescope extends CommandBase {
 
     @Override
     public void initialize() {
-        tlescope.setElevatorDown_Slowly_();
+        tlescope.retractTelescope();
     }
 
     @Override
