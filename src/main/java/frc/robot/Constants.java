@@ -216,7 +216,7 @@ public final class Constants {
     // Volt Second Squared Per Rad
     public static final double ROTATOR_KA_COEFF = 0;
 
-    // TODO: Measure and set encoder offset to make 0 perfectly horizontal
+  
     public static final double ENCODER_OFFSET = 138;
 
     public static final double HIGH_BOUND = 285;

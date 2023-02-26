@@ -10,16 +10,25 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
+/*
+ * DIAGRAM OF ROTATOR CORDINATE SYSTEM
+ * 
+ *        +180
+ *          |
+ *          |
+ *          |
+ *  +270 ---0----- +90 (FRONT OF ROBOT)
+ */
 
 public class RotatorSubsystem extends SubsystemBase {
     private final WPI_TalonFX rotationMotor;
     private final PIDController pid;
     private final DutyCycleEncoder encoder;
 
-    // TODO: make public or private, move wherever you like.
+    
     private boolean log = false;
 
-    // TODO: make public or private, move wherever you like.
+    
     private double speedLimit = 1; 
     private final ArmFeedforward feedforward;
 
@@ -68,7 +77,7 @@ public class RotatorSubsystem extends SubsystemBase {
         pid.setSetpoint(Math.toRadians(degrees));
     }
 
-    // TODO: tmp, just to keep the same interface as the other subsystem
+    //The SetPOINT value is in degrees
     public void setGoal(double setPoint) {
         setSetpoint(setPoint);
     }
