@@ -55,9 +55,9 @@ public class RobotContainer {
     swerve.setDefaultCommand(
         new TeleopDrivebaseDefaultCommand(
             swerve,
-            () -> driverController.getRawAxis(translationAxis),
-            () -> driverController.getRawAxis(strafeAxis),
-            () -> driverController.getRawAxis(rotationAxis),
+            () -> -driverController.getRawAxis(translationAxis),
+            () -> -driverController.getRawAxis(strafeAxis),
+            () -> -driverController.getRawAxis(rotationAxis),
             () -> driverController.b().getAsBoolean() // ,
         // () -> driverController.leftBumper().getAsBoolean()
         ));
@@ -107,6 +107,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // TODO: Replace with Auto command
-    return new BlueTest(swerve);
+    return new BluePreloadPlusOneLeft(swerve);
   }
 }

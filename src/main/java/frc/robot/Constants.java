@@ -154,7 +154,7 @@ public final class Constants {
     /* Module Specific Constants */
     /* Front Left Module - Module 0 */
     public static final class MOD_0 { // TODO: This must be tuned to specific robot
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(285.99609375);
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(105.8203125);
       public static final SwerveModuleConstants constants = new SwerveModuleConstants(
           RobotMap.Drivebase.Mod0.DRIVE_MOTOR_ID,
           RobotMap.Drivebase.Mod0.ANGLE_MOTOR_ID,
@@ -164,7 +164,7 @@ public final class Constants {
 
     /* Front Right Module - Module 1 */
     public static final class MOD_1 { // TODO: This must be tuned to specific robot
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(242.75390624999997);
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(62.22656250000001);
       public static final SwerveModuleConstants constants = new SwerveModuleConstants(
           RobotMap.Drivebase.Mod1.DRIVE_MOTOR_ID,
           RobotMap.Drivebase.Mod1.ANGLE_MOTOR_ID,
@@ -174,7 +174,7 @@ public final class Constants {
 
     /* Back Left Module - Module 2 */
     public static final class MOD_2 { // TODO: This must be tuned to specific robot
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(254.53125);
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(73.916015625);
       public static final SwerveModuleConstants constants = new SwerveModuleConstants(
           RobotMap.Drivebase.Mod2.DRIVE_MOTOR_ID,
           RobotMap.Drivebase.Mod2.ANGLE_MOTOR_ID,
@@ -184,7 +184,7 @@ public final class Constants {
 
     /* Back Right Module - Module 3 */
     public static final class MOD_3 { // TODO: This must be tuned to specific robot
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(76.640625);
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(256.11328125);
       public static final SwerveModuleConstants constants = new SwerveModuleConstants(
           RobotMap.Drivebase.Mod3.DRIVE_MOTOR_ID,
           RobotMap.Drivebase.Mod3.ANGLE_MOTOR_ID,
