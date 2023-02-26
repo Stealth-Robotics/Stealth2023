@@ -38,18 +38,14 @@ public final class Constants {
                 new Translation3d(0.0, 0.0, 0.0),
                 new Rotation3d(0, 0, 0));
 
-        public final static AprilTagFieldLayout APRIL_TAG_FIELD_LAYOUT;
+    public final static AprilTagFieldLayout APRIL_TAG_FIELD_LAYOUT;
 
-        static {
-            try {
-                APRIL_TAG_FIELD_LAYOUT = AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField();
-            } catch (IOException e) {
-                throw new RuntimeException("I/O exception with april tag field layout", e);
-            }
-        }
-
-        // TODO: Choose Pose Strategy
-        public final static PoseStrategy POSE_STRATEGY = PoseStrategy.LOWEST_AMBIGUITY;
+    static {
+      try {
+        APRIL_TAG_FIELD_LAYOUT = AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField();
+      } catch (IOException e) {
+        throw new RuntimeException("I/O exception with april tag field layout", e);
+      }
     }
 
     public static final class TeleopConstants {
@@ -84,16 +80,17 @@ public final class Constants {
                 new Translation2d(-WHEELBASE / 2.0, TRACKWIDTH / 2.0),
                 new Translation2d(-WHEELBASE / 2.0, -TRACKWIDTH / 2.0));
 
-        /* Module Gear Ratios */
-        public static final double DRIVE_GEAR_RATIO = CHOSEN_MODULE.driveGearRatio;
-        public static final double ANGLE_GEAR_RATIO = CHOSEN_MODULE.angleGearRatio;
+  public static final class DrivebaseConstants {
+    public static final int PIGEON_ID = 1;
+    public static final boolean INVERT_GYRO = false; // Always ensure Gyro is CCW+ CW-
 
-        /* Motor Inverts */
-        public static final boolean ANGLE_MOTOR_INVERT = CHOSEN_MODULE.angleMotorInvert;
-        public static final boolean DRIVE_MOTOR_INVERT = CHOSEN_MODULE.driveMotorInvert;
+    public static final COTSFalconSwerveConstants CHOSEN_MODULE = COTSFalconSwerveConstants
+        .SDSMK4(COTSFalconSwerveConstants.driveGearRatios.SDSMK4_L2);
 
-        /* Angle Encoder Invert */
-        public static final boolean CAN_CODER_INVERT = CHOSEN_MODULE.canCoderInvert;
+    /* Drivetrain Constants */
+    public static final double TRACKWIDTH = Units.inchesToMeters(17.5);
+    public static final double WHEELBASE = Units.inchesToMeters(26.75);
+    public static final double WHEEL_CIRCUMFERENCE = CHOSEN_MODULE.wheelCircumference;
 
         /* Swerve Current Limiting */
         // TODO: These values must be tuned for this robot
@@ -103,10 +100,9 @@ public final class Constants {
         public static final double ANGLE_PEAK_CURRENT_DURATION = 0.1;
         public static final boolean ANGLE_ENABLE_CURRENT_LIMIT = true;
 
-        public static final int DRIVE_CONT_CURRENT_LIMIT = 35;
-        public static final int DRIVE_PEAK_CURRENT_LIMIT = 60;
-        public static final double DRIVE_PEAK_CURRENT_DURATION = 0.1;
-        public static final boolean DRIVE_ENABLE_CURRENT_LIMIT = true;
+    /* Module Gear Ratios */
+    public static final double DRIVE_GEAR_RATIO = CHOSEN_MODULE.driveGearRatio;
+    public static final double ANGLE_GEAR_RATIO = CHOSEN_MODULE.angleGearRatio;
 
         /*
          * These values are used by the drive falcon to ramp in open loop and closed
@@ -116,11 +112,8 @@ public final class Constants {
         public static final double OPEN_LOOP_RAMP = 0.25;
         public static final double CLOSED_LOOP_RAMP = 0.0;
 
-        /* Angle Motor PID Values */
-        public static final double angleKP = CHOSEN_MODULE.angleKP;
-        public static final double angleKI = CHOSEN_MODULE.angleKI;
-        public static final double angleKD = CHOSEN_MODULE.angleKD;
-        public static final double angleKF = CHOSEN_MODULE.angleKF;
+    /* Angle Encoder Invert */
+    public static final boolean CAN_CODER_INVERT = CHOSEN_MODULE.canCoderInvert;
 
         /* Drive Motor PID Values */
         public static final double driveKP = 0.05; // TODO: This must be tuned to specific robot
@@ -206,4 +199,72 @@ public final class Constants {
         public static final TrapezoidProfile.Constraints k_THETA_CONTROLLER_CONSTRAINTS = new TrapezoidProfile.Constraints(
                 k_MAX_ANGULAR_SPEED_RADS_PER_SEC, k_MAX_ANGULAR_ACCEL_RADS_PER_SEC_SQUARED);
     }
+
+    /* Back Left Module - Module 2 */
+    public static final class MOD_2 { // TODO: This must be tuned to specific robot
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(178.651);
+      public static final SwerveModuleConstants constants = new SwerveModuleConstants(
+          RobotMap.Drivebase.Mod2.DRIVE_MOTOR_ID,
+          RobotMap.Drivebase.Mod2.ANGLE_MOTOR_ID,
+          RobotMap.Drivebase.Mod2.CANCODER_ID,
+          angleOffset);
+    }
+
+    /* Back Right Module - Module 3 */
+    public static final class MOD_3 { // TODO: This must be tuned to specific robot
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(75.997);
+      public static final SwerveModuleConstants constants = new SwerveModuleConstants(
+          RobotMap.Drivebase.Mod3.DRIVE_MOTOR_ID,
+          RobotMap.Drivebase.Mod3.ANGLE_MOTOR_ID,
+          RobotMap.Drivebase.Mod3.CANCODER_ID,
+          angleOffset);
+    }
+  }
+
+  public static final class AutoConstants { // TODO: The below constants are used in the example auto, and must be tuned
+                                            // to specific robot
+    public static final double k_MAX_SPEED_MPS = 3;
+    public static final double k_MAX_ACCEL_MPS_SQUARED = 3;
+    public static final double k_MAX_ANGULAR_SPEED_RADS_PER_SEC = Math.PI;
+    public static final double k_MAX_ANGULAR_ACCEL_RADS_PER_SEC_SQUARED = Math.PI;
+
+    public static final double k_PX_CONTROLLER = 1;
+    public static final double k_PY_CONTROLLER = 1;
+    public static final double k_P_THETA_CONTROLLER = 1;
+
+    /* Constraint for the motion profilied robot angle controller */
+    public static final TrapezoidProfile.Constraints k_THETA_CONTROLLER_CONSTRAINTS = new TrapezoidProfile.Constraints(
+        k_MAX_ANGULAR_SPEED_RADS_PER_SEC, k_MAX_ANGULAR_ACCEL_RADS_PER_SEC_SQUARED);
+  }
+
+  public static final class RotatorConstants {
+    // Radians Per Second
+    public static final double MAX_VELOCITY = 3.0;
+    // Radians Per Second Squared
+    public static final double MAX_ACCELERATION = 10.0;
+
+    // TODO: Tune After Feedforward is tuned
+    public static final double ROTATOR_P_COEFF = 1;
+    public static final double ROTATOR_I_COEFF = 0.0;
+    public static final double ROTATOR_D_COEFF = 0.0;
+
+    // TODO: Gain values through SysID
+    public static final double ROTATOR_KS_COEFF = 0; // 0.10451;
+    public static final double ROTATOR_KG_COEFF = 0.20852;
+    // Volt Second Per Rad
+    public static final double ROTATOR_KV_COEFF = 0; // 0.031835;
+    // Volt Second Squared Per Rad
+    public static final double ROTATOR_KA_COEFF = 0;
+
+  
+    public static final double ENCODER_OFFSET = 138;
+
+    public static final double HIGH_BOUND = 285;
+    public static final double LOW_BOUND = 70;
+
+    public static final double ROTATOR_SPEED_MULTIPLIER = 1.0;
+
+    public static final double RotatorJoystickDeadband = 0.05;
+  }
+
 }

@@ -1,5 +1,6 @@
 package frc.robot;
 
+
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 public class RobotMap {
@@ -46,6 +47,11 @@ public class RobotMap {
         //TODO: Change to fit the IDs on the robot.
         public static final int RIGHT_INTAKE_MOTOR_ID = 0;
         public static final int LEFT_INTAKE_MOTOR_ID = 1;
+    }
+
+    public static final class Rotator {
+        public static final int ROTATOR_MOTOR = 7;
+        public static final int ENCODER_PORT = 0;
     }
 
 }
