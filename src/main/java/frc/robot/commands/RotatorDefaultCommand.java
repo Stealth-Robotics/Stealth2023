@@ -5,14 +5,14 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.Rotator;
-import frc.robot.subsystems.Rotator;
+import frc.robot.subsystems.RotatorSubsystem;
+import frc.robot.subsystems.RotatorSubsystem;
 
 public class RotatorDefaultCommand extends CommandBase {
-    private final Rotator rotator;
+    private final RotatorSubsystem rotator;
     private final DoubleSupplier joystick;
 
-    public RotatorDefaultCommand(Rotator rotator, DoubleSupplier joystick) {
+    public RotatorDefaultCommand(RotatorSubsystem rotator, DoubleSupplier joystick) {
         this.rotator = rotator;
         this.joystick = joystick;
         addRequirements(rotator);

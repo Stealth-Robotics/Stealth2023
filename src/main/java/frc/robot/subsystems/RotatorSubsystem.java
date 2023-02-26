@@ -11,19 +11,19 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
 
-public class Rotator extends SubsystemBase {
+public class RotatorSubsystem extends SubsystemBase {
     private final WPI_TalonFX rotationMotor;
     private final PIDController pid;
     private final DutyCycleEncoder encoder;
 
     // TODO: make public or private, move wherever you like.
-    private boolean log = true;
+    private boolean log = false;
 
     // TODO: make public or private, move wherever you like.
-    private double speedLimit = 1; // mmmfixme: test, start at 10%
+    private double speedLimit = 1; 
     private final ArmFeedforward feedforward;
 
-    public Rotator() {
+    public RotatorSubsystem() {
 
         rotationMotor = new WPI_TalonFX(RobotMap.Rotator.ROTATOR_MOTOR);
         rotationMotor.setNeutralMode(NeutralMode.Coast);
