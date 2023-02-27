@@ -51,7 +51,7 @@ public final class Constants {
       }
     }
     // TODO: Choose Pose Strategy
-    public final static PoseStrategy POSE_STRATEGY = PoseStrategy.CLOSEST_TO_CAMERA_HEIGHT;
+    public final static PoseStrategy POSE_STRATEGY = PoseStrategy.MULTI_TAG_PNP;
   }
 
   public static final class TeleopConstants {
