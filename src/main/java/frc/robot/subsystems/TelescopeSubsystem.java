@@ -6,6 +6,10 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
@@ -15,6 +19,8 @@ public class TelescopeSubsystem extends SubsystemBase {
     private Debouncer stallDebouncer = new Debouncer(0.010, Debouncer.DebounceType.kRising);
 
     private double currentSetpoint;
+
+    private ShuffleboardTab telescopeTab;
 
     public TelescopeSubsystem() {
 
@@ -36,7 +42,21 @@ public class TelescopeSubsystem extends SubsystemBase {
         armMotor.setSelectedSensorPosition(0);
 
         currentSetpoint = getCurrentPosition();
-        register();
+
+        telescopeTab = Shuffleboard.getTab("Telescope");
+
+        if(Constants.IOConstants.LOGGING)
+        {
+            ShuffleboardLayout positionLayout = telescopeTab.getLayout("Position", BuiltInLayouts.kList);
+
+            positionLayout.addNumber("Current Angle", () -> getCurrentPosition());
+            positionLayout.addNumber("Setpoint", () -> getSetpoint());
+
+            ShuffleboardLayout resetLayout = telescopeTab.getLayout("Reset", BuiltInLayouts.kList);
+
+            resetLayout.addBoolean("Check Velocity", () -> checkVelocity());
+            resetLayout.addNumber("Velocity", () -> getVelocity());
+        }
     }
 
     public void setSetpoint(double setpoint) {
@@ -63,7 +83,11 @@ public class TelescopeSubsystem extends SubsystemBase {
     public boolean checkVelocity() {
 
         return stallDebouncer.calculate(
-                Math.abs(armMotor.getSelectedSensorVelocity()) < 50);
+                getVelocity() < 50);
+    }
+
+    private double getVelocity() {
+        return Math.abs(armMotor.getSelectedSensorVelocity());
     }
 
     public void completeReset() {
@@ -79,17 +103,18 @@ public class TelescopeSubsystem extends SubsystemBase {
 
     public boolean atSetpoint() {
         return Math.abs(armMotor.getClosedLoopError()) < Constants.TelescopeConstants.POSITIONAL_TOLERANCE
-                && Math.abs(armMotor.getSelectedSensorVelocity()) < Constants.TelescopeConstants.VELOCITY_TOLERANCE;
+                && getVelocity() < Constants.TelescopeConstants.VELOCITY_TOLERANCE;
     }
 
-    public boolean inBounds(){
+    public boolean inBounds() {
         return true;
-        //return Math.abs(getCurrentPosition()) <= Constants.TelescopeConstants.UPPER_BOUND ;
+        // return Math.abs(getCurrentPosition()) <=
+        // Constants.TelescopeConstants.UPPER_BOUND ;
     }
 
     @Override
     public void periodic() {
-        //System.out.println(armMotor.getSelectedSensorVelocity());
-        //System.out.println(getCurrentPosition());
+        // System.out.println(armMotor.getSelectedSensorVelocity());
+        // System.out.println(getCurrentPosition());
     }
 }
