@@ -39,7 +39,7 @@ public class LevelRobot extends CommandBase{
         double pitch = drive.getPitchAsDouble();
 
         //double deltaYaw = yaw-startingYaw;
-        double calculationMovement = pid.calculate(pitch, 0);
+        double calculationMovement = pid.calculate(pitch + roll, 0);
         double calculationHeading = headingPid.calculate(yaw * -1, 0);
         calculationMovement = MathUtil.clamp(calculationMovement, -Constants.LevelRobotConstants.LEVELING_DRIVE_SPEED_LIMIT, Constants.LevelRobotConstants.LEVELING_DRIVE_SPEED_LIMIT);
         calculationHeading = MathUtil.clamp(calculationHeading, -Constants.LevelRobotConstants.LEVELING_ROTATION_SPEED_LIMIT, Constants.LevelRobotConstants.LEVELING_ROTATION_SPEED_LIMIT);

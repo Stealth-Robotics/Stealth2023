@@ -89,7 +89,7 @@ public class RobotContainer {
     /* Driver Buttons */
     // mechController.b().onTrue(new ResetTelescope(telescope));
     zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
-    driverController.rightBumper().whileTrue(new LevelRobot(swerve));
+    driverController.rightBumper().whileTrue(new LevelRobotPulses(swerve));
     // mechController
     //     .x()
     //     .onTrue(
