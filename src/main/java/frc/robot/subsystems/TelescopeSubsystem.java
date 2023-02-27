@@ -20,8 +20,6 @@ public class TelescopeSubsystem extends SubsystemBase {
 
     private double currentSetpoint;
 
-    private ShuffleboardTab telescopeTab;
-
     public TelescopeSubsystem() {
 
         armMotor = new WPI_TalonFX(RobotMap.Telescope.TELESCOPE_ID);
@@ -43,10 +41,10 @@ public class TelescopeSubsystem extends SubsystemBase {
 
         currentSetpoint = getCurrentPosition();
 
-        telescopeTab = Shuffleboard.getTab("Telescope");
+        if (Constants.IOConstants.LOGGING) {
 
-        if(Constants.IOConstants.LOGGING)
-        {
+            final ShuffleboardTab telescopeTab = Shuffleboard.getTab("Telescope");
+
             ShuffleboardLayout positionLayout = telescopeTab.getLayout("Position", BuiltInLayouts.kList);
 
             positionLayout.addNumber("Current Angle", () -> getCurrentPosition());

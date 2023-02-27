@@ -49,7 +49,6 @@ public class DrivebaseSubsystem extends SubsystemBase {
             thetaController);
 
     private final Field2d field2d;
-    private final ShuffleboardTab drivebaseTab;
 
     public DrivebaseSubsystem() {
         pcw = new PhotonVisionCameraWrapper();
@@ -73,10 +72,11 @@ public class DrivebaseSubsystem extends SubsystemBase {
                 getGyroscopeRotation(),
                 getModulePositions(), new Pose2d());
 
-        drivebaseTab = Shuffleboard.getTab("Drivebase");
         field2d = new Field2d();
 
         if (Constants.IOConstants.LOGGING) {
+
+            final ShuffleboardTab drivebaseTab = Shuffleboard.getTab("Drivebase");
 
             drivebaseTab.getLayout("Drivebase Odometry", BuiltInLayouts.kList)
                     .withPosition(0, 0)

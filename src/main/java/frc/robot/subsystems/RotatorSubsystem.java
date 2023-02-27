@@ -35,8 +35,6 @@ public class RotatorSubsystem extends SubsystemBase {
     private double speedLimit = 1;
     private final ArmFeedforward feedforward;
 
-    private final ShuffleboardTab rotatorTab;
-
     public RotatorSubsystem() {
 
         rotationMotor = new WPI_TalonFX(RobotMap.Rotator.ROTATOR_MOTOR);
@@ -58,9 +56,8 @@ public class RotatorSubsystem extends SubsystemBase {
         encoder = new DutyCycleEncoder(0);
         reset();
 
-        rotatorTab = Shuffleboard.getTab("Rotator");
-
         if (Constants.IOConstants.LOGGING) {
+            final ShuffleboardTab rotatorTab = Shuffleboard.getTab("Rotator");
             ShuffleboardLayout positionLayout = rotatorTab.getLayout("Position", BuiltInLayouts.kList);
 
             positionLayout.addNumber("Current Angle", () -> getMeasurement());
