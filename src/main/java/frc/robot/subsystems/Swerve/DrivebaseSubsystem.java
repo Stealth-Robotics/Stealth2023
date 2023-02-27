@@ -22,10 +22,12 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DrivebaseSubsystem extends SubsystemBase {
@@ -46,7 +48,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
             yController,
             thetaController);
 
-    private Field2d field2d;
+    private final Field2d field2d;
+    private final ShuffleboardTab drivebaseTab;
 
     public DrivebaseSubsystem() {
         pcw = new PhotonVisionCameraWrapper();
@@ -66,17 +69,32 @@ public class DrivebaseSubsystem extends SubsystemBase {
         Timer.delay(1.0);
         resetModulesToAbsolute();
 
-        // TODO: Set the actual pose
-        field2d = new Field2d();
-        SmartDashboard.putData(field2d);
-        swerveOdometry = new SwerveDrivePoseEstimator(Constants.DrivebaseConstants.SWERVE_KINEMATICS, getGyroscopeRotation(),
+        swerveOdometry = new SwerveDrivePoseEstimator(Constants.DrivebaseConstants.SWERVE_KINEMATICS,
+                getGyroscopeRotation(),
                 getModulePositions(), new Pose2d());
+
+        drivebaseTab = Shuffleboard.getTab("Drivebase");
+        field2d = new Field2d();
+
+        if (Constants.IOConstants.LOGGING) {
+
+            drivebaseTab.getLayout("Drivebase Odometry", BuiltInLayouts.kList)
+                    .withPosition(0, 0)
+                    .withSize(5, 2)
+                    .add(field2d);
+
+            for (SwerveModule mod : mSwerveMods) {
+                ShuffleboardLayout modLayout = drivebaseTab.getLayout("Swerve Module " + mod.moduleNumber);
+
+                modLayout.withSize(2, 1).addNumber("Cancoder", () -> mod.getCanCoder().getDegrees());
+                modLayout.withSize(2, 1).addNumber("Integrated Encoder", () -> mod.getPosition().angle.getDegrees());
+                modLayout.withSize(2, 1).addNumber("Velocity", () -> mod.getState().speedMetersPerSecond);
+            }
+        }
     }
 
-    public void resetModulesToAbsolute()
-    {
-        for(SwerveModule mod: mSwerveMods)
-        {
+    public void resetModulesToAbsolute() {
+        for (SwerveModule mod : mSwerveMods) {
             mod.resetToAbsolute();
         }
     }
@@ -186,19 +204,15 @@ public class DrivebaseSubsystem extends SubsystemBase {
         swerveOdometry.update(getGyroscopeRotation(), getModulePositions());
 
         Optional<EstimatedRobotPose> result = pcw.getEstimatedGlobalPose(swerveOdometry.getEstimatedPosition());
-        /* 
-        if (result.isPresent()) {
-            EstimatedRobotPose camPose = result.get();
-            swerveOdometry.addVisionMeasurement(
-                    camPose.estimatedPose.toPose2d(),
-                    camPose.timestampSeconds);
-        }*/
+        /*
+         * if (result.isPresent()) {
+         * EstimatedRobotPose camPose = result.get();
+         * swerveOdometry.addVisionMeasurement(
+         * camPose.estimatedPose.toPose2d(),
+         * camPose.timestampSeconds);
+         * }
+         */
 
         field2d.setRobotPose(getPose());
-        for (SwerveModule mod : mSwerveMods) {
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getPosition().angle.getDegrees());
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
-        }
     }
 }
