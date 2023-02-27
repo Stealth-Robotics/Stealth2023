@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -44,10 +45,14 @@ public class RobotContainer {
   private final RotatorSubsystem rotator;
   private final TelescopeSubsystem telescope;
 
+  private SendableChooser<Command> autoChooser = new SendableChooser<>();
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+
+
     swerve = new DrivebaseSubsystem();
     telescope = new TelescopeSubsystem();
     rotator = new RotatorSubsystem();
@@ -72,6 +77,10 @@ public class RobotContainer {
             telescope,
             () -> mechController.getLeftX()));
 
+
+    autoChooser.setDefaultOption("Blue 1+Park", new BluePreloadParkCenter(swerve));
+    autoChooser.addOption("Blue 1+1 Left", new BluePreloadPlusOneLeft(swerve));
+    autoChooser.addOption("Blue 1+1 Right", new BluePreloadPlusOneRight(swerve));
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -106,7 +115,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // TODO: Replace with Auto command
-    return new BluePreloadPlusOneLeft(swerve);
+    return autoChooser.getSelected();
   }
 }
