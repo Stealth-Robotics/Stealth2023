@@ -7,11 +7,11 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 
-public class EndEffectorSubsystem extends SubsystemBase{
+public class CrocodileSubsystem extends SubsystemBase{
     private final Solenoid wristSolenoid;
     private final Solenoid chomperSolenoid;
     private final CANSparkMax motorA;
-    public EndEffectorSubsystem() {
+    public CrocodileSubsystem() {
         motorA = new CANSparkMax(RobotMap.EndEffector.END_EFFECTOR_MOTOR_A, MotorType.kBrushless);
         wristSolenoid = new Solenoid(
             RobotMap.Pneumatics.PCM, 

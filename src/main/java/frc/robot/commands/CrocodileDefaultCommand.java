@@ -3,13 +3,13 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.EndEffectorSubsystem;
+import frc.robot.subsystems.CrocodileSubsystem;
 
-public class EndEffectorDefaultCommand extends CommandBase {
-    private final EndEffectorSubsystem subsystem;
+public class CrocodileDefaultCommand extends CommandBase {
+    private final CrocodileSubsystem subsystem;
     private final DoubleSupplier motorSpeed;
 
-    public EndEffectorDefaultCommand(EndEffectorSubsystem subsystem,DoubleSupplier motorSpeed) {
+    public CrocodileDefaultCommand(CrocodileSubsystem subsystem,DoubleSupplier motorSpeed) {
         this.subsystem = subsystem;
         this.motorSpeed = motorSpeed;
         addRequirements(subsystem);
