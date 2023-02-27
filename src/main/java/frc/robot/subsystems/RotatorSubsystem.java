@@ -7,6 +7,10 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -26,12 +30,12 @@ public class RotatorSubsystem extends SubsystemBase {
     private final PIDController pid;
     private final DutyCycleEncoder encoder;
 
-    
-    private boolean log = false;
+    // private boolean log = false;
 
-    
-    private double speedLimit = 1; 
+    private double speedLimit = 1;
     private final ArmFeedforward feedforward;
+
+    private final ShuffleboardTab rotatorTab;
 
     public RotatorSubsystem() {
 
@@ -53,6 +57,15 @@ public class RotatorSubsystem extends SubsystemBase {
 
         encoder = new DutyCycleEncoder(0);
         reset();
+
+        rotatorTab = Shuffleboard.getTab("Rotator");
+
+        if (Constants.IOConstants.LOGGING) {
+            ShuffleboardLayout positionLayout = rotatorTab.getLayout("Position", BuiltInLayouts.kList);
+
+            positionLayout.addNumber("Current Angle", () -> getMeasurement());
+            positionLayout.addNumber("Setpoint", () -> getSetpoint());
+        }
     }
 
     public void reset() {
@@ -62,13 +75,6 @@ public class RotatorSubsystem extends SubsystemBase {
     private double getMeasurement() {
         double currentPosition = encoder.getAbsolutePosition();
         double result = Math.toRadians(((currentPosition * 360) + Constants.RotatorConstants.ENCODER_OFFSET) % 360);
-        if (log) {
-            System.out.println("RotatorPIDOnly.getMeasurement: Current encoder position (raw): " + currentPosition);
-            System.out.println(
-                    "RotatorPIDOnly.getMeasurement: Current encoder position (adj): " + Math.toDegrees(result));
-        }
-        SmartDashboard.putNumber("RotatorPIDOnly.getMeasurement: Current encoder position (raw): ", currentPosition);
-        SmartDashboard.putNumber("RotatorPIDOnly.getMeasurement: Current encoder position (adj): ", Math.toDegrees(result));
         return result;
     }
 
@@ -80,7 +86,7 @@ public class RotatorSubsystem extends SubsystemBase {
         pid.setSetpoint(Math.toRadians(degrees));
     }
 
-    //The SetPOINT value is in degrees
+    // The SetPOINT value is in degrees
     public void setGoal(double setPoint) {
         setSetpoint(setPoint);
     }
@@ -94,22 +100,20 @@ public class RotatorSubsystem extends SubsystemBase {
         double ff = feedforward.calculate(pid.getSetpoint() - (Math.PI / 2), rotationMotor.getSelectedSensorVelocity());
         double speed = pid.calculate(getMeasurement());
         double safeSpeed = MathUtil.clamp(speed + ff, -speedLimit, speedLimit);
-        if (log) {
-            System.out.println("RotatorPIDOnly.periodic: current setpoint: " + Math.toDegrees(pid.getSetpoint()));
-            System.out.println("RotatorPIDOnly.periodic: speed: " + speed);
-            System.out.println("RotatorPIDOnly.periodic: ff: " + ff);
-            System.out.println("RotatorPIDOnly.periodic: safe speed: " + safeSpeed);
-        }
-        SmartDashboard.putNumber("Setpoint: " , Math.toDegrees(pid.getSetpoint()));
-        SmartDashboard.putNumber("Speed: " , speed);        
-        SmartDashboard.putNumber("Setpoint: " , ff);
-        SmartDashboard.putNumber("safe speed: " , safeSpeed);
-        SmartDashboard.putNumber("Current Pos:", Math.toDegrees(getMeasurement()));
+        // if (log) {
+        // System.out.println("RotatorPIDOnly.periodic: current setpoint: " +
+        // Math.toDegrees(pid.getSetpoint()));
+        // System.out.println("RotatorPIDOnly.periodic: speed: " + speed);
+        // System.out.println("RotatorPIDOnly.periodic: ff: " + ff);
+        // System.out.println("RotatorPIDOnly.periodic: safe speed: " + safeSpeed);
+        // }
+        // SmartDashboard.putNumber("Setpoint: " , Math.toDegrees(pid.getSetpoint()));
+        // SmartDashboard.putNumber("Speed: " , speed);
+        // SmartDashboard.putNumber("Setpoint: " , ff);
+        // SmartDashboard.putNumber("safe speed: " , safeSpeed);
+        // SmartDashboard.putNumber("Current Pos:", Math.toDegrees(getMeasurement()));
 
-        
-
-
-        setSpeed(speed+ff);
+        setSpeed(speed + ff);
     }
 
 }
