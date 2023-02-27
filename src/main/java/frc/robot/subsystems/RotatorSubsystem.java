@@ -106,8 +106,6 @@ public class RotatorSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("safe speed: " , safeSpeed);
         SmartDashboard.putNumber("Current Pos:", Math.toDegrees(getMeasurement()));
 
-        
-
 
         setSpeed(speed+ff);
     }

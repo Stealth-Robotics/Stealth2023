@@ -7,7 +7,9 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.RotatorSubsystem;
+import frc.robot.RobotMap.EndEffector;
 import frc.robot.commands.*;
 import frc.robot.subsystems.TelescopeSubsystem;
 import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
@@ -42,6 +44,7 @@ public class RobotContainer {
   /* Subsystems */
   private final DrivebaseSubsystem swerve;
   private final RotatorSubsystem rotator;
+  private final EndEffectorSubsystem endEffector;
   private final TelescopeSubsystem telescope;
 
   /**
@@ -51,7 +54,7 @@ public class RobotContainer {
     swerve = new DrivebaseSubsystem();
     telescope = new TelescopeSubsystem();
     rotator = new RotatorSubsystem();
-
+    endEffector = new EndEffectorSubsystem();
     swerve.setDefaultCommand(
         new TeleopDrivebaseDefaultCommand(
             swerve,

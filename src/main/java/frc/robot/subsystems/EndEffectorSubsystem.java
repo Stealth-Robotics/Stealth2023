@@ -9,13 +9,11 @@ import frc.robot.Constants;
 import frc.robot.RobotMap;
 
 public class EndEffectorSubsystem extends SubsystemBase{
-    private Solenoid wristSolenoid;
-    private Solenoid chomperSolenoid;
-    private CANSparkMax motorA;
-    private CANSparkMax motorB;
+    private final Solenoid wristSolenoid;
+    private final Solenoid chomperSolenoid;
+    private final CANSparkMax motorA;
     public EndEffectorSubsystem() {
         motorA = new CANSparkMax(RobotMap.EndEffector.END_EFFECTOR_MOTOR_A, MotorType.kBrushless);
-        motorB = new CANSparkMax(RobotMap.EndEffector.END_EFFECTOR_MOTOR_B, MotorType.kBrushless);
         wristSolenoid = new Solenoid(
             RobotMap.Pneumatics.PCM, 
             RobotMap.Pneumatics.PCM_TYPE, 
@@ -24,8 +22,6 @@ public class EndEffectorSubsystem extends SubsystemBase{
             RobotMap.Pneumatics.PCM, 
             RobotMap.Pneumatics.PCM_TYPE, 
             RobotMap.Pneumatics.CHOMPER_PCM_CHANNEL);
-        motorB.follow(motorA);
-        motorA.setInverted(true);
     }
 
     public void setMotorSpeed(double speed){
