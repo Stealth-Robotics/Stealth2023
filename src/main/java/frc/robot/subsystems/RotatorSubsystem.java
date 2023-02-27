@@ -59,7 +59,7 @@ public class RotatorSubsystem extends SubsystemBase {
         setSetpoint(Math.toDegrees(getMeasurement()));
     }
 
-    private double getMeasurement() {
+    public double getMeasurement() {
         double currentPosition = encoder.getAbsolutePosition();
         double result = Math.toRadians(((currentPosition * 360) + Constants.RotatorConstants.ENCODER_OFFSET) % 360);
         if (log) {
