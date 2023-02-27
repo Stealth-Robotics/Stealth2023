@@ -39,7 +39,7 @@ public class RobotMap {
 
     public static final class Pneumatics {
         //TODO: Change to fit the IDs on the robot.
-        public static final int PCM = 41;
+        public static final int PCM = 4;
         public static final PneumaticsModuleType PCM_TYPE = PneumaticsModuleType.CTREPCM;
         public static final int CLAW_PCM_CHANNEL = 0;
     }

@@ -62,15 +62,15 @@ public class RobotContainer {
         // () -> driverController.leftBumper().getAsBoolean()
         ));
     
-    // rotator.setDefaultCommand(new RotatorDefaultCommand(
-    //     rotator,
-    //     () -> -mechController.getRightX()));
+    rotator.setDefaultCommand(new RotatorDefaultCommand(
+        rotator,
+        () -> -mechController.getRightX()));
     
-    // telescope.setDefaultCommand(
+    telescope.setDefaultCommand(
       
-    //     new TelescopeDefault(
-    //         telescope,
-    //         () -> mechController.getLeftX()));
+        new TelescopeDefault(
+            telescope,
+            () -> mechController.getLeftX()));
 
     // Configure the button bindings
     configureButtonBindings();
