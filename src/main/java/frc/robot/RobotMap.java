@@ -4,6 +4,10 @@ package frc.robot;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 public class RobotMap {
+    public static final class EndEffector{
+        public static final int END_EFFECTOR_MOTOR_A = 0;
+        public static final int END_EFFECTOR_MOTOR_B = 0;
+    }
     public static final class Telescope {
         public static final int TELESCOPE_ID = 6;
     }
@@ -42,6 +46,7 @@ public class RobotMap {
         public static final int PCM = 4;
         public static final PneumaticsModuleType PCM_TYPE = PneumaticsModuleType.CTREPCM;
         public static final int CLAW_PCM_CHANNEL = 0;
+        public static final int CHOMPER_PCM_CHANNEL = 0;
     }
     public static final class IntakeIDs {
         //TODO: Change to fit the IDs on the robot.

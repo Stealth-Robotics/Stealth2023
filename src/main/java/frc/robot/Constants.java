@@ -21,6 +21,10 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
 public final class Constants {
 
+  public static final class EndEffectorConstants{
+    
+  }
+
   public static final class TelescopeConstants {
     public static final double P_COEFF = 0.05;
     public static final double I_COEFF = 0.0;
