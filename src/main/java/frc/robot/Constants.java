@@ -236,6 +236,8 @@ public final class Constants {
     public static final double ROTATOR_SPEED_MULTIPLIER = 1.0;
 
     public static final double RotatorJoystickDeadband = 0.05;
+
+    public static final double MAX_VELOCITY_BEFORE_PULLING_IN = Integer.MAX_VALUE;
   }
 
 }

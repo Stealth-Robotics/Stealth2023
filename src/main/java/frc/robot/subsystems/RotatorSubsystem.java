@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
@@ -20,12 +21,13 @@ import frc.robot.RobotMap;
  *          |
  *  +270 ---0----- +90 (FRONT OF ROBOT)
  */
+import frc.robot.commands.ResetTelescope;
 
 public class RotatorSubsystem extends SubsystemBase {
     private final WPI_TalonFX rotationMotor;
     private final PIDController pid;
     private final DutyCycleEncoder encoder;
-
+    private final TelescopeSubsystem telescope;
     
     private boolean log = false;
 
@@ -33,8 +35,8 @@ public class RotatorSubsystem extends SubsystemBase {
     private double speedLimit = 1; 
     private final ArmFeedforward feedforward;
 
-    public RotatorSubsystem() {
-
+    public RotatorSubsystem(TelescopeSubsystem telescope) {
+        this.telescope = telescope;
         rotationMotor = new WPI_TalonFX(RobotMap.Rotator.ROTATOR_MOTOR);
         rotationMotor.setNeutralMode(NeutralMode.Coast);
         rotationMotor.setInverted(true);
@@ -89,6 +91,10 @@ public class RotatorSubsystem extends SubsystemBase {
         rotationMotor.set(speed); // Defaults to PercentOutput
     }
 
+    private double getVelocity(){
+        return rotationMotor.getSelectedSensorVelocity();
+    }
+
     @Override
     public void periodic() {
         double ff = feedforward.calculate(pid.getSetpoint() - (Math.PI / 2), rotationMotor.getSelectedSensorVelocity());
@@ -107,7 +113,9 @@ public class RotatorSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Current Pos:", Math.toDegrees(getMeasurement()));
 
         
-
+        if (getVelocity() > Constants.RotatorConstants.MAX_VELOCITY_BEFORE_PULLING_IN) {
+            CommandScheduler.getInstance().schedule(new ResetTelescope(telescope));
+        }
 
         setSpeed(speed+ff);
     }

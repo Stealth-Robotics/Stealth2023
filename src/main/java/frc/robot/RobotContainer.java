@@ -50,7 +50,7 @@ public class RobotContainer {
   public RobotContainer() {
     swerve = new DrivebaseSubsystem();
     telescope = new TelescopeSubsystem();
-    rotator = new RotatorSubsystem();
+    rotator = new RotatorSubsystem(telescope);
 
     swerve.setDefaultCommand(
         new TeleopDrivebaseDefaultCommand(
