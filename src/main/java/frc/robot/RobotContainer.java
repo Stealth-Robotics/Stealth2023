@@ -29,7 +29,7 @@ public class RobotContainer {
   private final CommandXboxController driverController = new CommandXboxController(
       Constants.IOConstants.k_DRIVER_CONTROLLER_PORT);
 
-      private final CommandXboxController mechController = new CommandXboxController(
+  private final CommandXboxController mechController = new CommandXboxController(
       Constants.IOConstants.k_OPERATOR_CONTROLLER_PORT);
 
   /* Drive Controls */
@@ -55,6 +55,7 @@ public class RobotContainer {
     telescope = new TelescopeSubsystem();
     rotator = new RotatorSubsystem();
     endEffector = new EndEffectorSubsystem();
+
     swerve.setDefaultCommand(
         new TeleopDrivebaseDefaultCommand(
             swerve,
@@ -64,16 +65,19 @@ public class RobotContainer {
             () -> driverController.b().getAsBoolean() // ,
         // () -> driverController.leftBumper().getAsBoolean()
         ));
-    
+
     rotator.setDefaultCommand(new RotatorDefaultCommand(
         rotator,
         () -> -mechController.getRightX()));
-    
+
     telescope.setDefaultCommand(
-      
+
         new TelescopeDefault(
             telescope,
             () -> mechController.getLeftX()));
+
+    endEffector.setDefaultCommand(new EndEffectorDefaultCommand(endEffector,
+        () -> (driverController.getLeftTriggerAxis() - driverController.getRightTriggerAxis())));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -93,14 +97,17 @@ public class RobotContainer {
     // mechController.b().onTrue(new ResetTelescope(telescope));
     zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
 
+    mechController.a().onTrue(new InstantCommand(() -> endEffector.toggleWrist(), endEffector));
+    mechController.b().onTrue(new InstantCommand(() -> endEffector.toggleChomper(), endEffector));
+
     // mechController
-    //     .x()
-    //     .onTrue(
-    //         Commands.runOnce(
-    //             () -> {
-    //               rotator.setGoal(130);
-    //             },
-    //             rotator));
+    // .x()
+    // .onTrue(
+    // Commands.runOnce(
+    // () -> {
+    // rotator.setGoal(130);
+    // },
+    // rotator));
   }
 
   /**
