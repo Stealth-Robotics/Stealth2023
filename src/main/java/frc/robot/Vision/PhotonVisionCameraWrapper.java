@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.Vision;
 
 import java.util.Optional;
 
@@ -6,6 +6,8 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import frc.robot.Constants;
+import frc.robot.Constants.PhotonVisionConstants;
 
 public class PhotonVisionCameraWrapper {
 
