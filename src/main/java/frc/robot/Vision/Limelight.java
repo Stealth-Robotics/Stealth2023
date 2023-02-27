@@ -106,7 +106,7 @@ public class Limelight extends SubsystemBase {
     }
 
     public double getPipelineLatency() {
-        return tl.getDouble(0);
+        return llresults.targetingResults.latency_pipeline + llresults.targetingResults.latency_capture + llresults.targetingResults.latency_jsonParse;
     }
 
     public double[][] getCorners() {
