@@ -5,10 +5,10 @@ import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.subsystems.CANdleSubsystem;
 import frc.robot.subsystems.RotatorSubsystem;
 import frc.robot.commands.*;
 import frc.robot.subsystems.TelescopeSubsystem;
@@ -29,7 +29,7 @@ public class RobotContainer {
   private final CommandXboxController driverController = new CommandXboxController(
       Constants.IOConstants.k_DRIVER_CONTROLLER_PORT);
 
-      private final CommandXboxController mechController = new CommandXboxController(
+  private final CommandXboxController mechController = new CommandXboxController(
       Constants.IOConstants.k_OPERATOR_CONTROLLER_PORT);
 
   /* Drive Controls */
@@ -45,6 +45,7 @@ public class RobotContainer {
   private final DrivebaseSubsystem swerve;
   private final RotatorSubsystem rotator;
   private final TelescopeSubsystem telescope;
+  private final CANdleSubsystem candleSubsystem;
 
   private UsbCamera camera = CameraServer.startAutomaticCapture();
 
@@ -55,7 +56,7 @@ public class RobotContainer {
     swerve = new DrivebaseSubsystem();
     telescope = new TelescopeSubsystem();
     rotator = new RotatorSubsystem();
-
+    candleSubsystem = new CANdleSubsystem();
 
     camera.setResolution(160, 120);
     camera.setFPS(30);
@@ -69,13 +70,13 @@ public class RobotContainer {
             () -> driverController.b().getAsBoolean() // ,
         // () -> driverController.leftBumper().getAsBoolean()
         ));
-    
+
     rotator.setDefaultCommand(new RotatorDefaultCommand(
         rotator,
         () -> -mechController.getRightX()));
-    
+
     telescope.setDefaultCommand(
-      
+
         new TelescopeDefault(
             telescope,
             () -> mechController.getLeftX()));
@@ -99,13 +100,17 @@ public class RobotContainer {
     zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
 
     // mechController
-    //     .x()
-    //     .onTrue(
-    //         Commands.runOnce(
-    //             () -> {
-    //               rotator.setGoal(130);
-    //             },
-    //             rotator));
+    // .x()
+    // .onTrue(
+    // Commands.runOnce(
+    // () -> {
+    // rotator.setGoal(130);
+    // },
+    // rotator));
+
+    mechController.povUp().onTrue(new InstantCommand(() -> candleSubsystem.idle(), candleSubsystem));
+    mechController.povLeft().onTrue(new InstantCommand(() -> candleSubsystem.yellow(), candleSubsystem));
+    mechController.povRight().onTrue(new InstantCommand(() -> candleSubsystem.purple(), candleSubsystem));
   }
 
   /**

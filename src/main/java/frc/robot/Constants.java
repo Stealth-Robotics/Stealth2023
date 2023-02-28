@@ -21,6 +21,10 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
 public final class Constants {
 
+  public static final class CANdleConstants {
+    public static final int LED_COUNT = 8;
+  }
+
   public static final class TelescopeConstants {
     public static final double P_COEFF = 0.05;
     public static final double I_COEFF = 0.0;
@@ -192,7 +196,7 @@ public final class Constants {
           angleOffset);
     }
   }
-  
+
   public static final class AutoConstants { // TODO: The below constants are used in the example auto, and must be tuned
                                             // to specific robot
     public static final double k_MAX_SPEED_MPS = 3;
