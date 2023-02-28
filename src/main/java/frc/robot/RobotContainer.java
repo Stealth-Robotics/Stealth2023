@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.CrocodileSubsystem;
 import frc.robot.subsystems.RotatorSubsystem;
-import frc.robot.RobotMap.EndEffector;
+import frc.robot.RobotMap.Crocodile;
 import frc.robot.commands.*;
 import frc.robot.subsystems.TelescopeSubsystem;
 import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
