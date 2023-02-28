@@ -32,12 +32,13 @@ public class BluePreloadParkCenter extends SequentialCommandGroup {
       //Close Gripper
       //Arm Rotate 135
       new TelescopeToPosition(null, 100), //TODO: set to actual telescope position.
-      new SwerveTrajectoryFollowCommand(driveBase,  "preloadParkCenter", defaultConfig, false, true),
       //Flex Wrist
       //Gripper Open 
       //Wrist Straight
-      new TelescopeToPosition(null, 0) //TODO: set to actual telescope position.
+      new TelescopeToPosition(null, 0), //TODO: set to actual telescope position.
       //Arm Rotate 90
+      new SwerveTrajectoryFollowCommand(driveBase,  "preloadParkCenter", defaultConfig, false, true)
+
 
     );
     //grabs any requirements needed for the drivebase from other running commands.

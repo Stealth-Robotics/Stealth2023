@@ -20,6 +20,14 @@ public class BluePreloadPlusOneRight extends SequentialCommandGroup {
     this.defaultConfig = new TrajectoryConfig(Constants.AutoConstants.k_MAX_SPEED_MPS, Constants.AutoConstants.k_MAX_ACCEL_MPS_SQUARED);
     addCommands(
       //references the path file and sets the starting color and if the command is running first.
+      //Close Gripper
+      //Arm Rotate 135
+      //Extend Telescope Out
+      //Flex Wrist
+      //Gripper Open 
+      //Wrist Straight
+      //Retract Telescope
+      //Arm Rotate 90
       new SwerveTrajectoryFollowCommand(driveBase,  "preloadPlusOneRight1", defaultConfig, false, true),
       new SwerveTrajectoryFollowCommand(driveBase,  "preloadPlusOneRight2", defaultConfig, false, false)
     );
