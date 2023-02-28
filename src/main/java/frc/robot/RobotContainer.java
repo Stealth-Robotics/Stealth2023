@@ -77,7 +77,7 @@ public class RobotContainer {
             () -> mechController.getLeftX()));
 
     endEffector.setDefaultCommand(new CrocodileDefaultCommand(endEffector,
-        () -> (driverController.getLeftTriggerAxis() - driverController.getRightTriggerAxis())));
+        () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis())));
 
     // Configure the button bindings
     configureButtonBindings();
