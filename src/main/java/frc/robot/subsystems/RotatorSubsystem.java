@@ -27,7 +27,6 @@ public class RotatorSubsystem extends SubsystemBase {
     private final WPI_TalonFX rotationMotor;
     private final PIDController pid;
     private final DutyCycleEncoder encoder;
-    private final TelescopeSubsystem telescope;
     
     private boolean log = false;
 
@@ -35,8 +34,7 @@ public class RotatorSubsystem extends SubsystemBase {
     private double speedLimit = 1; 
     private final ArmFeedforward feedforward;
 
-    public RotatorSubsystem(TelescopeSubsystem telescope) {
-        this.telescope = telescope;
+    public RotatorSubsystem() {
         rotationMotor = new WPI_TalonFX(RobotMap.Rotator.ROTATOR_MOTOR);
         rotationMotor.setNeutralMode(NeutralMode.Coast);
         rotationMotor.setInverted(true);
@@ -112,10 +110,6 @@ public class RotatorSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("safe speed: " , safeSpeed);
         SmartDashboard.putNumber("Current Pos:", Math.toDegrees(getMeasurement()));
 
-        
-        if (getVelocity() > Constants.RotatorConstants.MAX_VELOCITY_BEFORE_PULLING_IN) {
-            CommandScheduler.getInstance().schedule(new ResetTelescope(telescope));
-        }
 
         setSpeed(speed+ff);
     }

@@ -50,7 +50,7 @@ public class RobotContainer {
   public RobotContainer() {
     swerve = new DrivebaseSubsystem();
     telescope = new TelescopeSubsystem();
-    rotator = new RotatorSubsystem(telescope);
+    rotator = new RotatorSubsystem();
 
     swerve.setDefaultCommand(
         new TeleopDrivebaseDefaultCommand(
@@ -64,6 +64,7 @@ public class RobotContainer {
     
     rotator.setDefaultCommand(new RotatorDefaultCommand(
         rotator,
+        telescope,
         () -> -mechController.getRightX()));
     
     telescope.setDefaultCommand(
