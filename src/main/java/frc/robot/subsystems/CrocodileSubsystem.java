@@ -16,6 +16,8 @@ public class CrocodileSubsystem extends SubsystemBase{
     private double currentMotorPower;
     public CrocodileSubsystem() {
         motorA = new CANSparkMax(RobotMap.EndEffector.END_EFFECTOR_MOTOR_A, MotorType.kBrushless);
+        motorA.setSmartCurrentLimit(20);
+        motorA.burnFlash();
         wristSolenoid = new Solenoid(
             RobotMap.Pneumatics.PCM, 
             RobotMap.Pneumatics.PCM_TYPE, 
