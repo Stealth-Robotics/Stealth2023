@@ -21,8 +21,7 @@ public class BluePreloadPlusOneLeft extends SequentialCommandGroup {
     this.defaultConfig = new TrajectoryConfig(Constants.AutoConstants.k_MAX_SPEED_MPS,
         Constants.AutoConstants.k_MAX_ACCEL_MPS_SQUARED);
     addCommands(
-        // references the path file and sets the starting color and if the command is
-        // running first.
+        // references the path file and sets the starting color and if the command is running first.
         // Close Gripper
         // Arm Rotate 135
         // Extend Telescope Out
