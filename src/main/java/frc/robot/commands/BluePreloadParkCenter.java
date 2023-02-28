@@ -20,7 +20,24 @@ public class BluePreloadParkCenter extends SequentialCommandGroup {
     this.defaultConfig = new TrajectoryConfig(Constants.AutoConstants.k_MAX_SPEED_MPS, Constants.AutoConstants.k_MAX_ACCEL_MPS_SQUARED);
     addCommands(
       //references the path file and sets the starting color and if the command is running first.
-      new SwerveTrajectoryFollowCommand(driveBase,  "preloadParkCenter", defaultConfig, false, true)
+      //Start Condition:
+      // - Wrist Straight
+      // - Cone In Gripper
+      // - Rotator At 180
+      // - Telescope Fully Retracted
+
+      //Command Group
+
+      //Close Gripper
+      //Arm Rotate 135
+      new TelescopeToPosition(null, 100), //TODO: set to actual telescope position.
+      new SwerveTrajectoryFollowCommand(driveBase,  "preloadParkCenter", defaultConfig, false, true),
+      //Flex Wrist
+      //Gripper Open
+      //Wrist Straight
+      new TelescopeToPosition(null, 0) //TODO: set to actual telescope position.
+      //Arm Rotate 90
+
     );
     //grabs any requirements needed for the drivebase from other running commands.
     addRequirements(driveBase);
