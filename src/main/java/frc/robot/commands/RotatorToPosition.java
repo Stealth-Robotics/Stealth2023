@@ -32,7 +32,7 @@ public class RotatorToPosition extends CommandBase {
     }
     @Override
     public boolean isFinished() {
-        return rotatorSubsystem.getMeasurement() == setpoint || resettingElevator;
+        return rotatorSubsystem.atSetpoint() || resettingElevator;
     }
     @Override
     public void end(boolean interrupted) {

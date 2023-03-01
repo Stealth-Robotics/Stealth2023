@@ -78,7 +78,7 @@ public class RobotContainer {
             () -> driverController.b().getAsBoolean() // ,
         // () -> driverController.leftBumper().getAsBoolean()
         ));
-
+    
     rotator.setDefaultCommand(new RotatorDefaultCommand(
         rotator,
         () -> -mechController.getRightX()));
@@ -89,14 +89,15 @@ public class RobotContainer {
             telescope,
             () -> mechController.getLeftX()));
 
-
-    autoChooser.setDefaultOption("Blue 1+Park", new BluePreloadParkCenter(swerve));
-    autoChooser.addOption("Blue 1+1 Left", new BluePreloadPlusOneLeft(swerve));
-    autoChooser.addOption("Blue 1+1 Right", new BluePreloadPlusOneRight(swerve));
-    SmartDashboard.putData("Selected Autonomous", autoChooser);
-    endEffector.setDefaultCommand(new CrocodileDefaultCommand(endEffector,
-        () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis())));
-
+    endEffector.setDefaultCommand(
+      new CrocodileDefaultCommand(
+        endEffector,
+        () -> mechController.getLeftTriggerAxis())     
+    );
+    // autoChooser.setDefaultOption("Blue 1+Park", new BluePreloadParkCenter(swerve));
+    // autoChooser.addOption("Blue 1+1 Left", new BluePreloadPlusOneLeft(swerve));
+    // autoChooser.addOption("Blue 1+1 Right", new BluePreloadPlusOneRight(swerve));
+    //SmartDashboard.putData("Selected Autonomous", autoChooser);
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -112,11 +113,13 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     /* Driver Buttons */
-    // mechController.b().onTrue(new ResetTelescope(telescope));
+    //mechController.b().onTrue(new ResetTelescope(telescope));
+    mechController.b().onTrue(new InstantCommand(()->telescope.resetEncoder()));
     zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
 
     mechController.a().onTrue(new InstantCommand(() -> endEffector.toggleWrist(), endEffector));
     mechController.b().onTrue(new InstantCommand(() -> endEffector.toggleChomper(), endEffector));
+    mechController.x().onTrue(new RotatorToPosition(rotator, telescope, 230));
 
     // mechController
     // .x()
@@ -134,7 +137,8 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    System.out.println("Selected Autonomous: " + autoChooser.getSelected());
-    return autoChooser.getSelected();
+    //System.out.println("Selected Autonomous: " + autoChooser.getSelected());
+    //return autoChooser.getSelected();
+    return null;
   }
 }

@@ -14,6 +14,8 @@ public class TelescopeSubsystem extends SubsystemBase {
     private final WPI_TalonFX armMotor;
     private Debouncer stallDebouncer = new Debouncer(0.010, Debouncer.DebounceType.kRising);
 
+    private double speedLimit;
+
     private double currentSetpoint;
 
     public TelescopeSubsystem() {
@@ -34,9 +36,10 @@ public class TelescopeSubsystem extends SubsystemBase {
         armMotor.config_kF(0, Constants.TelescopeConstants.F_COEFF);
 
         armMotor.setSelectedSensorPosition(0);
-
+        armMotor.setInverted(true);
+    
         currentSetpoint = getCurrentPosition();
-        register();
+        //register();
     }
 
     public void setSetpoint(double setpoint) {
@@ -68,7 +71,12 @@ public class TelescopeSubsystem extends SubsystemBase {
 
     public void completeReset() {
         armMotor.set(ControlMode.PercentOutput, 0);
-        armMotor.setSelectedSensorPosition(100); //100 is 100 ticks backwards
+        armMotor.setSelectedSensorPosition(0); //100 is 100 ticks backwards
+        setSetpoint(0);
+    }
+
+    public void resetEncoder() {
+        armMotor.setSelectedSensorPosition(0); //100 is 100 ticks backwards
         setSetpoint(0);
     }
 
@@ -91,6 +99,6 @@ public class TelescopeSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         //System.out.println(armMotor.getSelectedSensorVelocity());
-        //System.out.println(getCurrentPosition());
+        System.out.println(getCurrentPosition());
     }
 }

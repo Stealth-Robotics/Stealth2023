@@ -30,7 +30,7 @@ public class RotatorSubsystem extends SubsystemBase {
     private boolean log = false;
 
     
-    private double speedLimit = 1; 
+    private double speedLimit = 0.2; 
     private final ArmFeedforward feedforward;
 
     public RotatorSubsystem() {
@@ -44,7 +44,7 @@ public class RotatorSubsystem extends SubsystemBase {
                 Constants.RotatorConstants.ROTATOR_I_COEFF,
                 Constants.RotatorConstants.ROTATOR_D_COEFF);
         // pid.enableContinuousInput(0, Math.PI * 2);
-        pid.setTolerance(Math.toRadians(3));
+        pid.setTolerance(Math.toRadians(10));
         feedforward = new ArmFeedforward(
                 Constants.RotatorConstants.ROTATOR_KS_COEFF,
                 Constants.RotatorConstants.ROTATOR_KG_COEFF,
@@ -85,8 +85,12 @@ public class RotatorSubsystem extends SubsystemBase {
         setSetpoint(setPoint);
     }
 
-    private void setSpeed(double speed) {
+    public void setSpeed(double speed) {
         rotationMotor.set(speed); // Defaults to PercentOutput
+    }
+
+    public boolean atSetpoint(){
+        return pid.atSetpoint();
     }
 
     @Override
@@ -105,9 +109,8 @@ public class RotatorSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Setpoint: " , ff);
         SmartDashboard.putNumber("safe speed: " , safeSpeed);
         SmartDashboard.putNumber("Current Pos:", Math.toDegrees(getMeasurement()));
-
-
-        setSpeed(speed+ff);
+        
+        setSpeed(safeSpeed);
     }
 
 }
