@@ -90,7 +90,8 @@ public class RobotContainer {
             () -> mechController.getLeftX()));
 
     endEffector.setDefaultCommand(new CrocodileDefaultCommand(endEffector,
-        () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis())));
+        () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
+        () -> mechController.leftBumper().getAsBoolean()));
 
 
     autoChooser.setDefaultOption("Blue 1+Park", new BluePreloadParkCenter(swerve));

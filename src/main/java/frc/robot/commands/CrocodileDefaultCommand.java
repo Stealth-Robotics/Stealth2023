@@ -9,13 +9,11 @@ import frc.robot.subsystems.CrocodileSubsystem;
 public class CrocodileDefaultCommand extends CommandBase {
     private final CrocodileSubsystem subsystem;
     private final DoubleSupplier motorSpeed;
-    private final DoubleSupplier reverseSpeed;
     private final BooleanSupplier slowMovement;
 
-    public CrocodileDefaultCommand(CrocodileSubsystem subsystem, DoubleSupplier motorSpeed, DoubleSupplier reverseSpeed, BooleanSupplier slowMovement) {
+    public CrocodileDefaultCommand(CrocodileSubsystem subsystem, DoubleSupplier motorSpeed, BooleanSupplier slowMovement) {
         this.subsystem = subsystem;
         this.motorSpeed = motorSpeed;
-        this.reverseSpeed = reverseSpeed;
         this.slowMovement = slowMovement;
         addRequirements(subsystem);
     }
@@ -27,8 +25,6 @@ public class CrocodileDefaultCommand extends CommandBase {
             subsystem.setMotorSpeed(motorSpeed.getAsDouble() * 0.2);
             return;
         }
-        double forward = motorSpeed.getAsDouble();
-        double reverse = -1 * reverseSpeed.getAsDouble();
-        subsystem.setMotorSpeed(forward + reverse);
+        subsystem.setMotorSpeed(motorSpeed.getAsDouble());
     }
 }
