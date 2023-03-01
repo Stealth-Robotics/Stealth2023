@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 public class RobotMap {
     public static final class Crocodile {
-        public static final int INTAKE = 0;
+        public static final int INTAKE = 5;
     }
 
     public static final class Telescope {
@@ -48,7 +48,7 @@ public class RobotMap {
         public static final int PCM = 4;
         public static final PneumaticsModuleType PCM_TYPE = PneumaticsModuleType.CTREPCM;
         public static final int CLAW_PCM_CHANNEL = 0;
-        public static final int CHOMPER_PCM_CHANNEL = 0;
+        public static final int CHOMPER_PCM_CHANNEL = 1;
     }
 
     public static final class IntakeIDs {
