@@ -22,7 +22,7 @@ public class RotatorToPosition extends CommandBase {
     }
     @Override
     public void initialize() {
-        if (telescope.currentTicksToPercent() > telescope.ticksToPercent(2048) && Math.abs(telescope.getCurrentPosition() - setpoint) > telescope.ticksToPercent(4096)){
+        if (telescope.currentTicksToPercent() > telescope.ticksToPercent(-2048) && Math.abs(telescope.getCurrentPosition() - setpoint) > telescope.ticksToPercent(-4096)){
             CommandScheduler.getInstance().schedule(resetTelescope.andThen(new RotatorToPosition(rotatorSubsystem, telescope, setpoint)));
             resettingElevator = true;
         }
