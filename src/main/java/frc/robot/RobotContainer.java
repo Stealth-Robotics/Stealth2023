@@ -90,7 +90,7 @@ public class RobotContainer {
             () -> mechController.getLeftX()));
 
     endEffector.setDefaultCommand(new CrocodileDefaultCommand(endEffector,
-        () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
+        () -> (mechController.getRightTriggerAxis() - mechController.getLeftTriggerAxis()),
         () -> mechController.leftBumper().getAsBoolean()));
 
 
