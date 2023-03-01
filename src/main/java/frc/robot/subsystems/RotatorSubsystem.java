@@ -31,7 +31,7 @@ public class RotatorSubsystem extends SubsystemBase {
     private boolean log = false;
 
     
-    private double speedLimit = 1; 
+    private double speedLimit = 0.5; 
     private final ArmFeedforward feedforward;
 
     public RotatorSubsystem() {
@@ -89,10 +89,6 @@ public class RotatorSubsystem extends SubsystemBase {
         rotationMotor.set(speed); // Defaults to PercentOutput
     }
 
-    private double getVelocity(){
-        return rotationMotor.getSelectedSensorVelocity();
-    }
-
     @Override
     public void periodic() {
         double ff = feedforward.calculate(pid.getSetpoint() - (Math.PI / 2), rotationMotor.getSelectedSensorVelocity());
@@ -111,7 +107,7 @@ public class RotatorSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Current Pos:", Math.toDegrees(getMeasurement()));
 
 
-        setSpeed(speed+ff);
+        setSpeed(safeSpeed);
     }
 
 }
