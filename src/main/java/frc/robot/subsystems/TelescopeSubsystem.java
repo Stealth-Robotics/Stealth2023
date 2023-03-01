@@ -15,7 +15,7 @@ public class TelescopeSubsystem extends SubsystemBase {
     private Debouncer stallDebouncer = new Debouncer(0.050, Debouncer.DebounceType.kRising);
 
     private double currentSetpoint;
-    private final int MAXIMUM_TICKS = 1; //TODO: set to actual value
+    private final int MAXIMUM_TICKS = -1; //TODO: set to actual value
     public TelescopeSubsystem() {
 
         telescopeMotor = new WPI_TalonFX(RobotMap.Telescope.TELESCOPE_ID);
@@ -35,8 +35,10 @@ public class TelescopeSubsystem extends SubsystemBase {
 
         telescopeMotor.setSelectedSensorPosition(0);
 
-        telescopeMotor.setSensorPhase(true);
-        telescopeMotor.setInverted(true);
+        // we dont need to invert the motor and neither properly invert the sensor
+        // We have decided to just cope with negative numbers
+        // telescopeMotor.setSensorPhase(true);
+        // telescopeMotor.setInverted(true);
 
         currentSetpoint = getCurrentPosition();
     }
