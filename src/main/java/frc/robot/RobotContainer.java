@@ -77,6 +77,7 @@ public class RobotContainer {
     
     rotator.setDefaultCommand(new RotatorDefaultCommand(
         rotator,
+        telescope,
         () -> -mechController.getRightX()));
     
     telescope.setDefaultCommand(
