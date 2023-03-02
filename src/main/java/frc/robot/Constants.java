@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 import java.io.IOException;
@@ -61,6 +62,8 @@ public final class Constants {
   public static final class IOConstants {
     public static final int k_DRIVER_CONTROLLER_PORT = 0;
     public static final int k_OPERATOR_CONTROLLER_PORT = 1;
+
+    public static final boolean LOGGING = !DriverStation.isFMSAttached();
   }
 
   public static final class DrivebaseConstants {
@@ -192,7 +195,7 @@ public final class Constants {
           angleOffset);
     }
   }
-  
+
   public static final class AutoConstants { // TODO: The below constants are used in the example auto, and must be tuned
                                             // to specific robot
     public static final double k_MAX_SPEED_MPS = 3;
