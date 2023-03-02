@@ -11,7 +11,9 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.subsystems.CrocodileSubsystem;
 import frc.robot.subsystems.RotatorSubsystem;
+import frc.robot.RobotMap.Crocodile;
 import frc.robot.commands.*;
 import frc.robot.subsystems.TelescopeSubsystem;
 import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
@@ -31,7 +33,7 @@ public class RobotContainer {
   private final CommandXboxController driverController = new CommandXboxController(
       Constants.IOConstants.k_DRIVER_CONTROLLER_PORT);
 
-      private final CommandXboxController mechController = new CommandXboxController(
+  private final CommandXboxController mechController = new CommandXboxController(
       Constants.IOConstants.k_OPERATOR_CONTROLLER_PORT);
 
   /* Drive Controls */
@@ -46,6 +48,7 @@ public class RobotContainer {
   /* Subsystems */
   private final DrivebaseSubsystem swerve;
   private final RotatorSubsystem rotator;
+  private final CrocodileSubsystem endEffector;
   private final TelescopeSubsystem telescope;
 
   private UsbCamera camera = CameraServer.startAutomaticCapture();
@@ -60,6 +63,7 @@ public class RobotContainer {
     swerve = new DrivebaseSubsystem();
     telescope = new TelescopeSubsystem();
     rotator = new RotatorSubsystem();
+    endEffector = new CrocodileSubsystem();
 
 
     camera.setResolution(160, 120);
@@ -71,25 +75,28 @@ public class RobotContainer {
             () -> -driverController.getRawAxis(translationAxis),
             () -> -driverController.getRawAxis(strafeAxis),
             () -> -driverController.getRawAxis(rotationAxis),
-            () -> driverController.b().getAsBoolean() // ,
-        // () -> driverController.leftBumper().getAsBoolean()
+            () -> driverController.b().getAsBoolean(),
+            () -> driverController.rightBumper().getAsBoolean()
         ));
     
     rotator.setDefaultCommand(new RotatorDefaultCommand(
         rotator,
-        () -> -mechController.getRightX()));
+        () -> -mechController.getRightY()));
     
-    telescope.setDefaultCommand(
-      
+    telescope.setDefaultCommand(      
         new TelescopeDefault(
             telescope,
-            () -> mechController.getLeftX()));
+            () -> mechController.getLeftY()));
 
+    // autoChooser.setDefaultOption("Blue 1+Park", new BluePreloadParkCenter(swerve));
+    // autoChooser.addOption("Blue 1+1 Left", new BluePreloadPlusOneLeft(swerve));
+    // autoChooser.addOption("Blue 1+1 Right", new BluePreloadPlusOneRight(swerve));
+    //SmartDashboard.putData("Selected Autonomous", autoChooser);
+    endEffector.setDefaultCommand(new CrocodileDefaultCommand(
+      endEffector,
+        () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
+        () -> driverController.leftBumper().getAsBoolean()));
 
-    autoChooser.setDefaultOption("Blue 1+Park", new BluePreloadParkCenter(swerve));
-    autoChooser.addOption("Blue 1+1 Left", new BluePreloadPlusOneLeft(swerve));
-    autoChooser.addOption("Blue 1+1 Right", new BluePreloadPlusOneRight(swerve));
-    SmartDashboard.putData("Selected Autonomous", autoChooser);
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -105,17 +112,30 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     /* Driver Buttons */
-    // mechController.b().onTrue(new ResetTelescope(telescope));
+    //mechController.b().onTrue(new ResetTelescope(telescope));
+    mechController.b().onTrue(new InstantCommand(()->telescope.resetEncoder()));
     zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
 
+    mechController.rightBumper().onTrue(new InstantCommand(() -> endEffector.toggleWrist(), endEffector));
+    driverController.leftBumper().onTrue(new InstantCommand(() -> endEffector.toggleChomper(), endEffector));
+    mechController.x().onTrue(new RotatorToPosition(rotator, telescope, 230));
+
     // mechController
-    //     .x()
-    //     .onTrue(
-    //         Commands.runOnce(
-    //             () -> {
-    //               rotator.setGoal(130);
-    //             },
-    //             rotator));
+    // .x()
+    // .onTrue(
+    // Commands.runOnce(
+    // () -> {
+    // rotator.setGoal(130);
+    // },
+    // rotator));
+  }
+
+  public void teleopInit() {
+    telescope.completeReset();
+  }
+
+  public void autonomousInit() {
+    telescope.completeReset();
   }
 
   /**
@@ -124,7 +144,8 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    System.out.println("Selected Autonomous: " + autoChooser.getSelected());
-    return autoChooser.getSelected();
+    //System.out.println("Selected Autonomous: " + autoChooser.getSelected());
+    //return autoChooser.getSelected();
+    return null;
   }
 }

@@ -8,15 +8,15 @@ public class TelescopeToPosition extends CommandBase {
     private final TelescopeSubsystem telescopeSubsystem;
     private final double setpoint;
 
-    public TelescopeToPosition(TelescopeSubsystem telescopeSubsystem, double setpoint)
+    public TelescopeToPosition(TelescopeSubsystem telescopeSubsystem, double percentOut)
     {
         this.telescopeSubsystem = telescopeSubsystem;
-        this.setpoint = setpoint;
+        this.setpoint = percentOut;
     }
     
     @Override
     public void initialize() {
-        telescopeSubsystem.setSetpoint(setpoint);
+        telescopeSubsystem.setSetpoint(telescopeSubsystem.percentToTicks(setpoint));
     }
 
     @Override
