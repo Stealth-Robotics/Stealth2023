@@ -76,7 +76,7 @@ public class RobotContainer {
             () -> -driverController.getRawAxis(strafeAxis),
             () -> -driverController.getRawAxis(rotationAxis),
             () -> driverController.b().getAsBoolean(),
-            () -> driverController.leftBumper().getAsBoolean()
+            () -> driverController.rightBumper().getAsBoolean()
         ));
     
     rotator.setDefaultCommand(new RotatorDefaultCommand(
@@ -116,8 +116,8 @@ public class RobotContainer {
     mechController.b().onTrue(new InstantCommand(()->telescope.resetEncoder()));
     zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
 
-    driverController.x().onTrue(new InstantCommand(() -> endEffector.toggleWrist(), endEffector));
-    driverController.b().onTrue(new InstantCommand(() -> endEffector.toggleChomper(), endEffector));
+    driverController.rightBumper().onTrue(new InstantCommand(() -> endEffector.toggleWrist(), endEffector));
+    driverController.leftBumper().onTrue(new InstantCommand(() -> endEffector.toggleChomper(), endEffector));
     mechController.x().onTrue(new RotatorToPosition(rotator, telescope, 230));
 
     // mechController
