@@ -27,7 +27,7 @@ public class TelescopeDefault extends CommandBase {
                 telescopeSubsystem.setSpeed(MathUtil.clamp(joystickInput, -0.3, 0.3));
             }
             else {
-                telescopeSubsystem.setSpeed(MathUtil.clamp(joystickInput, 1, 0));
+                telescopeSubsystem.setSpeed(MathUtil.clamp(joystickInput, 0.3, 0));
             }
         }
 
