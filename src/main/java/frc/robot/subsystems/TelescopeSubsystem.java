@@ -14,8 +14,10 @@ public class TelescopeSubsystem extends SubsystemBase {
     private final WPI_TalonFX telescopeMotor;
     private Debouncer stallDebouncer = new Debouncer(0.050, Debouncer.DebounceType.kRising);
 
+    private double speedLimit;
+
     private double currentSetpoint;
-    private final int MAXIMUM_TICKS = -1; //TODO: set to actual value
+    private final int MAXIMUM_TICKS = 100000; //TODO: set to actual value
     public TelescopeSubsystem() {
 
         telescopeMotor = new WPI_TalonFX(RobotMap.Telescope.TELESCOPE_ID);
@@ -54,7 +56,9 @@ public class TelescopeSubsystem extends SubsystemBase {
     public double currentTicksToPercent(){
         return getCurrentPosition() / MAXIMUM_TICKS;
     }
-
+    public void resetEncoder(){
+        telescopeMotor.setSelectedSensorPosition(0);
+    }
     public double percentToTicks(double percent){
         return percent * MAXIMUM_TICKS;
     }
@@ -90,7 +94,7 @@ public class TelescopeSubsystem extends SubsystemBase {
 
     // check the elevator down
     public void retractTelescope() {
-        telescopeMotor.set(ControlMode.PercentOutput, 0.3);
+        telescopeMotor.set(ControlMode.PercentOutput, -0.3);
         stallDebouncer.calculate(false);
     }
 
@@ -100,13 +104,14 @@ public class TelescopeSubsystem extends SubsystemBase {
     }
 
     public boolean inBounds(){
-        return true;
-        //return Math.abs(getCurrentPosition()) <= Constants.TelescopeConstants.UPPER_BOUND ;
+        return currentTicksToPercent() < 0.9 && currentTicksToPercent() > 0;
     }
 
     @Override
     public void periodic() {
         //System.out.println(armMotor.getSelectedSensorVelocity());
         //System.out.println(getCurrentPosition());
+        //System.out.println("Telescope position: " + getCurrentPosition());
+        System.out.println("Telescope extension percent: " + currentTicksToPercent());
     }
 }

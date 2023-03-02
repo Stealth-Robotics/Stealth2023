@@ -29,12 +29,20 @@ public class RotatorDefaultCommand extends CommandBase {
 
     @Override
     public void initialize() {
+
         rotator.setToCurrentPosition();
     }
 
     @Override
     public void execute() {
+
         double joystickVal = joystick.getAsDouble();
+    
+        // if (Math.abs(joystickVal) > Constants.RotatorConstants.RotatorJoystickDeadband) {
+        //     rotator.setGoal(MathUtil.clamp(
+        //             (rotator.getSetpoint() + joystickVal * Constants.RotatorConstants.ROTATOR_SPEED_MULTIPLIER),
+        //             Constants.RotatorConstants.LOW_BOUND, Constants.RotatorConstants.HIGH_BOUND));
+        // }
         // If we are within the deadband, do nothing
         if (Math.abs(joystickVal) < Constants.RotatorConstants.RotatorJoystickDeadband) {
             return;
@@ -56,6 +64,8 @@ public class RotatorDefaultCommand extends CommandBase {
         }
         // Otherwise, just move the rotator normally
         else {
+            if (joystickVal < 0 && rotator.getMeasurementDegrees() < 60) return;
+            if (joystickVal > 0 && rotator.getMeasurementDegrees() > 240) return;
             rotator.setGoal(MathUtil.clamp(
                     (rotator.getSetpoint() + joystickVal * Constants.RotatorConstants.ROTATOR_SPEED_MULTIPLIER),
                     Constants.RotatorConstants.LOW_BOUND, Constants.RotatorConstants.HIGH_BOUND));
