@@ -72,8 +72,8 @@ public class TelescopeSubsystem extends SubsystemBase {
         telescopeMotor.set(ControlMode.PercentOutput, speed);
     }
 
-    public void setPosition(double position) {
-        telescopeMotor.set(ControlMode.Position, position);
+    public void setPosition(double positionTicks) {
+        telescopeMotor.set(ControlMode.Position, positionTicks);
     }
 
     public boolean checkVelocity() {
