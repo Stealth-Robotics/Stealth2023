@@ -94,7 +94,7 @@ public class TelescopeSubsystem extends SubsystemBase {
 
     // check the elevator down
     public void retractTelescope() {
-        telescopeMotor.set(ControlMode.PercentOutput, 0.3);
+        telescopeMotor.set(ControlMode.PercentOutput, -0.3);
         stallDebouncer.calculate(false);
     }
 

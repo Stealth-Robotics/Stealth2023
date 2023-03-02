@@ -86,7 +86,7 @@ public class RobotContainer {
     telescope.setDefaultCommand(      
         new TelescopeDefault(
             telescope,
-            () -> mechController.getLeftY()));
+            () -> -mechController.getLeftY()));
 
     // autoChooser.setDefaultOption("Blue 1+Park", new BluePreloadParkCenter(swerve));
     // autoChooser.addOption("Blue 1+1 Left", new BluePreloadPlusOneLeft(swerve));
