@@ -1,7 +1,11 @@
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -44,13 +48,22 @@ public class RobotContainer {
   private final RotatorSubsystem rotator;
   private final TelescopeSubsystem telescope;
 
+  private UsbCamera camera = CameraServer.startAutomaticCapture();
+  private SendableChooser<Command> autoChooser = new SendableChooser<>();
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+
+
     swerve = new DrivebaseSubsystem();
     telescope = new TelescopeSubsystem();
     rotator = new RotatorSubsystem();
+
+
+    camera.setResolution(160, 120);
+    camera.setFPS(30);
 
     swerve.setDefaultCommand(
         new TeleopDrivebaseDefaultCommand(
@@ -71,6 +84,11 @@ public class RobotContainer {
             telescope,
             () -> mechController.getLeftX()));
 
+
+    autoChooser.setDefaultOption("Blue 1+Park", new BluePreloadParkCenter(swerve));
+    autoChooser.addOption("Blue 1+1 Left", new BluePreloadPlusOneLeft(swerve));
+    autoChooser.addOption("Blue 1+1 Right", new BluePreloadPlusOneRight(swerve));
+    SmartDashboard.putData("Selected Autonomous", autoChooser);
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -98,6 +116,14 @@ public class RobotContainer {
     //             },
     //             rotator));
   }
+  
+  public void teleopInit() {
+    telescope.completeReset();
+  }
+
+  public void autonomousInit(){
+    telescope.completeReset();
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -105,7 +131,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // TODO: Replace with Auto command
-    return new BluePreloadPlusOneLeft(swerve);
+    System.out.println("Selected Autonomous: " + autoChooser.getSelected());
+    return autoChooser.getSelected();
   }
 }

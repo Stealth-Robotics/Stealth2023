@@ -84,7 +84,8 @@ public class TelescopeSubsystem extends SubsystemBase {
 
     public void completeReset() {
         telescopeMotor.set(ControlMode.PercentOutput, 0);
-        telescopeMotor.setSelectedSensorPosition(0);
+        telescopeMotor.setSelectedSensorPosition(100);//100 is 100 ticks backwards
+        setSetpoint(0);
     }
 
     // check the elevator down
