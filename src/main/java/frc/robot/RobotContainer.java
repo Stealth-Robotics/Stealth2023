@@ -75,8 +75,8 @@ public class RobotContainer {
             () -> -driverController.getRawAxis(translationAxis),
             () -> -driverController.getRawAxis(strafeAxis),
             () -> -driverController.getRawAxis(rotationAxis),
-            () -> driverController.b().getAsBoolean() // ,
-        // () -> driverController.leftBumper().getAsBoolean()
+            () -> driverController.b().getAsBoolean(),
+            () -> driverController.leftBumper().getAsBoolean()
         ));
 
     rotator.setDefaultCommand(new RotatorDefaultCommand(
@@ -127,6 +127,14 @@ public class RobotContainer {
     // rotator.setGoal(130);
     // },
     // rotator));
+  }
+
+  public void teleopInit() {
+    telescope.completeReset();
+  }
+
+  public void autonomousInit() {
+    telescope.completeReset();
   }
 
   /**
