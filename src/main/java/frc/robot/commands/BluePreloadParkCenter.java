@@ -4,8 +4,6 @@
 
 package frc.robot.commands;
 
-import org.apache.commons.collections4.sequence.InsertCommand;
-
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -45,14 +43,15 @@ public class BluePreloadParkCenter extends SequentialCommandGroup {
 
       new InstantCommand(()-> croc.closeChomper()),
       new RotatorToPosition(rotator, telescope, 230),
-      new TelescopeToPosition(telescope, 90), //TODO: set to actual telescope position.
+      new TelescopeToPosition(telescope, 70000), //TODO: set to actual telescope position.
       new InstantCommand(()-> croc.wristDown()),
       new WaitCommand(0.2),
       new InstantCommand(()-> croc.openChomper()),
       new WaitCommand(.2),
       new InstantCommand(()-> croc.wristUp()),
       new WaitCommand(.2),
-      new TelescopeToPosition(telescope, 0), //TODO: set to actual telescope position.
+      //new TelescopeToPosition(telescope, 1000), //TODO: set to actual telescope position.
+      new ResetTelescope(telescope),
       new RotatorToPosition(rotator, telescope, 90),
       new SwerveTrajectoryFollowCommand(driveBase,  "preloadParkCenter", defaultConfig, false, true)
       //LEVEL

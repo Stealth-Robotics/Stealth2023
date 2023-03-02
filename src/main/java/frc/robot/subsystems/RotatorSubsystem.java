@@ -44,7 +44,7 @@ public class RotatorSubsystem extends SubsystemBase {
                 Constants.RotatorConstants.ROTATOR_I_COEFF,
                 Constants.RotatorConstants.ROTATOR_D_COEFF);
         // pid.enableContinuousInput(0, Math.PI * 2);
-        pid.setTolerance(Math.toRadians(10));
+        pid.setTolerance(Math.toRadians(30));
         feedforward = new ArmFeedforward(
                 Constants.RotatorConstants.ROTATOR_KS_COEFF,
                 Constants.RotatorConstants.ROTATOR_KG_COEFF,
@@ -112,6 +112,7 @@ public class RotatorSubsystem extends SubsystemBase {
             System.out.println("RotatorPIDOnly.periodic: safe speed: " + safeSpeed);
         }        
         setSpeed(safeSpeed);
+        System.out.println("Rotator position: " + getMeasurementDegrees() + " | SP: " + getSetpoint());
     }
 
 }

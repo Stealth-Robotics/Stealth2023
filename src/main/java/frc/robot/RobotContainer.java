@@ -150,6 +150,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     //System.out.println("Selected Autonomous: " + autoChooser.getSelected());
     //return autoChooser.getSelected();
-    return null;
+    //return null;
+    return new BluePreloadParkCenter(swerve, endEffector, rotator, telescope);
   }
 }

@@ -94,13 +94,13 @@ public class TelescopeSubsystem extends SubsystemBase {
 
     // check the elevator down
     public void retractTelescope() {
-        telescopeMotor.set(ControlMode.PercentOutput, 0.3);
+        telescopeMotor.set(ControlMode.PercentOutput, -0.3);
         stallDebouncer.calculate(false);
     }
 
     public boolean atSetpoint() {
-        return Math.abs(telescopeMotor.getClosedLoopError()) < Constants.TelescopeConstants.POSITIONAL_TOLERANCE
-                && Math.abs(telescopeMotor.getSelectedSensorVelocity()) < Constants.TelescopeConstants.VELOCITY_TOLERANCE;
+        return Math.abs(telescopeMotor.getClosedLoopError()) < Constants.TelescopeConstants.POSITIONAL_TOLERANCE;
+                // && Math.abs(telescopeMotor.getSelectedSensorVelocity()) < Constants.TelescopeConstants.VELOCITY_TOLERANCE;
     }
 
     public boolean inBounds(){
@@ -112,6 +112,6 @@ public class TelescopeSubsystem extends SubsystemBase {
     public void periodic() {
         //System.out.println(armMotor.getSelectedSensorVelocity());
         //System.out.println(getCurrentPosition());
-        System.out.println("Telescope position: " + getCurrentPosition());
+        System.out.println("Telescope position: " + getCurrentPosition() + " | SP: " + getSetpoint());
     }
 }

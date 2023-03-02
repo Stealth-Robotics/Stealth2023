@@ -185,7 +185,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
         swerveOdometry.update(getGyroscopeRotation(), getModulePositions());
 
-        Optional<EstimatedRobotPose> result = pcw.getEstimatedGlobalPose(swerveOdometry.getEstimatedPosition());
+        // Optional<EstimatedRobotPose> result = pcw.getEstimatedGlobalPose(swerveOdometry.getEstimatedPosition());
         /* 
         if (result.isPresent()) {
             EstimatedRobotPose camPose = result.get();
