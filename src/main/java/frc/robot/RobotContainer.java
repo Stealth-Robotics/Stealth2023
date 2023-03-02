@@ -31,7 +31,7 @@ public class RobotContainer {
   private final CommandXboxController driverController = new CommandXboxController(
       Constants.IOConstants.k_DRIVER_CONTROLLER_PORT);
 
-      private final CommandXboxController mechController = new CommandXboxController(
+  private final CommandXboxController mechController = new CommandXboxController(
       Constants.IOConstants.k_OPERATOR_CONTROLLER_PORT);
 
   /* Drive Controls */
@@ -71,8 +71,8 @@ public class RobotContainer {
             () -> -driverController.getRawAxis(translationAxis),
             () -> -driverController.getRawAxis(strafeAxis),
             () -> -driverController.getRawAxis(rotationAxis),
-            () -> driverController.b().getAsBoolean() // ,
-        // () -> driverController.leftBumper().getAsBoolean()
+            () -> driverController.b().getAsBoolean(),
+            () -> driverController.leftBumper().getAsBoolean()
         ));
     
     rotator.setDefaultCommand(new RotatorDefaultCommand(
@@ -108,20 +108,20 @@ public class RobotContainer {
     zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
 
     // mechController
-    //     .x()
-    //     .onTrue(
-    //         Commands.runOnce(
-    //             () -> {
-    //               rotator.setGoal(130);
-    //             },
-    //             rotator));
+    // .x()
+    // .onTrue(
+    // Commands.runOnce(
+    // () -> {
+    // rotator.setGoal(130);
+    // },
+    // rotator));
   }
-  
+
   public void teleopInit() {
     telescope.completeReset();
   }
 
-  public void autonomousInit(){
+  public void autonomousInit() {
     telescope.completeReset();
   }
 
