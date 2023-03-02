@@ -21,6 +21,7 @@ public class RotatorDefaultCommand extends CommandBase {
     @Override
     public void initialize() {
 
+        rotator.setToCurrentPosition();
     }
 
     @Override
