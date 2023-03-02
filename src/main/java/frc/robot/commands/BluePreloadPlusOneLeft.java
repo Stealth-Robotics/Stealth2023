@@ -31,7 +31,15 @@ public class BluePreloadPlusOneLeft extends SequentialCommandGroup {
         // Retract Telescope
         // Arm Rotate 90
         new SwerveTrajectoryFollowCommand(driveBase, "preloadPlusOneLeft1", defaultConfig, true, true),
+        // Close Gripper
         new SwerveTrajectoryFollowCommand(driveBase, "preloadPlusOneLeft2", defaultConfig, true, false));
+        // Arm Rotate 135
+        // Extend Telescope Out
+        // Flex Wrist
+        // Gripper Open
+        // Wrist Straight
+        // Retract Telescope
+        // Arm Rotate 90
     // grabs any requirements needed for the drivebase from other running commands.
     addRequirements(driveBase);
   }
