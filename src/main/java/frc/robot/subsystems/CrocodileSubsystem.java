@@ -18,7 +18,8 @@ public class CrocodileSubsystem extends SubsystemBase {
 
     public CrocodileSubsystem() {
         intake = new CANSparkMax(RobotMap.Crocodile.INTAKE, MotorType.kBrushless);
-        intake.setSmartCurrentLimit(Constants.CrocodileConstants.CURRENT_LIMIT);
+        intake.setSmartCurrentLimit(Constants.CrocodileConstants.STALL_CURRENT_LIMIT,
+                Constants.CrocodileConstants.FREE_CURRENT_LIMIT);
         intake.burnFlash();
 
         wristSolenoid = new Solenoid(

@@ -22,7 +22,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 public final class Constants {
 
   public static final class CrocodileConstants {
-    public static final int CURRENT_LIMIT = 20;
+    public static final int FREE_CURRENT_LIMIT = 30;
+    public static final int STALL_CURRENT_LIMIT = 20;
   }
 
   public static final class TelescopeConstants {
