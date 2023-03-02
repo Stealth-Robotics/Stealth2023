@@ -81,12 +81,12 @@ public class RobotContainer {
     
     rotator.setDefaultCommand(new RotatorDefaultCommand(
         rotator,
-        () -> -mechController.getRightX()));
+        () -> -mechController.getRightY()));
     
     telescope.setDefaultCommand(      
         new TelescopeDefault(
             telescope,
-            () -> mechController.getLeftX()));
+            () -> mechController.getLeftY()));
 
     // autoChooser.setDefaultOption("Blue 1+Park", new BluePreloadParkCenter(swerve));
     // autoChooser.addOption("Blue 1+1 Left", new BluePreloadPlusOneLeft(swerve));
@@ -94,8 +94,8 @@ public class RobotContainer {
     //SmartDashboard.putData("Selected Autonomous", autoChooser);
     endEffector.setDefaultCommand(new CrocodileDefaultCommand(
       endEffector,
-        () -> (mechController.getRightTriggerAxis() - mechController.getLeftTriggerAxis()),
-        () -> mechController.leftBumper().getAsBoolean()));
+        () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
+        () -> driverController.leftBumper().getAsBoolean()));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -116,8 +116,8 @@ public class RobotContainer {
     mechController.b().onTrue(new InstantCommand(()->telescope.resetEncoder()));
     zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
 
-    mechController.a().onTrue(new InstantCommand(() -> endEffector.toggleWrist(), endEffector));
-    mechController.b().onTrue(new InstantCommand(() -> endEffector.toggleChomper(), endEffector));
+    driverController.x().onTrue(new InstantCommand(() -> endEffector.toggleWrist(), endEffector));
+    driverController.b().onTrue(new InstantCommand(() -> endEffector.toggleChomper(), endEffector));
     mechController.x().onTrue(new RotatorToPosition(rotator, telescope, 230));
 
     // mechController

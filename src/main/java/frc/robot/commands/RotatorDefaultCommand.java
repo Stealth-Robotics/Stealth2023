@@ -36,8 +36,8 @@ public class RotatorDefaultCommand extends CommandBase {
         double joystickVal = joystick.getAsDouble();
         if (Math.abs(joystickVal) > 0.05) {
             
-            rotator.setSpeed(joystickVal);
-            rotator.reset();
+            rotator.setSpeed(MathUtil.clamp(joystickVal, -0.5, 0.5));
+            rotator.setToCurrentPosition();
         }
         // if (Math.abs(joystickVal) > Constants.RotatorConstants.RotatorJoystickDeadband) {
         //     rotator.setGoal(MathUtil.clamp(

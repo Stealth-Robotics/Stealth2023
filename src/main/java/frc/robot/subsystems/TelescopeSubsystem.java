@@ -56,7 +56,9 @@ public class TelescopeSubsystem extends SubsystemBase {
     public double currentTicksToPercent(){
         return getCurrentPosition() / MAXIMUM_TICKS;
     }
-
+    public void resetEncoder(){
+        telescopeMotor.setSelectedSensorPosition(0);
+    }
     public double percentToTicks(double percent){
         return percent * MAXIMUM_TICKS;
     }
@@ -109,6 +111,6 @@ public class TelescopeSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         //System.out.println(armMotor.getSelectedSensorVelocity());
-        System.out.println(getCurrentPosition());
+        //System.out.println(getCurrentPosition());
     }
 }
