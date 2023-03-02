@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
@@ -20,21 +21,20 @@ import frc.robot.RobotMap;
  *          |
  *  +270 ---0----- +90 (FRONT OF ROBOT)
  */
+import frc.robot.commands.ResetTelescope;
 
 public class RotatorSubsystem extends SubsystemBase {
     private final WPI_TalonFX rotationMotor;
     private final PIDController pid;
     private final DutyCycleEncoder encoder;
-
     
     private boolean log = false;
 
     
-    private double speedLimit = 1; 
+    private double speedLimit = 0.2; 
     private final ArmFeedforward feedforward;
 
     public RotatorSubsystem() {
-
         rotationMotor = new WPI_TalonFX(RobotMap.Rotator.ROTATOR_MOTOR);
         rotationMotor.setNeutralMode(NeutralMode.Coast);
         rotationMotor.setInverted(true);
@@ -44,7 +44,7 @@ public class RotatorSubsystem extends SubsystemBase {
                 Constants.RotatorConstants.ROTATOR_I_COEFF,
                 Constants.RotatorConstants.ROTATOR_D_COEFF);
         // pid.enableContinuousInput(0, Math.PI * 2);
-        pid.setTolerance(Math.toRadians(3));
+        pid.setTolerance(Math.toRadians(10));
         feedforward = new ArmFeedforward(
                 Constants.RotatorConstants.ROTATOR_KS_COEFF,
                 Constants.RotatorConstants.ROTATOR_KG_COEFF,
@@ -52,12 +52,13 @@ public class RotatorSubsystem extends SubsystemBase {
                 Constants.RotatorConstants.ROTATOR_KA_COEFF);
 
         encoder = new DutyCycleEncoder(0);
-        reset();
+        setToCurrentPosition();
     }
 
-    public void reset() {
+    public void setToCurrentPosition() {
         setSetpoint(Math.toDegrees(getMeasurement()));
     }
+    
 
     private double getMeasurement() {
         double currentPosition = encoder.getAbsolutePosition();
@@ -67,8 +68,14 @@ public class RotatorSubsystem extends SubsystemBase {
             System.out.println(
                     "RotatorPIDOnly.getMeasurement: Current encoder position (adj): " + Math.toDegrees(result));
         }
-        SmartDashboard.putNumber("RotatorPIDOnly.getMeasurement: Current encoder position (raw): ", currentPosition);
-        SmartDashboard.putNumber("RotatorPIDOnly.getMeasurement: Current encoder position (adj): ", Math.toDegrees(result));
+    
+        return result;
+    }
+
+    public double getMeasurementDegrees() {
+        double currentPosition = encoder.getAbsolutePosition();
+        double result = (((currentPosition * 360) + Constants.RotatorConstants.ENCODER_OFFSET) % 360);
+    
         return result;
     }
 
@@ -85,8 +92,12 @@ public class RotatorSubsystem extends SubsystemBase {
         setSetpoint(setPoint);
     }
 
-    private void setSpeed(double speed) {
+    public void setSpeed(double speed) {
         rotationMotor.set(speed); // Defaults to PercentOutput
+    }
+
+    public boolean atSetpoint(){
+        return pid.atSetpoint();
     }
 
     @Override
@@ -99,17 +110,8 @@ public class RotatorSubsystem extends SubsystemBase {
             System.out.println("RotatorPIDOnly.periodic: speed: " + speed);
             System.out.println("RotatorPIDOnly.periodic: ff: " + ff);
             System.out.println("RotatorPIDOnly.periodic: safe speed: " + safeSpeed);
-        }
-        SmartDashboard.putNumber("Setpoint: " , Math.toDegrees(pid.getSetpoint()));
-        SmartDashboard.putNumber("Speed: " , speed);        
-        SmartDashboard.putNumber("Setpoint: " , ff);
-        SmartDashboard.putNumber("safe speed: " , safeSpeed);
-        SmartDashboard.putNumber("Current Pos:", Math.toDegrees(getMeasurement()));
-
-        
-
-
-        setSpeed(speed+ff);
+        }        
+        setSpeed(safeSpeed);
     }
 
 }

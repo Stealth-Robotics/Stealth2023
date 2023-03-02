@@ -8,10 +8,10 @@ public class TelescopeToPosition extends CommandBase {
     private final TelescopeSubsystem telescopeSubsystem;
     private final double setpoint;
 
-    public TelescopeToPosition(TelescopeSubsystem telescopeSubsystem, double setpoint)
+    public TelescopeToPosition(TelescopeSubsystem telescopeSubsystem, double ticks)
     {
         this.telescopeSubsystem = telescopeSubsystem;
-        this.setpoint = setpoint;
+        this.setpoint = ticks;
     }
     
     @Override
