@@ -117,6 +117,14 @@ public class RobotContainer {
     //             },
     //             rotator));
   }
+  
+  public void teleopInit() {
+    telescope.completeReset();
+  }
+
+  public void autonomousInit(){
+    telescope.completeReset();
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
