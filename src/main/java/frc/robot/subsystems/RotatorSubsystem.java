@@ -68,8 +68,14 @@ public class RotatorSubsystem extends SubsystemBase {
             System.out.println(
                     "RotatorPIDOnly.getMeasurement: Current encoder position (adj): " + Math.toDegrees(result));
         }
-        SmartDashboard.putNumber("RotatorPIDOnly.getMeasurement: Current encoder position (raw): ", currentPosition);
-        SmartDashboard.putNumber("RotatorPIDOnly.getMeasurement: Current encoder position (adj): ", Math.toDegrees(result));
+    
+        return result;
+    }
+
+    public double getMeasurementDegrees() {
+        double currentPosition = encoder.getAbsolutePosition();
+        double result = (((currentPosition * 360) + Constants.RotatorConstants.ENCODER_OFFSET) % 360);
+    
         return result;
     }
 
@@ -104,13 +110,7 @@ public class RotatorSubsystem extends SubsystemBase {
             System.out.println("RotatorPIDOnly.periodic: speed: " + speed);
             System.out.println("RotatorPIDOnly.periodic: ff: " + ff);
             System.out.println("RotatorPIDOnly.periodic: safe speed: " + safeSpeed);
-        }
-        SmartDashboard.putNumber("Setpoint: " , Math.toDegrees(pid.getSetpoint()));
-        SmartDashboard.putNumber("Speed: " , speed);        
-        SmartDashboard.putNumber("Setpoint: " , ff);
-        SmartDashboard.putNumber("safe speed: " , safeSpeed);
-        SmartDashboard.putNumber("Current Pos:", Math.toDegrees(getMeasurement()));
-        
+        }        
         setSpeed(safeSpeed);
     }
 

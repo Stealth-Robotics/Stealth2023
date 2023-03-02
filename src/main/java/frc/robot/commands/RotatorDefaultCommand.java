@@ -26,16 +26,11 @@ public class RotatorDefaultCommand extends CommandBase {
 
     @Override
     public void execute() {
-        double joystickInput = joystick.getAsDouble();
-
-        // if (Math.abs(joystickInput) > 0.05) {
-        // rotator.setSpeed(MathUtil.clamp(joystickInput, -0.3, 0.3));
-        // rotator.setSetpoint(rotator.getMeasurement());
-        // }
 
         double joystickVal = joystick.getAsDouble();
         if (Math.abs(joystickVal) > 0.05) {
-            
+            if (joystickVal < 0 && rotator.getMeasurementDegrees() < 60) return;
+            if (joystickVal > 0 && rotator.getMeasurementDegrees() > 240) return;
             rotator.setSpeed(MathUtil.clamp(joystickVal, -0.5, 0.5));
             rotator.setToCurrentPosition();
         }
