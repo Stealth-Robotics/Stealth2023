@@ -9,6 +9,7 @@ import org.apache.commons.collections4.sequence.InsertCommand;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.RobotMap.Crocodile;
 import frc.robot.subsystems.CrocodileSubsystem;
@@ -46,11 +47,15 @@ public class BluePreloadParkCenter extends SequentialCommandGroup {
       new RotatorToPosition(rotator, telescope, 230),
       new TelescopeToPosition(telescope, 90), //TODO: set to actual telescope position.
       new InstantCommand(()-> croc.wristDown()),
+      new WaitCommand(0.2),
       new InstantCommand(()-> croc.openChomper()),
+      new WaitCommand(.2),
       new InstantCommand(()-> croc.wristUp()),
+      new WaitCommand(.2),
       new TelescopeToPosition(telescope, 0), //TODO: set to actual telescope position.
       new RotatorToPosition(rotator, telescope, 90),
       new SwerveTrajectoryFollowCommand(driveBase,  "preloadParkCenter", defaultConfig, false, true)
+      //LEVEL
 
 
     );
