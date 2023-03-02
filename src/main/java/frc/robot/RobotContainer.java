@@ -75,8 +75,8 @@ public class RobotContainer {
             () -> -driverController.getRawAxis(translationAxis),
             () -> -driverController.getRawAxis(strafeAxis),
             () -> -driverController.getRawAxis(rotationAxis),
-            () -> driverController.b().getAsBoolean() // ,
-        // () -> driverController.leftBumper().getAsBoolean()
+            () -> driverController.b().getAsBoolean(),
+            () -> driverController.leftBumper().getAsBoolean()
         ));
     
     rotator.setDefaultCommand(new RotatorDefaultCommand(
@@ -89,15 +89,15 @@ public class RobotContainer {
             telescope,
             () -> mechController.getLeftX()));
 
-    endEffector.setDefaultCommand(
-      new CrocodileDefaultCommand(
-        endEffector,
-        () -> mechController.getLeftTriggerAxis())     
-    );
     // autoChooser.setDefaultOption("Blue 1+Park", new BluePreloadParkCenter(swerve));
     // autoChooser.addOption("Blue 1+1 Left", new BluePreloadPlusOneLeft(swerve));
     // autoChooser.addOption("Blue 1+1 Right", new BluePreloadPlusOneRight(swerve));
     //SmartDashboard.putData("Selected Autonomous", autoChooser);
+    endEffector.setDefaultCommand(new CrocodileDefaultCommand(
+      endEffector,
+        () -> (mechController.getRightTriggerAxis() - mechController.getLeftTriggerAxis()),
+        () -> mechController.leftBumper().getAsBoolean()));
+
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -129,6 +129,14 @@ public class RobotContainer {
     // rotator.setGoal(130);
     // },
     // rotator));
+  }
+
+  public void teleopInit() {
+    telescope.completeReset();
+  }
+
+  public void autonomousInit() {
+    telescope.completeReset();
   }
 
   /**
