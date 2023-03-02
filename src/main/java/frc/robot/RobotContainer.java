@@ -11,7 +11,9 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.subsystems.CrocodileSubsystem;
 import frc.robot.subsystems.RotatorSubsystem;
+import frc.robot.RobotMap.Crocodile;
 import frc.robot.commands.*;
 import frc.robot.subsystems.TelescopeSubsystem;
 import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
@@ -46,6 +48,7 @@ public class RobotContainer {
   /* Subsystems */
   private final DrivebaseSubsystem swerve;
   private final RotatorSubsystem rotator;
+  private final CrocodileSubsystem endEffector;
   private final TelescopeSubsystem telescope;
 
   private UsbCamera camera = CameraServer.startAutomaticCapture();
@@ -60,6 +63,7 @@ public class RobotContainer {
     swerve = new DrivebaseSubsystem();
     telescope = new TelescopeSubsystem();
     rotator = new RotatorSubsystem();
+    endEffector = new CrocodileSubsystem();
 
 
     camera.setResolution(160, 120);
@@ -74,16 +78,20 @@ public class RobotContainer {
             () -> driverController.b().getAsBoolean(),
             () -> driverController.leftBumper().getAsBoolean()
         ));
-    
+
     rotator.setDefaultCommand(new RotatorDefaultCommand(
         rotator,
         telescope,
         () -> -mechController.getRightX()));
-    
+
     telescope.setDefaultCommand(      
         new TelescopeDefault(
             telescope,
             () -> mechController.getLeftX()));
+
+    endEffector.setDefaultCommand(new CrocodileDefaultCommand(endEffector,
+        () -> (mechController.getRightTriggerAxis() - mechController.getLeftTriggerAxis()),
+        () -> mechController.leftBumper().getAsBoolean()));
 
 
     autoChooser.setDefaultOption("Blue 1+Park", new BluePreloadParkCenter(swerve));
@@ -107,6 +115,9 @@ public class RobotContainer {
     /* Driver Buttons */
     // mechController.b().onTrue(new ResetTelescope(telescope));
     zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
+
+    mechController.a().onTrue(new InstantCommand(() -> endEffector.toggleWrist(), endEffector));
+    mechController.b().onTrue(new InstantCommand(() -> endEffector.toggleChomper(), endEffector));
 
     // mechController
     // .x()

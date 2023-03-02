@@ -1,12 +1,16 @@
 package frc.robot;
 
-
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 public class RobotMap {
+    public static final class Crocodile {
+        public static final int INTAKE = 5;
+    }
+
     public static final class Telescope {
         public static final int TELESCOPE_ID = 6;
     }
+
     public static final class Drivebase {
         public static final int PIGEON_ID = 2;
 
@@ -16,6 +20,7 @@ public class RobotMap {
             public static final int ANGLE_MOTOR_ID = 24;
             public static final int CANCODER_ID = 34;
         }
+
         /* Front Right Module - Module 1 */
         public static final class Mod1 {
             public static final int DRIVE_MOTOR_ID = 12;
@@ -29,6 +34,7 @@ public class RobotMap {
             public static final int ANGLE_MOTOR_ID = 23;
             public static final int CANCODER_ID = 33;
         }
+
         /* Back Right Module - Module 3 */
         public static final class Mod3 {
             public static final int DRIVE_MOTOR_ID = 11;
@@ -38,13 +44,15 @@ public class RobotMap {
     }
 
     public static final class Pneumatics {
-        //TODO: Change to fit the IDs on the robot.
+        // TODO: Change to fit the IDs on the robot.
         public static final int PCM = 4;
         public static final PneumaticsModuleType PCM_TYPE = PneumaticsModuleType.CTREPCM;
         public static final int CLAW_PCM_CHANNEL = 0;
+        public static final int CHOMPER_PCM_CHANNEL = 1;
     }
+
     public static final class IntakeIDs {
-        //TODO: Change to fit the IDs on the robot.
+        // TODO: Change to fit the IDs on the robot.
         public static final int RIGHT_INTAKE_MOTOR_ID = 0;
         public static final int LEFT_INTAKE_MOTOR_ID = 1;
     }
