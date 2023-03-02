@@ -104,8 +104,7 @@ public class TelescopeSubsystem extends SubsystemBase {
     }
 
     public boolean inBounds(){
-        return true;
-        //return Math.abs(getCurrentPosition()) <= Constants.TelescopeConstants.UPPER_BOUND ;
+        return currentTicksToPercent() < 0.9 && currentTicksToPercent() > 0;
     }
 
     @Override
