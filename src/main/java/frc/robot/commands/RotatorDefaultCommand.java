@@ -33,15 +33,16 @@ public class RotatorDefaultCommand extends CommandBase {
         // }
 
         double joystickVal = joystick.getAsDouble();
-
-        if (Math.abs(joystickVal) > Constants.RotatorConstants.RotatorJoystickDeadband) {
-            rotator.setGoal(MathUtil.clamp(
-                    (rotator.getSetpoint() + joystickVal *
-                            Constants.RotatorConstants.ROTATOR_SPEED_MULTIPLIER),
-                    Constants.RotatorConstants.LOW_BOUND,
-                    Constants.RotatorConstants.HIGH_BOUND));
+        if (Math.abs(joystickVal) > 0.05) {
+            
+            rotator.setSpeed(joystickVal);
+            rotator.reset();
         }
-
+        // if (Math.abs(joystickVal) > Constants.RotatorConstants.RotatorJoystickDeadband) {
+        //     rotator.setGoal(MathUtil.clamp(
+        //             (rotator.getSetpoint() + joystickVal * Constants.RotatorConstants.ROTATOR_SPEED_MULTIPLIER),
+        //             Constants.RotatorConstants.LOW_BOUND, Constants.RotatorConstants.HIGH_BOUND));
+        // }
     }
 
 }
