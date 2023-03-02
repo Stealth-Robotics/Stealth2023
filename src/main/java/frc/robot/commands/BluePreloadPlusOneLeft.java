@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.subsystems.CrocodileSubsystem;
@@ -31,9 +32,13 @@ public class BluePreloadPlusOneLeft extends SequentialCommandGroup {
     addCommands(
         // references the path file and sets the starting color and if the command is running first.
         // Close Gripper
-        // Arm Rotate 135
+        new InstantCommand(()-> croc.closeChomper()),
+        // Arm Rotate 230
+        new RotatorToPosition(rotator, telescope, 230),
         // Extend Telescope Out
+        new TelescopeToPosition(telescope, 90),
         // Flex Wrist
+        new InstantCommand(()-> croc.wristDown()),
         // Gripper Open
         // Wrist Straight
         // Retract Telescope
