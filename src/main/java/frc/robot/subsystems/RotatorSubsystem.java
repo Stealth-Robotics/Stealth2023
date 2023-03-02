@@ -52,12 +52,13 @@ public class RotatorSubsystem extends SubsystemBase {
                 Constants.RotatorConstants.ROTATOR_KA_COEFF);
 
         encoder = new DutyCycleEncoder(0);
-        reset();
+        setToCurrentPosition();
     }
 
-    public void reset() {
+    public void setToCurrentPosition() {
         setSetpoint(Math.toDegrees(getMeasurement()));
     }
+    
 
     private double getMeasurement() {
         double currentPosition = encoder.getAbsolutePosition();
@@ -87,6 +88,10 @@ public class RotatorSubsystem extends SubsystemBase {
 
     private void setSpeed(double speed) {
         rotationMotor.set(speed); // Defaults to PercentOutput
+    }
+
+    public boolean atSetpoint(){
+        return pid.atSetpoint();
     }
 
     @Override

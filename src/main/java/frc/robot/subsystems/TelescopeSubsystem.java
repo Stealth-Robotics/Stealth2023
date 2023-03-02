@@ -11,32 +11,36 @@ import frc.robot.Constants;
 import frc.robot.RobotMap;
 
 public class TelescopeSubsystem extends SubsystemBase {
-    private final WPI_TalonFX armMotor;
-    private Debouncer stallDebouncer = new Debouncer(0.010, Debouncer.DebounceType.kRising);
+    private final WPI_TalonFX telescopeMotor;
+    private Debouncer stallDebouncer = new Debouncer(0.050, Debouncer.DebounceType.kRising);
 
     private double currentSetpoint;
-
+    private final int MAXIMUM_TICKS = -1; //TODO: set to actual value
     public TelescopeSubsystem() {
 
-        armMotor = new WPI_TalonFX(RobotMap.Telescope.TELESCOPE_ID);
+        telescopeMotor = new WPI_TalonFX(RobotMap.Telescope.TELESCOPE_ID);
 
-        armMotor.configFactoryDefault();
+        telescopeMotor.configFactoryDefault();
 
-        armMotor.setNeutralMode(NeutralMode.Brake);
+        telescopeMotor.setNeutralMode(NeutralMode.Brake);
 
-        armMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+        telescopeMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 
-        armMotor.configAllowableClosedloopError(0, Constants.TelescopeConstants.POSITIONAL_TOLERANCE);
+        telescopeMotor.configAllowableClosedloopError(0, Constants.TelescopeConstants.POSITIONAL_TOLERANCE);
 
-        armMotor.config_kP(0, Constants.TelescopeConstants.P_COEFF);
-        armMotor.config_kI(0, Constants.TelescopeConstants.I_COEFF);
-        armMotor.config_kD(0, Constants.TelescopeConstants.D_COEFF);
-        armMotor.config_kF(0, Constants.TelescopeConstants.F_COEFF);
+        telescopeMotor.config_kP(0, Constants.TelescopeConstants.P_COEFF);
+        telescopeMotor.config_kI(0, Constants.TelescopeConstants.I_COEFF);
+        telescopeMotor.config_kD(0, Constants.TelescopeConstants.D_COEFF);
+        telescopeMotor.config_kF(0, Constants.TelescopeConstants.F_COEFF);
 
-        armMotor.setSelectedSensorPosition(0);
+        telescopeMotor.setSelectedSensorPosition(0);
+
+        // we dont need to invert the motor and neither properly invert the sensor
+        // We have decided to just cope with negative numbers
+        // telescopeMotor.setSensorPhase(true);
+        // telescopeMotor.setInverted(true);
 
         currentSetpoint = getCurrentPosition();
-        register();
     }
 
     public void setSetpoint(double setpoint) {
@@ -47,40 +51,52 @@ public class TelescopeSubsystem extends SubsystemBase {
         return currentSetpoint;
     }
 
+    public double currentTicksToPercent(){
+        return getCurrentPosition() / MAXIMUM_TICKS;
+    }
+
+    public double percentToTicks(double percent){
+        return percent * MAXIMUM_TICKS;
+    }
+
+    public double ticksToPercent(double ticks){
+        return ticks / MAXIMUM_TICKS;
+    }
+
     public double getCurrentPosition() {
-        return armMotor.getSelectedSensorPosition();
+        return telescopeMotor.getSelectedSensorPosition();
     }
 
     public void setSpeed(double speed) {
         currentSetpoint = getCurrentPosition();
-        armMotor.set(ControlMode.PercentOutput, speed);
+        telescopeMotor.set(ControlMode.PercentOutput, speed);
     }
 
-    public void setPosition(double position) {
-        armMotor.set(ControlMode.Position, position);
+    public void setPosition(double positionTicks) {
+        telescopeMotor.set(ControlMode.Position, positionTicks);
     }
 
     public boolean checkVelocity() {
 
         return stallDebouncer.calculate(
-                Math.abs(armMotor.getSelectedSensorVelocity()) < 50);
+                Math.abs(telescopeMotor.getSelectedSensorVelocity()) < 50);
     }
 
     public void completeReset() {
-        armMotor.set(ControlMode.PercentOutput, 0);
-        armMotor.setSelectedSensorPosition(100); //100 is 100 ticks backwards
+        telescopeMotor.set(ControlMode.PercentOutput, 0);
+        telescopeMotor.setSelectedSensorPosition(100);//100 is 100 ticks backwards
         setSetpoint(0);
     }
 
     // check the elevator down
     public void retractTelescope() {
-        armMotor.set(ControlMode.PercentOutput, 0.3);
+        telescopeMotor.set(ControlMode.PercentOutput, 0.3);
         stallDebouncer.calculate(false);
     }
 
     public boolean atSetpoint() {
-        return Math.abs(armMotor.getClosedLoopError()) < Constants.TelescopeConstants.POSITIONAL_TOLERANCE
-                && Math.abs(armMotor.getSelectedSensorVelocity()) < Constants.TelescopeConstants.VELOCITY_TOLERANCE;
+        return Math.abs(telescopeMotor.getClosedLoopError()) < Constants.TelescopeConstants.POSITIONAL_TOLERANCE
+                && Math.abs(telescopeMotor.getSelectedSensorVelocity()) < Constants.TelescopeConstants.VELOCITY_TOLERANCE;
     }
 
     public boolean inBounds(){
