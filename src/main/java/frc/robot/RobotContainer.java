@@ -112,13 +112,17 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     /* Driver Buttons */
-    //mechController.b().onTrue(new ResetTelescope(telescope));
-    mechController.b().onTrue(new InstantCommand(()->telescope.resetEncoder()));
+
     zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
 
-    mechController.rightBumper().onTrue(new InstantCommand(() -> endEffector.toggleWrist(), endEffector));
     driverController.leftBumper().onTrue(new InstantCommand(() -> endEffector.toggleChomper(), endEffector));
+
+
+    mechController.a().onTrue(new TelescopeToPosition(telescope, 50));
+    mechController.y().onTrue(new RotatorToPosition(rotator, telescope, 90));
     mechController.x().onTrue(new RotatorToPosition(rotator, telescope, 230));
+    mechController.b().onTrue(new InstantCommand(()->telescope.resetEncoder()));
+    mechController.rightBumper().onTrue(new InstantCommand(() -> endEffector.toggleWrist(), endEffector));
 
     // mechController
     // .x()
