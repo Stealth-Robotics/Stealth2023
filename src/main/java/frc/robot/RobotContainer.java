@@ -116,8 +116,8 @@ public class RobotContainer {
 
     driverController.leftBumper().onTrue(new InstantCommand(() -> endEffector.toggleChomper(), endEffector));
 
-    mechController.a().onTrue(new TelescopeToPosition(telescope, 50));
-    mechController.y().onTrue(new RotatorToPosition(rotator, telescope, 90));
+    mechController.a().onTrue(new HighPresetSequence(telescope, rotator, endEffector));
+    mechController.y().onTrue(new LowPresetSequence(telescope, rotator, endEffector));
     mechController.x().onTrue(new RotatorToPosition(rotator, telescope, 230));
     mechController.b().onTrue(new InstantCommand(() -> telescope.resetEncoder()));
     mechController.rightBumper().onTrue(new InstantCommand(() -> endEffector.toggleWrist(), endEffector));
