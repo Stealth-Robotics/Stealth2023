@@ -1,15 +1,10 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.RobotMap;
 
 public class CrocodileSubsystem extends SubsystemBase {
@@ -21,6 +16,7 @@ public class CrocodileSubsystem extends SubsystemBase {
 
     public CrocodileSubsystem() {
         intake = new WPI_TalonFX(RobotMap.Crocodile.INTAKE);
+        intake.setNeutralMode(NeutralMode.Brake);
         // intake.setSmartCurrentLimit(Constants.CrocodileConstants.STALL_CURRENT_LIMIT,
         //         Constants.CrocodileConstants.FREE_CURRENT_LIMIT);
         // intake.burnFlash();
