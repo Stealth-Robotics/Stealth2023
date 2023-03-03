@@ -36,25 +36,38 @@ public class BluePreloadPlusOneLeft extends SequentialCommandGroup {
         // Arm Rotate 230
         new RotatorToPosition(rotator, telescope, 230),
         // Extend Telescope Out
-        new TelescopeToPosition(telescope, 90),
+        new TelescopeToPosition(telescope, 70000),
         // Flex Wrist
         new InstantCommand(()-> croc.wristDown()),
         // Gripper Open
         new InstantCommand(()-> croc.openChomper()),
         // Wrist Straight
+        new InstantCommand(()-> croc.wristUp()),
         // Retract Telescope
+        new ResetTelescope(telescope),
         // Arm Rotate 90
+        new RotatorToPosition(rotator, telescope, 90),
+
         new SwerveTrajectoryFollowCommand(driveBase, "preloadPlusOneLeft1", defaultConfig, true, true),
         // Close Gripper
-        new SwerveTrajectoryFollowCommand(driveBase, "preloadPlusOneLeft2", defaultConfig, true, false));
+        new InstantCommand(()-> croc.closeChomper()),
+        new SwerveTrajectoryFollowCommand(driveBase, "preloadPlusOneLeft2", defaultConfig, true, false),
         // Arm Rotate 135
+        new RotatorToPosition(rotator, telescope, 230),
         // Extend Telescope Out
+        new TelescopeToPosition(telescope, 70000),
         // Flex Wrist
+        new InstantCommand(()-> croc.wristDown()),
         // Gripper Open
+        new InstantCommand(()-> croc.openChomper()),
         // Wrist Straight
+        new InstantCommand(()-> croc.wristUp()),
         // Retract Telescope
+        new ResetTelescope(telescope),
         // Arm Rotate 90
-    // grabs any requirements needed for the drivebase from other running commands.
+        new RotatorToPosition(rotator, telescope, 90)
+      // grabs any requirements needed for the drivebase from other running commands.
+    );
     addRequirements(driveBase);
   }
 }
