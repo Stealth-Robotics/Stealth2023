@@ -58,17 +58,15 @@ public class RotatorDefaultCommand extends CommandBase {
         // If the telescope is extended, and the joystick is being pushed a little,
         // allow them to move it (but only a little)
         else if (Math.abs(joystickVal) <= 0.4 && telescope.getCurrentPosition() > 2048) {
-            rotator.setGoal(MathUtil.clamp(
-                    (rotator.getSetpoint() + joystickVal * Constants.RotatorConstants.ROTATOR_SPEED_MULTIPLIER),
-                    Constants.RotatorConstants.LOW_BOUND, Constants.RotatorConstants.HIGH_BOUND));
+            rotator.setSpeed(MathUtil.clamp(joystickVal, -0.3, 0.3));
+            rotator.setToCurrentPosition();
         }
         // Otherwise, just move the rotator normally
         else {
             if (joystickVal < 0 && rotator.getMeasurementDegrees() < 60) return;
             if (joystickVal > 0 && rotator.getMeasurementDegrees() > 240) return;
-            rotator.setGoal(MathUtil.clamp(
-                    (rotator.getSetpoint() + joystickVal * Constants.RotatorConstants.ROTATOR_SPEED_MULTIPLIER),
-                    Constants.RotatorConstants.LOW_BOUND, Constants.RotatorConstants.HIGH_BOUND));
+            rotator.setSpeed(MathUtil.clamp(joystickVal, -0.5, 0.5));
+            rotator.setToCurrentPosition();
         }
 
     }
