@@ -133,11 +133,12 @@ public class RobotContainer {
   }
 
   public void teleopInit() {
-    telescope.completeReset();
+    //telescope.completeReset();
+    //telescope.resetEncoder();
   }
 
   public void autonomousInit() {
-    telescope.completeReset();
+    //telescope.completeReset();
   }
 
   /**
