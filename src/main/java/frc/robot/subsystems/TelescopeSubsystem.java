@@ -35,14 +35,14 @@ public class TelescopeSubsystem extends SubsystemBase {
         telescopeMotor.config_kD(0, Constants.TelescopeConstants.D_COEFF);
         telescopeMotor.config_kF(0, Constants.TelescopeConstants.F_COEFF);
 
-        telescopeMotor.setSelectedSensorPosition(0);
+        //telescopeMotor.setSelectedSensorPosition(0);
 
         // we dont need to invert the motor and neither properly invert the sensor
         // We have decided to just cope with negative numbers
         // telescopeMotor.setSensorPhase(true);
         // telescopeMotor.setInverted(true);
 
-        currentSetpoint = getCurrentPosition();
+        //currentSetpoint = getCurrentPosition();
     }
 
     public void setSetpoint(double setpoint) {

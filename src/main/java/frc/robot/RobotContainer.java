@@ -138,10 +138,12 @@ public class RobotContainer {
   public void teleopInit() {
     //telescope.completeReset();
     //telescope.resetEncoder();
+    telescope.setSetpoint(telescope.getCurrentPosition());
   }
 
   public void autonomousInit() {
     //telescope.completeReset();
+    telescope.setSetpoint(telescope.getCurrentPosition());
   }
 
   /**
