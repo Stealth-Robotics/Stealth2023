@@ -21,11 +21,15 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
 public final class Constants {
 
+  public static final class CrocodileConstants {
+    public static final int CURRENT_LIMIT = 20;
+  }
+
   public static final class TelescopeConstants {
     public static final double P_COEFF = 0.05;
     public static final double I_COEFF = 0.0;
     public static final double D_COEFF = 0.025;
-    public static final double POSITIONAL_TOLERANCE = 10;
+    public static final double POSITIONAL_TOLERANCE = 1000;
     public static final double VELOCITY_TOLERANCE = Double.POSITIVE_INFINITY;
     public static final double F_COEFF = 0;
     public static final double TELESCOPE_SPEED_MULTIPLIER = 1.0;
@@ -192,7 +196,7 @@ public final class Constants {
           angleOffset);
     }
   }
-  
+
   public static final class AutoConstants { // TODO: The below constants are used in the example auto, and must be tuned
                                             // to specific robot
     public static final double k_MAX_SPEED_MPS = 3;
@@ -218,13 +222,13 @@ public final class Constants {
     // TODO: Tune After Feedforward is tuned
     public static final double ROTATOR_P_COEFF = 0.75;
     public static final double ROTATOR_I_COEFF = 0;
-    public static final double ROTATOR_D_COEFF = 0.025;
+    public static final double ROTATOR_D_COEFF = 0;
 
     // TODO: Gain values through SysID
-    public static final double ROTATOR_KS_COEFF = 0; // 0.10451;
-    public static final double ROTATOR_KG_COEFF = 0.20852;
+    public static final double ROTATOR_KS_COEFF = 0;
+    public static final double ROTATOR_KG_COEFF = 0.12;
     // Volt Second Per Rad
-    public static final double ROTATOR_KV_COEFF = 0; // 0.031835;
+    public static final double ROTATOR_KV_COEFF = 0;
     // Volt Second Squared Per Rad
     public static final double ROTATOR_KA_COEFF = 0;
 

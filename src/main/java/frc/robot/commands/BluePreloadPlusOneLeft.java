@@ -5,27 +5,40 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
+import frc.robot.subsystems.CrocodileSubsystem;
+import frc.robot.subsystems.RotatorSubsystem;
+import frc.robot.subsystems.TelescopeSubsystem;
 import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
 
 public class BluePreloadPlusOneLeft extends SequentialCommandGroup {
   // creates variables for the drivebase and defaultconfig.
   private final DrivebaseSubsystem driveBase;
-  private final TrajectoryConfig defaultConfig;
-
-  public BluePreloadPlusOneLeft(DrivebaseSubsystem driveBase) {
+  private final TrajectoryConfig defaultConfig;    
+  private final CrocodileSubsystem croc;
+  private final RotatorSubsystem rotator;
+  private final TelescopeSubsystem telescope;
+  public BluePreloadPlusOneLeft(DrivebaseSubsystem driveBase, CrocodileSubsystem croc, RotatorSubsystem rotator, TelescopeSubsystem telescope) {
     // assign the drivebase and config file
     this.driveBase = driveBase;
+    this.croc = croc;
+    this.rotator = rotator;
+    this.telescope = telescope;
     // sets the config variables to the speed and accel constants.
     this.defaultConfig = new TrajectoryConfig(Constants.AutoConstants.k_MAX_SPEED_MPS,
         Constants.AutoConstants.k_MAX_ACCEL_MPS_SQUARED);
     addCommands(
         // references the path file and sets the starting color and if the command is running first.
         // Close Gripper
-        // Arm Rotate 135
+        new InstantCommand(()-> croc.closeChomper()),
+        // Arm Rotate 230
+        new RotatorToPosition(rotator, telescope, 230),
         // Extend Telescope Out
+        new TelescopeToPosition(telescope, 90),
         // Flex Wrist
+        new InstantCommand(()-> croc.wristDown()),
         // Gripper Open
         // Wrist Straight
         // Retract Telescope
