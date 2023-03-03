@@ -40,6 +40,7 @@ public class BluePreloadPlusOneLeft extends SequentialCommandGroup {
         // Flex Wrist
         new InstantCommand(()-> croc.wristDown()),
         // Gripper Open
+        new InstantCommand(()-> croc.openChomper()),
         // Wrist Straight
         // Retract Telescope
         // Arm Rotate 90
