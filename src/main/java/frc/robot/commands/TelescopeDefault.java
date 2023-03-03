@@ -16,6 +16,12 @@ public class TelescopeDefault extends CommandBase {
         this.telescopeSubsystem = telescopeSubsystem;
         this.joystickSupplier = joystickSupplier;
         addRequirements(telescopeSubsystem);
+
+    }
+
+    @Override
+    public void initialize() {
+        telescopeSubsystem.setSetpoint(telescopeSubsystem.getCurrentPosition());
     }
 
     @Override
@@ -26,9 +32,9 @@ public class TelescopeDefault extends CommandBase {
             if (telescopeSubsystem.inBounds()){
                 telescopeSubsystem.setSpeed(MathUtil.clamp(joystickInput, -0.3, 0.3));
             }
-            else {
-                telescopeSubsystem.setSpeed(MathUtil.clamp(joystickInput, 0.3, 0));
-            }
+            // else {
+            //     telescopeSubsystem.setSpeed(MathUtil.clamp(joystickInput, 0.3, 0));
+            // }
         }
 
         else {
