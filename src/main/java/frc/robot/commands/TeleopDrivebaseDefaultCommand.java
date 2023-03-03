@@ -40,12 +40,14 @@ public class TeleopDrivebaseDefaultCommand extends CommandBase {
         double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.TeleopConstants.SITCK_DEADBAND);
         double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.TeleopConstants.SITCK_DEADBAND);
         double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.TeleopConstants.SITCK_DEADBAND);
-
+        if (slowMode.getAsBoolean()) {
             translationVal *= SLOW_MODE_MULTIPLIER;
+            strafeVal *=  SLOW_MODE_MULTIPLIER;
             rotationVal *=  SLOW_MODE_MULTIPLIER;
         }
         /* Drive */
         drivebase.drive(
+            new Translation2d(translationVal, strafeVal).times(Constants.DrivebaseConstants.MAX_SPEED), 
             rotationVal * Constants.DrivebaseConstants.MAX_ANGULAR_VELOCITY, 
             !robotCentricSup.getAsBoolean(), 
             true
