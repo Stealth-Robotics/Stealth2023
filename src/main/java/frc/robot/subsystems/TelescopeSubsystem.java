@@ -94,7 +94,7 @@ public class TelescopeSubsystem extends SubsystemBase {
 
     // check the elevator down
     public void retractTelescope() {
-        telescopeMotor.set(ControlMode.PercentOutput, 0.3);
+        telescopeMotor.set(ControlMode.PercentOutput, -0.3);
         stallDebouncer.calculate(false);
     }
 
@@ -104,7 +104,8 @@ public class TelescopeSubsystem extends SubsystemBase {
     }
 
     public boolean inBounds(){
-        return currentTicksToPercent() < 0.9;
+        return currentTicksToPercent() < 0.8;
+        // return true;
     }
 
     @Override
@@ -112,6 +113,7 @@ public class TelescopeSubsystem extends SubsystemBase {
         //System.out.println(armMotor.getSelectedSensorVelocity());
         //System.out.println(getCurrentPosition());
         //System.out.println("Telescope position: " + getCurrentPosition());
-        System.out.println("Telescope extension percent: " + currentTicksToPercent());
+        System.out.println("Extension% : " + currentTicksToPercent() + " POS: " + getCurrentPosition());
+
     }
 }

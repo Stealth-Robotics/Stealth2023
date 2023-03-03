@@ -82,8 +82,8 @@ public class CrocodileSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (currentMotorPower > 0 && stallDebouncer.calculate((getMotorVelocity() < 50))) {
-            setMotorSpeed(0);
-        }
+        // if (currentMotorPower > 0 && stallDebouncer.calculate((getMotorVelocity() < 50))) {
+        //     setMotorSpeed(0);
+        // }
     }
 }
