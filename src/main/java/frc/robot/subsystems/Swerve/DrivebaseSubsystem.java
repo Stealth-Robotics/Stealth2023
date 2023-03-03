@@ -2,7 +2,10 @@ package frc.robot.subsystems.Swerve;
 
 import frc.robot.Constants;
 import frc.robot.RobotMap;
+import frc.robot.Vision.Limelight;
+import frc.robot.Vision.LimelightHelpers;
 import frc.robot.Vision.PhotonVisionCameraWrapper;
+import frc.robot.Vision.LimelightHelpers.LimelightResults;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -22,6 +25,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -33,6 +39,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
     public SwerveDrivePoseEstimator swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
+    public Limelight ll;
 
     private final ProfiledPIDController thetaController = new ProfiledPIDController(
             Constants.AutoConstants.k_P_THETA_CONTROLLER, 0, 0,
@@ -55,7 +62,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
         zeroGyro();
         thetaController.enableContinuousInput(Math.PI, -Math.PI);
         pathController.setEnabled(true);
-
+        ll = new Limelight();
         mSwerveMods = new SwerveModule[] {
                 new SwerveModule(0, Constants.DrivebaseConstants.MOD_0.constants),
                 new SwerveModule(1, Constants.DrivebaseConstants.MOD_1.constants),
@@ -69,14 +76,13 @@ public class DrivebaseSubsystem extends SubsystemBase {
         // TODO: Set the actual pose
         field2d = new Field2d();
         SmartDashboard.putData(field2d);
-        swerveOdometry = new SwerveDrivePoseEstimator(Constants.DrivebaseConstants.SWERVE_KINEMATICS, getGyroscopeRotation(),
+        swerveOdometry = new SwerveDrivePoseEstimator(Constants.DrivebaseConstants.SWERVE_KINEMATICS,
+                getGyroscopeRotation(),
                 getModulePositions(), new Pose2d());
     }
 
-    public void resetModulesToAbsolute()
-    {
-        for(SwerveModule mod: mSwerveMods)
-        {
+    public void resetModulesToAbsolute() {
+        for (SwerveModule mod : mSwerveMods) {
             mod.resetToAbsolute();
         }
     }
@@ -184,16 +190,29 @@ public class DrivebaseSubsystem extends SubsystemBase {
     public void periodic() {
 
         swerveOdometry.update(getGyroscopeRotation(), getModulePositions());
-
+        System.out.println(ll.getRobotPose());
         Optional<EstimatedRobotPose> result = pcw.getEstimatedGlobalPose(swerveOdometry.getEstimatedPosition());
-        /* 
+
         if (result.isPresent()) {
             EstimatedRobotPose camPose = result.get();
             swerveOdometry.addVisionMeasurement(
                     camPose.estimatedPose.toPose2d(),
                     camPose.timestampSeconds);
-        }*/
+        }
+        LimelightResults llresults = LimelightHelpers.getLatestResults("limelight");
 
+        NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+        NetworkTableEntry tl = table.getEntry("tl");
+        NetworkTableEntry cl = table.getEntry("cl");
+        NetworkTableEntry tv = table.getEntry("tv");
+
+        double totalLatency = cl.getDouble(1) + tl.getDouble(1);
+        Pose2d please_work = llresults.targetingResults.getBotPose2d_wpiBlue();
+        double hasTarget = tv.getDouble(0);
+
+        double im_crying = Timer.getFPGATimestamp() - (totalLatency / 1000.0);
+        if (hasTarget == 1)
+            swerveOdometry.addVisionMeasurement(please_work, im_crying);
 
         field2d.setRobotPose(getPose());
         for (SwerveModule mod : mSwerveMods) {

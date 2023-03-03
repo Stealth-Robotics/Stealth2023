@@ -32,7 +32,7 @@ public class Limelight extends SubsystemBase {
     private final NetworkTableEntry tid;
     private final NetworkTableEntry botpose;
 
-    private LimelightResults llresults = LimelightHelpers.getLatestResults("");
+    private LimelightResults llresults = LimelightHelpers.getLatestResults("limelight");
     public Limelight() {
         this(NetworkTableInstance.getDefault().getTable("limelight"));
     }
