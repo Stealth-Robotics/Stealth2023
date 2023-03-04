@@ -22,7 +22,7 @@ public class CrocodileDefaultCommand extends CommandBase {
     @Override
     public void execute() {
         if (slowMovement.getAsBoolean()) {
-            subsystem.setMotorSpeed(motorSpeed.getAsDouble() * 0.2);
+            subsystem.setMotorSpeed(0.4);
             return;
         }
         subsystem.setMotorSpeed(motorSpeed.getAsDouble());

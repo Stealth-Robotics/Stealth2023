@@ -34,6 +34,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
 
+
     private final ProfiledPIDController thetaController = new ProfiledPIDController(
             Constants.AutoConstants.k_P_THETA_CONTROLLER, 0, 0,
             Constants.AutoConstants.k_THETA_CONTROLLER_CONSTRAINTS);
@@ -162,11 +163,11 @@ public class DrivebaseSubsystem extends SubsystemBase {
         gyro.setYaw(0);
     }
 
-    public double getYawAsDouble() {
+    public double getYawAsDouble(){
         return gyro.getYaw();
     }
 
-    public double getPitchAsDouble() {
+    public double getPitchAsDouble(){
         return gyro.getPitch();
     }
 

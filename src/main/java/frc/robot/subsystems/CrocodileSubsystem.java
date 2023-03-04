@@ -1,25 +1,25 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.RobotMap;
 
 public class CrocodileSubsystem extends SubsystemBase {
     private final Solenoid wristSolenoid;
     private final Solenoid chomperSolenoid;
-    private final CANSparkMax intake;
+    private final WPI_TalonFX intake;
     private Debouncer stallDebouncer = new Debouncer(0.050, Debouncer.DebounceType.kRising);
     private double currentMotorPower;
 
     public CrocodileSubsystem() {
-        intake = new CANSparkMax(RobotMap.Crocodile.INTAKE, MotorType.kBrushless);
-        intake.setSmartCurrentLimit(Constants.CrocodileConstants.CURRENT_LIMIT);
-        intake.burnFlash();
+        intake = new WPI_TalonFX(RobotMap.Crocodile.INTAKE);
+        intake.setNeutralMode(NeutralMode.Brake);
+        // intake.setSmartCurrentLimit(Constants.CrocodileConstants.STALL_CURRENT_LIMIT,
+        //         Constants.CrocodileConstants.FREE_CURRENT_LIMIT);
+        // intake.burnFlash();
 
         wristSolenoid = new Solenoid(
                 RobotMap.Pneumatics.PCM,
@@ -37,7 +37,7 @@ public class CrocodileSubsystem extends SubsystemBase {
     }
 
     public double getMotorVelocity() {
-        return intake.getEncoder().getVelocity();
+        return intake.getSelectedSensorVelocity();
     }
 
     private void setWrist(boolean newValue) {
@@ -82,8 +82,8 @@ public class CrocodileSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (currentMotorPower > 0 && stallDebouncer.calculate((getMotorVelocity() < 50))) {
-            setMotorSpeed(0);
-        }
+        // if (currentMotorPower > 0 && stallDebouncer.calculate((getMotorVelocity() < 50))) {
+        //     setMotorSpeed(0);
+        // }
     }
 }

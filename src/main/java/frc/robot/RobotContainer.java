@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.subsystems.CrocodileSubsystem;
 import frc.robot.subsystems.RotatorSubsystem;
+import frc.robot.subsystems.CrocodileSubsystem;
 import frc.robot.RobotMap.Crocodile;
 import frc.robot.commands.*;
 import frc.robot.subsystems.TelescopeSubsystem;
@@ -81,12 +81,13 @@ public class RobotContainer {
     
     rotator.setDefaultCommand(new RotatorDefaultCommand(
         rotator,
+        telescope,
         () -> -mechController.getRightY()));
     
     telescope.setDefaultCommand(      
         new TelescopeDefault(
             telescope,
-            () -> mechController.getLeftY()));
+            () -> -mechController.getLeftY()));
 
     // autoChooser.setDefaultOption("Blue 1+Park", new BluePreloadParkCenter(swerve));
     // autoChooser.addOption("Blue 1+1 Left", new BluePreloadPlusOneLeft(swerve));
@@ -124,6 +125,8 @@ public class RobotContainer {
     mechController.b().onTrue(new InstantCommand(()->telescope.resetEncoder()));
     mechController.rightBumper().onTrue(new InstantCommand(() -> endEffector.toggleWrist(), endEffector));
 
+
+    driverController.rightBumper().onTrue(new LevelRobot(swerve));
     // mechController
     // .x()
     // .onTrue(
@@ -135,11 +138,14 @@ public class RobotContainer {
   }
 
   public void teleopInit() {
-    telescope.completeReset();
+    //telescope.completeReset();
+    //telescope.resetEncoder();
+    telescope.setSetpoint(telescope.getCurrentPosition());
   }
 
   public void autonomousInit() {
-    telescope.completeReset();
+    //telescope.completeReset();
+    telescope.setSetpoint(telescope.getCurrentPosition());
   }
 
   /**

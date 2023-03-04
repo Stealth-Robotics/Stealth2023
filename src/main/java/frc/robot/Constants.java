@@ -21,8 +21,21 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
 public final class Constants {
 
+  public static final class LevelRobotConstants {
+    public static final double PID_kP = 0.1;
+    public static final double PID_kI = 0.001;
+    public static final double PID_kD = 0.05;
+
+    public static final double HEADING_PID_kP = 0.04;
+    public static final double HEADING_PID_kI = 0;
+    public static final double HEADING_PID_kD = 0.0025;
+
+    public static final double LEVELING_DRIVE_SPEED_LIMIT = 0.7;
+    public static final double LEVELING_ROTATION_SPEED_LIMIT = 0.5;
+}
   public static final class CrocodileConstants {
-    public static final int CURRENT_LIMIT = 20;
+    public static final int FREE_CURRENT_LIMIT = 30;
+    public static final int STALL_CURRENT_LIMIT = 20;
   }
 
   public static final class TelescopeConstants {
@@ -240,6 +253,7 @@ public final class Constants {
     public static final double ROTATOR_SPEED_MULTIPLIER = 1.0;
 
     public static final double RotatorJoystickDeadband = 0.05;
+
   }
 
 }

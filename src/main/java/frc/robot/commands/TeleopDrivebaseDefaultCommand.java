@@ -23,12 +23,14 @@ public class TeleopDrivebaseDefaultCommand extends CommandBase {
 
     public TeleopDrivebaseDefaultCommand(DrivebaseSubsystem s_Swerve, DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, BooleanSupplier robotCentricSup, BooleanSupplier slowMode) {
         this.drivebase = s_Swerve;
-        addRequirements(s_Swerve);
 
         this.translationSup = translationSup;
         this.strafeSup = strafeSup;
         this.rotationSup = rotationSup;
         this.robotCentricSup = robotCentricSup;
+
+        addRequirements(s_Swerve);
+
         this.slowMode = slowMode;
     }
 

@@ -16,7 +16,7 @@ public class COTSFalconSwerveConstants {
     public final boolean angleMotorInvert;
     public final boolean canCoderInvert;
 
-    public COTSFalconSwerveConstants(double wheelDiameter, double angleGearRatio, double driveGearRatio, double angleKP, double angleKI, double angleKD, double angleKF, boolean driveMotorInvert, boolean angleMotorInvert, boolean canCoderInvert){
+    private COTSFalconSwerveConstants(double wheelDiameter, double angleGearRatio, double driveGearRatio, double angleKP, double angleKI, double angleKD, double angleKF, boolean driveMotorInvert, boolean angleMotorInvert, boolean canCoderInvert){
         this.wheelDiameter = wheelDiameter;
         this.wheelCircumference = wheelDiameter * Math.PI;
         this.angleGearRatio = angleGearRatio;
