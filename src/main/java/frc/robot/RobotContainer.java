@@ -120,13 +120,13 @@ public class RobotContainer {
 
 
     mechController.a().onTrue(new TelescopeToPosition(telescope, 50));
-    mechController.y().onTrue(new RotatorToPosition(rotator, telescope, 90));
+    mechController.y().onTrue(new RotatorToPosition(rotator, telescope, 70));
     mechController.x().onTrue(new RotatorToPosition(rotator, telescope, 230));
     mechController.b().onTrue(new InstantCommand(()->telescope.resetEncoder()));
     mechController.rightBumper().onTrue(new InstantCommand(() -> endEffector.toggleWrist(), endEffector));
 
 
-    driverController.rightBumper().onTrue(new LevelRobot(swerve));
+    // driverController.rightBumper().onTrue(new LevelRobot(swerve));
     // mechController
     // .x()
     // .onTrue(
@@ -157,6 +157,6 @@ public class RobotContainer {
     //System.out.println("Selected Autonomous: " + autoChooser.getSelected());
     //return autoChooser.getSelected();
     //return null;
-    return new BluePreloadParkCenter(swerve, endEffector, rotator, telescope);
+    return new RedPreloadParkCenter(swerve, endEffector, rotator, telescope);
   }
 }
