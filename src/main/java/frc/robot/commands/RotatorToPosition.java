@@ -26,13 +26,13 @@ public class RotatorToPosition extends CommandBase {
         // 4096 ticks is two rotations. I'm not going to change this atm because i dont
         // care about percent right now, I care about actual rotations. This can be
         // addressed after GPK
-        if (telescope.currentTicksToPercent() > 0.1/* 10 percent */ && Math.abs(telescope.getCurrentPosition() - setpoint) > 4096) {
-            CommandScheduler.getInstance()
-                    .schedule(resetTelescope.andThen(new RotatorToPosition(rotatorSubsystem, telescope, setpoint)));
-            resettingElevator = true;
-        } else {
+        // if (telescope.currentTicksToPercent() > 0.1/* 10 percent */ && Math.abs(telescope.getCurrentPosition() - setpoint) > 4096) {
+        //     CommandScheduler.getInstance()
+        //             .schedule(resetTelescope.andThen(new RotatorToPosition(rotatorSubsystem, telescope, setpoint)));
+        //     resettingElevator = true;
+        // } else {
             rotatorSubsystem.setSetpoint(setpoint);
-        }
+        // }
     }
 
     @Override

@@ -47,6 +47,7 @@ public class RedPreloadParkCenter extends SequentialCommandGroup {
       new InstantCommand(()-> croc.wristDown()),
       new WaitCommand(0.2),
       new InstantCommand(()-> croc.openChomper()),
+      new RunCrocodileMotors(croc, -0.2),
       new WaitCommand(.2),
       new InstantCommand(()-> croc.wristUp()),
       new WaitCommand(.2),
@@ -55,7 +56,8 @@ public class RedPreloadParkCenter extends SequentialCommandGroup {
       new RotatorToPosition(rotator, telescope, 90),
       new SwerveTrajectoryFollowCommand(driveBase,  "preloadParkCenter", defaultConfig, false, true),
       //LEVEL
-      new LevelRobot(driveBase)
+      new LevelRobot(driveBase),
+      new RotatorToPosition(rotator, telescope, 90)
 
     );
     //grabs any requirements needed for the drivebase from other running commands.

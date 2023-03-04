@@ -95,7 +95,7 @@ public class RobotContainer {
     endEffector.setDefaultCommand(new CrocodileDefaultCommand(
         endEffector,
         () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
-        () -> driverController.leftBumper().getAsBoolean()));
+        () -> mechController.leftBumper().getAsBoolean()));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -117,9 +117,9 @@ public class RobotContainer {
 
     driverController.leftBumper().onTrue(new InstantCommand(() -> endEffector.toggleChomper(), endEffector));
 
-    mechController.a().onTrue(new HighPresetSequence(telescope, rotator, endEffector));
-    mechController.y().onTrue(new LowPresetSequence(telescope, rotator, endEffector));
-    mechController.x().onTrue(new MidPresetSequence(telescope, rotator, endEffector));
+    mechController.a().onTrue(new RotatorToPosition(rotator, telescope, 230));
+    mechController.y().onTrue(new RotatorToPosition(rotator, telescope, 40));
+    mechController.x().onTrue(new TelescopeToPosition(telescope, 75000));
     mechController.b().onTrue(new InstantCommand(() -> telescope.resetEncoder()));
     mechController.rightBumper().onTrue(new InstantCommand(() -> endEffector.toggleWrist(), endEffector));
 

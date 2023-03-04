@@ -17,7 +17,7 @@ public class TelescopeSubsystem extends SubsystemBase {
     private double speedLimit;
 
     private double currentSetpoint;
-    private final int MAXIMUM_TICKS = 80000; //TODO: set to actual value   
+    private final int MAXIMUM_TICKS = 90000; //TODO: set to actual value   
     public TelescopeSubsystem() {
 
         telescopeMotor = new WPI_TalonFX(RobotMap.Telescope.TELESCOPE_ID);
@@ -104,8 +104,8 @@ public class TelescopeSubsystem extends SubsystemBase {
     }
 
     public boolean inBounds(){
-        return currentTicksToPercent() < 1;
-        // return true;
+        // return currentTicksToPercent() < 1;
+        return true;
     }
 
     @Override
