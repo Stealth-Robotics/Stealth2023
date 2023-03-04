@@ -43,7 +43,7 @@ public class RedPreloadParkCenter extends SequentialCommandGroup {
 
       new InstantCommand(()-> croc.closeChomper()),
       new RotatorToPosition(rotator, telescope, 230),
-      new TelescopeToPosition(telescope, 70000), //TODO: set to actual telescope position.
+      new TelescopeToPosition(telescope, 80000), //TODO: set to actual telescope position.
       new InstantCommand(()-> croc.wristDown()),
       new WaitCommand(0.2),
       new InstantCommand(()-> croc.openChomper()),

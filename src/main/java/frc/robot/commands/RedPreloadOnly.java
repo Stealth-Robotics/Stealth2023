@@ -15,14 +15,14 @@ import frc.robot.subsystems.RotatorSubsystem;
 import frc.robot.subsystems.TelescopeSubsystem;
 import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
 
-public class BluePreloadParkCenter extends SequentialCommandGroup {
+public class RedPreloadOnly extends SequentialCommandGroup {
   //creates variables for the drivebase and defaultconfig.
   private final DrivebaseSubsystem driveBase;
   private final TrajectoryConfig defaultConfig;    
   private final CrocodileSubsystem croc;
   private final RotatorSubsystem rotator;
   private final TelescopeSubsystem telescope;
-  public BluePreloadParkCenter(DrivebaseSubsystem driveBase, CrocodileSubsystem croc, RotatorSubsystem rotator, TelescopeSubsystem telescope) {
+  public RedPreloadOnly(DrivebaseSubsystem driveBase, CrocodileSubsystem croc, RotatorSubsystem rotator, TelescopeSubsystem telescope) {
     //assign the drivebase and config file
     this.driveBase = driveBase;
     this.croc = croc;
@@ -47,16 +47,19 @@ public class BluePreloadParkCenter extends SequentialCommandGroup {
       new InstantCommand(()-> croc.wristDown()),
       new WaitCommand(0.2),  
       new InstantCommand(()-> croc.openChomper()),
+      new RunCrocodileMotors(croc, -0.2),
       new WaitCommand(.2),
       new InstantCommand(()-> croc.wristUp()),
       new WaitCommand(.2),
+      new TelescopeToPosition(telescope, 2000),
+      new RotatorToPosition(rotator, telescope, 90),
       //new TelescopeToPosition(telescope, 1000), //TODO: set to actual telescope position.
       new ResetTelescope(telescope),
-      new RotatorToPosition(rotator, telescope, 90),
-      new SwerveTrajectoryFollowCommand(driveBase,  "preloadParkCenter", defaultConfig, false, true),
-      //LEVEL
-      new LevelRobot(driveBase),
       new RotatorToPosition(rotator, telescope, 90)
+      // new SwerveTrajectoryFollowCommand(driveBase,  "preloadParkCenter", defaultConfig, false, true),
+      // //LEVEL
+      // new LevelRobot(driveBase),
+      // new RotatorToPosition(rotator, telescope, 90)
 
     );
     //grabs any requirements needed for the drivebase from other running commands.

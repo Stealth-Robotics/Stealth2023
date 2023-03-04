@@ -112,7 +112,7 @@ public class RotatorSubsystem extends SubsystemBase {
             System.out.println("RotatorPIDOnly.periodic: safe speed: " + safeSpeed);
         }        
         setSpeed(safeSpeed);
-        System.out.println("Rotator position: " + getMeasurementDegrees() + " | SP: " + getSetpoint());
+        // System.out.println("Rotator position: " + getMeasurementDegrees() + " | SP: " + getSetpoint());
     }
 
 }

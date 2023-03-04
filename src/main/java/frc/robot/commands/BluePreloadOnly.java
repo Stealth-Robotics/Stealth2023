@@ -7,20 +7,22 @@ package frc.robot.commands;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
+import frc.robot.RobotMap.Crocodile;
 import frc.robot.subsystems.CrocodileSubsystem;
 import frc.robot.subsystems.RotatorSubsystem;
 import frc.robot.subsystems.TelescopeSubsystem;
 import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
 
-public class BluePreloadPlusOneRight extends SequentialCommandGroup {
+public class BluePreloadOnly extends SequentialCommandGroup {
   //creates variables for the drivebase and defaultconfig.
   private final DrivebaseSubsystem driveBase;
   private final TrajectoryConfig defaultConfig;    
   private final CrocodileSubsystem croc;
   private final RotatorSubsystem rotator;
-  private final TelescopeSubsystem telescope;   
-  public BluePreloadPlusOneRight(DrivebaseSubsystem driveBase, CrocodileSubsystem croc, RotatorSubsystem rotator, TelescopeSubsystem telescope) {
+  private final TelescopeSubsystem telescope;
+  public BluePreloadOnly(DrivebaseSubsystem driveBase, CrocodileSubsystem croc, RotatorSubsystem rotator, TelescopeSubsystem telescope) {
     //assign the drivebase and config file
     this.driveBase = driveBase;
     this.croc = croc;
@@ -30,41 +32,35 @@ public class BluePreloadPlusOneRight extends SequentialCommandGroup {
     this.defaultConfig = new TrajectoryConfig(Constants.AutoConstants.k_MAX_SPEED_MPS, Constants.AutoConstants.k_MAX_ACCEL_MPS_SQUARED);
     addCommands(
       //references the path file and sets the starting color and if the command is running first.
-      // Close Gripper
-      new InstantCommand(()-> croc.closeChomper()),
-      // Arm Rotate 230
-      new RotatorToPosition(rotator, telescope, 230),
-      // Extend Telescope Out
-      new TelescopeToPosition(telescope, 70000),
-      // Flex Wrist
-      new InstantCommand(()-> croc.wristDown()),
-      // Gripper Open
-      new InstantCommand(()-> croc.openChomper()),
-      // Wrist Straight
-      new InstantCommand(()-> croc.wristUp()),
-      // Retract Telescope
-      new ResetTelescope(telescope),
-      // Arm Rotate 90
-      new RotatorToPosition(rotator, telescope, 90),
+      /* Start Condition:
+       - Wrist Straight
+       - Cone In Gripper
+       - Rotator At 180
+       - Telescope Fully Retracted
+      */
 
-      new SwerveTrajectoryFollowCommand(driveBase,  "preloadPlusOneRight1", defaultConfig, false, true),
-      //Close Gripper
+      //Command Group
+
       new InstantCommand(()-> croc.closeChomper()),
-      new SwerveTrajectoryFollowCommand(driveBase,  "preloadPlusOneRight2", defaultConfig, false, false),
-      // Arm Rotate 135
       new RotatorToPosition(rotator, telescope, 230),
-      // Extend Telescope Out
-      new TelescopeToPosition(telescope, 70000),
-      // Flex Wrist
+      new TelescopeToPosition(telescope, 80000), //TODO: set to actual telescope position.
       new InstantCommand(()-> croc.wristDown()),
-      // Gripper Open
+      new WaitCommand(0.2),  
       new InstantCommand(()-> croc.openChomper()),
-      // Wrist Straight
+      new RunCrocodileMotors(croc, -0.2),
+      new WaitCommand(.2),
       new InstantCommand(()-> croc.wristUp()),
-      // Retract Telescope
+      new WaitCommand(.2),
+      new TelescopeToPosition(telescope, 2000),
+      new RotatorToPosition(rotator, telescope, 90),
+      //new TelescopeToPosition(telescope, 1000), //TODO: set to actual telescope position.
       new ResetTelescope(telescope),
-      // Arm Rotate 90
       new RotatorToPosition(rotator, telescope, 90)
+      // new SwerveTrajectoryFollowCommand(driveBase,  "preloadParkCenter", defaultConfig, false, true),
+      // //LEVEL
+      // new LevelRobot(driveBase),
+      // new RotatorToPosition(rotator, telescope, 90)
+
     );
     //grabs any requirements needed for the drivebase from other running commands.
     addRequirements(driveBase);

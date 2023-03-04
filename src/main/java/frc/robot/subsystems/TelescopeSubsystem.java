@@ -17,7 +17,7 @@ public class TelescopeSubsystem extends SubsystemBase {
     private double speedLimit;
 
     private double currentSetpoint;
-    private final int MAXIMUM_TICKS = 100000; //TODO: set to actual value   
+    private final int MAXIMUM_TICKS = 80000; //TODO: set to actual value   
     public TelescopeSubsystem() {
 
         telescopeMotor = new WPI_TalonFX(RobotMap.Telescope.TELESCOPE_ID);
@@ -104,7 +104,7 @@ public class TelescopeSubsystem extends SubsystemBase {
     }
 
     public boolean inBounds(){
-        return currentTicksToPercent() < 0.8;
+        return currentTicksToPercent() < 1;
         // return true;
     }
 
@@ -112,7 +112,6 @@ public class TelescopeSubsystem extends SubsystemBase {
     public void periodic() {
         //System.out.println(armMotor.getSelectedSensorVelocity());
         //System.out.println(getCurrentPosition());
-        System.out.println("Telescope position: " + getCurrentPosition());
         // System.out.println("Extension% : " + currentTicksToPercent() + " POS: " + getCurrentPosition());
 
     }

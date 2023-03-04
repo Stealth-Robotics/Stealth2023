@@ -9,10 +9,8 @@ import frc.robot.subsystems.TelescopeSubsystem;
 public class LowPresetSequence extends SequentialCommandGroup {
     public LowPresetSequence(TelescopeSubsystem telescope, RotatorSubsystem rotator, CrocodileSubsystem crocodile) {
         addCommands(
-            new RotatorToPosition(rotator, telescope, 70),
-            new TelescopeToPosition(telescope, 10000),
-            new RunCrocodileMotors(crocodile, -0.2),
-            new InstantCommand(()->crocodile.openChomper())
+            new RotatorToPosition(rotator, telescope, 5000),
+            new TelescopeToPosition(telescope, 5000)
         );
     }
 }
