@@ -113,7 +113,7 @@ public class TelescopeSubsystem extends SubsystemBase {
         //System.out.println(armMotor.getSelectedSensorVelocity());
         //System.out.println(getCurrentPosition());
         //System.out.println("Telescope position: " + getCurrentPosition());
-        System.out.println("Extension% : " + currentTicksToPercent() + " POS: " + getCurrentPosition());
+        // System.out.println("Extension% : " + currentTicksToPercent() + " POS: " + getCurrentPosition());
 
     }
 }

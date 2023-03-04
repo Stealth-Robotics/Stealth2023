@@ -115,7 +115,6 @@ public class RobotContainer {
     /* Driver Buttons */
 
     zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
-    driverController.rightBumper().whileTrue(new LevelRobotPulses(swerve));
 
     driverController.leftBumper().onTrue(new InstantCommand(() -> endEffector.toggleChomper(), endEffector));
 
@@ -126,6 +125,8 @@ public class RobotContainer {
     mechController.b().onTrue(new InstantCommand(()->telescope.resetEncoder()));
     mechController.rightBumper().onTrue(new InstantCommand(() -> endEffector.toggleWrist(), endEffector));
 
+
+    driverController.rightBumper().onTrue(new LevelRobot(swerve));
     // mechController
     // .x()
     // .onTrue(

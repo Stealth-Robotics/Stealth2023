@@ -26,7 +26,7 @@ public class LevelRobot extends CommandBase{
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        pid.setTolerance(0);
+        pid.setTolerance(1);
         pid.setSetpoint(0);
         startingYaw = drive.getYawAsDouble() % 360;
     }
@@ -43,14 +43,15 @@ public class LevelRobot extends CommandBase{
         double calculationHeading = headingPid.calculate(yaw * -1, 0);
         calculationMovement = MathUtil.clamp(calculationMovement, -Constants.LevelRobotConstants.LEVELING_DRIVE_SPEED_LIMIT, Constants.LevelRobotConstants.LEVELING_DRIVE_SPEED_LIMIT);
         calculationHeading = MathUtil.clamp(calculationHeading, -Constants.LevelRobotConstants.LEVELING_ROTATION_SPEED_LIMIT, Constants.LevelRobotConstants.LEVELING_ROTATION_SPEED_LIMIT);
-        System.out.println(calculationMovement);
-        drive.drive(new Translation2d(calculationMovement, 0), calculationHeading, true, true);
+        System.out.println(calculationMovement + " | " + (pitch + roll));
+        drive.drive(new Translation2d(-calculationMovement, 0), 0, false, true);
         
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
+        drive.drive(new Translation2d(0, 0), 0, false, true);
     }
 
     // Returns true when the command should end.
