@@ -53,7 +53,7 @@ public class RedPreloadParkCenter extends SequentialCommandGroup {
       //new TelescopeToPosition(telescope, 1000), //TODO: set to actual telescope position.
       new ResetTelescope(telescope),
       new RotatorToPosition(rotator, telescope, 90),
-      new SwerveTrajectoryFollowCommand(driveBase,  "preloadParkCenter", defaultConfig, true, true),
+      new SwerveTrajectoryFollowCommand(driveBase,  "preloadParkCenter", defaultConfig, false, true),
       //LEVEL
       new LevelRobot(driveBase)
 
