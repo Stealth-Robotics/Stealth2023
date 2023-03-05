@@ -41,20 +41,20 @@ public class BluePreloadOnly extends SequentialCommandGroup {
 
       //Command Group
 
+      new ResetTelescope(telescope),
       new InstantCommand(()-> croc.closeChomper()),
       new InstantCommand(()-> croc.setMotorSpeed(1)),
-      new RotatorToPosition(rotator, telescope, 230),
-      new TelescopeToPosition(telescope, 80000), //TODO: set to actual telescope position.
       new InstantCommand(()-> croc.wristDown()),
-      new WaitCommand(0.2),  
-      new InstantCommand(()-> croc.openChomper()),
+      new RotatorToPosition(rotator, telescope, 245),
+      new WaitCommand(1),
+      new RunCrocodileMotors(croc, -0.3).withTimeout(.5),       
+      new InstantCommand(()-> croc.closeChomper()),
       new InstantCommand(()->croc.setMotorSpeed(-0.2)),
       new WaitCommand(.2),
       new InstantCommand(()-> croc.wristUp()),
       new WaitCommand(.2),
       new TelescopeToPosition(telescope, 2000),
       new RotatorToPosition(rotator, telescope, 90),
-      //new TelescopeToPosition(telescope, 1000), //TODO: set to actual telescope position.
       new ResetTelescope(telescope),
       new RotatorToPosition(rotator, telescope, 90),
       new SwerveTrajectoryFollowCommand(driveBase,  "preloadPlusOneLeft1", defaultConfig, false, true)
