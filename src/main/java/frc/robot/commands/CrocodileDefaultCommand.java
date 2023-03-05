@@ -11,7 +11,8 @@ public class CrocodileDefaultCommand extends CommandBase {
     private final DoubleSupplier motorSpeed;
     private final BooleanSupplier slowMovement;
 
-    public CrocodileDefaultCommand(CrocodileSubsystem subsystem, DoubleSupplier motorSpeed, BooleanSupplier slowMovement) {
+    public CrocodileDefaultCommand(CrocodileSubsystem subsystem, DoubleSupplier motorSpeed,
+            BooleanSupplier slowMovement) {
         this.subsystem = subsystem;
         this.motorSpeed = motorSpeed;
         this.slowMovement = slowMovement;
@@ -22,9 +23,13 @@ public class CrocodileDefaultCommand extends CommandBase {
     @Override
     public void execute() {
         if (slowMovement.getAsBoolean()) {
-            subsystem.setMotorSpeed(0.4);
-            return;
+            subsystem.setMotorSpeed(.4);
+        } 
+        else if (motorSpeed.getAsDouble() > 0.05){
+            subsystem.setMotorSpeed(motorSpeed.getAsDouble());
         }
-        subsystem.setMotorSpeed(motorSpeed.getAsDouble());
+        else {
+            subsystem.setMotorSpeed(0);
+        }
     }
 }

@@ -47,7 +47,7 @@ public class RedPreloadParkCenter extends SequentialCommandGroup {
       new InstantCommand(()-> croc.wristDown()),
       new WaitCommand(0.2),
       new InstantCommand(()-> croc.openChomper()),
-      new RunCrocodileMotors(croc, -0.2),
+      new RunCrocodileMotors(croc, 1).withTimeout(.5),
       new WaitCommand(.2),
       new InstantCommand(()-> croc.wristUp()),
       new WaitCommand(.2),
