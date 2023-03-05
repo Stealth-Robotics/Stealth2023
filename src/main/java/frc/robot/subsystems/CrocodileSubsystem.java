@@ -1,10 +1,13 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.RobotMap;
 
 public class CrocodileSubsystem extends SubsystemBase {
@@ -17,9 +20,8 @@ public class CrocodileSubsystem extends SubsystemBase {
     public CrocodileSubsystem() {
         intake = new WPI_TalonFX(RobotMap.Crocodile.INTAKE);
         intake.setNeutralMode(NeutralMode.Brake);
-        // intake.setSmartCurrentLimit(Constants.CrocodileConstants.STALL_CURRENT_LIMIT,
-        //         Constants.CrocodileConstants.FREE_CURRENT_LIMIT);
-        // intake.burnFlash();
+        /* enabled | Limit(amp) | Trigger Threshold(amp) | Trigger Threshold Time(s) */
+        intake.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 35, 60, 0.1));
 
         wristSolenoid = new Solenoid(
                 RobotMap.Pneumatics.PCM,
@@ -82,8 +84,9 @@ public class CrocodileSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // if (currentMotorPower > 0 && stallDebouncer.calculate((getMotorVelocity() < 50))) {
-        //     setMotorSpeed(0);
+        // if (currentMotorPower > 0 && stallDebouncer.calculate((getMotorVelocity() <
+        // 50))) {
+        // setMotorSpeed(0);
         // }
     }
 }
