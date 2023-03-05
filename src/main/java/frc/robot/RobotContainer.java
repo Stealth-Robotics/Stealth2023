@@ -155,6 +155,6 @@ public class RobotContainer {
     //System.out.println("Selected Autonomous: " + autoChooser.getSelected());
     //return autoChooser.getSelected();
     //return null;
-    return new BluePreloadParkCenter(swerve, endEffector, rotator, telescope);
+    return new RedPreloadOnly(swerve, endEffector, rotator, telescope);
   }
 }
