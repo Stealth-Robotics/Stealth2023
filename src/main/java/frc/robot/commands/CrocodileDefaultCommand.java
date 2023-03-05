@@ -25,7 +25,7 @@ public class CrocodileDefaultCommand extends CommandBase {
         if (slowMovement.getAsBoolean()) {
             subsystem.setMotorSpeed(.4);
         } 
-        else if (motorSpeed.getAsDouble() > 0.05){
+        else if (Math.abs(motorSpeed.getAsDouble()) > 0.05){
             subsystem.setMotorSpeed(motorSpeed.getAsDouble());
         }
         else {

@@ -16,51 +16,59 @@ import frc.robot.subsystems.TelescopeSubsystem;
 import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
 
 public class RedPreloadParkCenter extends SequentialCommandGroup {
-  //creates variables for the drivebase and defaultconfig.
+  // creates variables for the drivebase and defaultconfig.
   private final DrivebaseSubsystem driveBase;
-  private final TrajectoryConfig defaultConfig;    
+  private final TrajectoryConfig defaultConfig;
   private final CrocodileSubsystem croc;
   private final RotatorSubsystem rotator;
   private final TelescopeSubsystem telescope;
-  public RedPreloadParkCenter(DrivebaseSubsystem driveBase, CrocodileSubsystem croc, RotatorSubsystem rotator, TelescopeSubsystem telescope) {
-    //assign the drivebase and config file
+
+  public RedPreloadParkCenter(DrivebaseSubsystem driveBase, CrocodileSubsystem croc, RotatorSubsystem rotator,
+      TelescopeSubsystem telescope) {
+    // assign the drivebase and config file
     this.driveBase = driveBase;
     this.croc = croc;
     this.rotator = rotator;
     this.telescope = telescope;
-    //sets the config variables to the speed and accel constants.
-    this.defaultConfig = new TrajectoryConfig(Constants.AutoConstants.k_MAX_SPEED_MPS, Constants.AutoConstants.k_MAX_ACCEL_MPS_SQUARED);
+    // sets the config variables to the speed and accel constants.
+    this.defaultConfig = new TrajectoryConfig(Constants.AutoConstants.k_MAX_SPEED_MPS,
+        Constants.AutoConstants.k_MAX_ACCEL_MPS_SQUARED);
     addCommands(
-      //references the path file and sets the starting color and if the command is running first.
-      /* Start Condition:
-       - Wrist Straight
-       - Cone In Gripper
-       - Rotator At 180
-       - Telescope Fully Retracted
-      */
+        // references the path file and sets the starting color and if the command is
+        // running first.
+        /*
+         * Start Condition:
+         * - Wrist Straight
+         * - Cone In Gripper
+         * - Rotator At 180
+         * - Telescope Fully Retracted
+         */
 
-      //Command Group
+        // Command Group
 
-      new InstantCommand(()-> croc.closeChomper()),
-      new RotatorToPosition(rotator, telescope, 230),
-      new TelescopeToPosition(telescope, 80000), //TODO: set to actual telescope position.
-      new InstantCommand(()-> croc.wristDown()),
-      new WaitCommand(0.2),
-      new InstantCommand(()-> croc.openChomper()),
-      new RunCrocodileMotors(croc, 1).withTimeout(.5),
-      new WaitCommand(.2),
-      new InstantCommand(()-> croc.wristUp()),
-      new WaitCommand(.2),
-      //new TelescopeToPosition(telescope, 1000), //TODO: set to actual telescope position.
-      new ResetTelescope(telescope),
-      new RotatorToPosition(rotator, telescope, 90),
-      new SwerveTrajectoryFollowCommand(driveBase,  "preloadParkCenter", defaultConfig, false, true),
-      //LEVEL
-      new LevelRobot(driveBase),
-      new RotatorToPosition(rotator, telescope, 90)
+        new InstantCommand(() -> croc.openChomper()),
+        new InstantCommand(() -> croc.setMotorSpeed(1)),
+        new RotatorToPosition(rotator, telescope, 230),
+        new TelescopeToPosition(telescope, 80000), // TODO: set to actual telescope position.
+        new InstantCommand(() -> croc.wristDown()),
+        new WaitCommand(0.2),
+        new InstantCommand(() -> croc.closeChomper()),
+        new InstantCommand(() -> croc.setMotorSpeed(-0.2)),
+        new WaitCommand(.2),
+        new InstantCommand(() -> croc.setMotorSpeed(0)),
+        new InstantCommand(() -> croc.wristUp()),
+        new WaitCommand(.2),
+        // new TelescopeToPosition(telescope, 1000), //TODO: set to actual telescope
+        // position.
+        new ResetTelescope(telescope),
+        new RotatorToPosition(rotator, telescope, 90),
+        new SwerveTrajectoryFollowCommand(driveBase, "preloadParkCenter", defaultConfig, false, true),
+        // LEVEL
+        new LevelRobot(driveBase),
+        new RotatorToPosition(rotator, telescope, 90)
 
     );
-    //grabs any requirements needed for the drivebase from other running commands.
+    // grabs any requirements needed for the drivebase from other running commands.
     addRequirements(driveBase);
-  } 
+  }
 }

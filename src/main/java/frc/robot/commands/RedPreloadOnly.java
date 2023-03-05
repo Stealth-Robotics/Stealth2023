@@ -41,13 +41,14 @@ public class RedPreloadOnly extends SequentialCommandGroup {
 
       //Command Group
 
-      new InstantCommand(()-> croc.closeChomper()),
+      new InstantCommand(()-> croc.openChomper()),
+      new InstantCommand(()-> croc.setMotorSpeed(1)),
       new RotatorToPosition(rotator, telescope, 230),
       new TelescopeToPosition(telescope, 80000), //TODO: set to actual telescope position.
       new InstantCommand(()-> croc.wristDown()),
       new WaitCommand(0.2),  
-      new InstantCommand(()-> croc.openChomper()),
-      new RunCrocodileMotors(croc, -0.2).withTimeout(.5),
+      new InstantCommand(()-> croc.closeChomper()),
+      new InstantCommand(()->croc.setMotorSpeed(-0.2)),
       new WaitCommand(.2),
       new InstantCommand(()-> croc.wristUp()),
       new WaitCommand(.2),
@@ -55,7 +56,9 @@ public class RedPreloadOnly extends SequentialCommandGroup {
       new RotatorToPosition(rotator, telescope, 90),
       //new TelescopeToPosition(telescope, 1000), //TODO: set to actual telescope position.
       new ResetTelescope(telescope),
-      new RotatorToPosition(rotator, telescope, 90)
+      new RotatorToPosition(rotator, telescope, 90),
+      new SwerveTrajectoryFollowCommand(driveBase,  "preloadPlusOneLeft1", defaultConfig, false, true)
+
       // new SwerveTrajectoryFollowCommand(driveBase,  "preloadParkCenter", defaultConfig, false, true),
       // //LEVEL
       // new LevelRobot(driveBase),
@@ -64,5 +67,6 @@ public class RedPreloadOnly extends SequentialCommandGroup {
     );
     //grabs any requirements needed for the drivebase from other running commands.
     addRequirements(driveBase);
+
   } 
 }

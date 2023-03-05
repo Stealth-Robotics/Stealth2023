@@ -42,13 +42,14 @@ public class BluePreloadParkCenter extends SequentialCommandGroup {
 
       //Command Group
 
-      new InstantCommand(()-> croc.closeChomper()),
+      new InstantCommand(()-> croc.openChomper()),
+      new InstantCommand(()-> croc.setMotorSpeed(1)),
       new RotatorToPosition(rotator, telescope, 230),
       new TelescopeToPosition(telescope, 70000), //TODO: set to actual telescope position.
       new InstantCommand(()-> croc.wristDown()),
       new WaitCommand(0.2),  
-      new InstantCommand(()-> croc.openChomper()),
-      new RunCrocodileMotors(croc, 1).withTimeout(.5),
+      new InstantCommand(()-> croc.closeChomper()),
+      new InstantCommand(()->croc.setMotorSpeed(-0.2)),
       new WaitCommand(.2),
       new InstantCommand(()-> croc.wristUp()),
       new WaitCommand(.2),
