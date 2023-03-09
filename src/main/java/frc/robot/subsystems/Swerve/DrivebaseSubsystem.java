@@ -1,6 +1,6 @@
 package frc.robot.subsystems.Swerve;
 
-import frc.robot.Constants;
+import frc.robot.SharedConstants;
 import frc.robot.PhotonVisionCameraWrapper;
 import frc.robot.RobotMap;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -36,11 +36,11 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
 
     private final ProfiledPIDController thetaController = new ProfiledPIDController(
-            Constants.AutoConstants.k_P_THETA_CONTROLLER, 0, 0,
-            Constants.AutoConstants.k_THETA_CONTROLLER_CONSTRAINTS);
+            SharedConstants.AutoConstants.k_P_THETA_CONTROLLER, 0, 0,
+            SharedConstants.AutoConstants.k_THETA_CONTROLLER_CONSTRAINTS);
 
-    private final PIDController xController = new PIDController(Constants.AutoConstants.k_PX_CONTROLLER, 0, 0);
-    private final PIDController yController = new PIDController(Constants.AutoConstants.k_PY_CONTROLLER, 0, 0);
+    private final PIDController xController = new PIDController(SharedConstants.AutoConstants.k_PX_CONTROLLER, 0, 0);
+    private final PIDController yController = new PIDController(SharedConstants.AutoConstants.k_PY_CONTROLLER, 0, 0);
 
     private final HolonomicDriveController pathController = new HolonomicDriveController(
             xController,
@@ -58,10 +58,10 @@ public class DrivebaseSubsystem extends SubsystemBase {
         pathController.setEnabled(true);
 
         mSwerveMods = new SwerveModule[] {
-                new SwerveModule(0, Constants.DrivebaseConstants.MOD_0.constants),
-                new SwerveModule(1, Constants.DrivebaseConstants.MOD_1.constants),
-                new SwerveModule(2, Constants.DrivebaseConstants.MOD_2.constants),
-                new SwerveModule(3, Constants.DrivebaseConstants.MOD_3.constants)
+                new SwerveModule(0, SharedConstants.DrivebaseConstants.MOD_0.constants),
+                new SwerveModule(1, SharedConstants.DrivebaseConstants.MOD_1.constants),
+                new SwerveModule(2, SharedConstants.DrivebaseConstants.MOD_2.constants),
+                new SwerveModule(3, SharedConstants.DrivebaseConstants.MOD_3.constants)
         };
 
         Timer.delay(1.0);
@@ -70,7 +70,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
         // TODO: Set the actual pose
         field2d = new Field2d();
         SmartDashboard.putData(field2d);
-        swerveOdometry = new SwerveDrivePoseEstimator(Constants.DrivebaseConstants.SWERVE_KINEMATICS, getGyroscopeRotation(),
+        swerveOdometry = new SwerveDrivePoseEstimator(SharedConstants.DrivebaseConstants.SWERVE_KINEMATICS, getGyroscopeRotation(),
                 getModulePositions(), new Pose2d());
     }
 
@@ -83,7 +83,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
-        SwerveModuleState[] swerveModuleStates = Constants.DrivebaseConstants.SWERVE_KINEMATICS.toSwerveModuleStates(
+        SwerveModuleState[] swerveModuleStates = SharedConstants.DrivebaseConstants.SWERVE_KINEMATICS.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
                         translation.getX(),
                         translation.getY(),
@@ -93,7 +93,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
                                 translation.getX(),
                                 translation.getY(),
                                 rotation));
-        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.DrivebaseConstants.MAX_SPEED);
+        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SharedConstants.DrivebaseConstants.MAX_SPEED);
 
         for (SwerveModule mod : mSwerveMods) {
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
@@ -106,9 +106,9 @@ public class DrivebaseSubsystem extends SubsystemBase {
      * @param chassisSpeeds The x, y, and theta the drivebase must move in.
      */
     public void drive(ChassisSpeeds chassisSpeeds, boolean isOpenLoop) {
-        SwerveModuleState[] swerveModuleStates = Constants.DrivebaseConstants.SWERVE_KINEMATICS.toSwerveModuleStates(
+        SwerveModuleState[] swerveModuleStates = SharedConstants.DrivebaseConstants.SWERVE_KINEMATICS.toSwerveModuleStates(
                 chassisSpeeds);
-        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.DrivebaseConstants.MAX_SPEED);
+        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SharedConstants.DrivebaseConstants.MAX_SPEED);
 
         for (SwerveModule mod : mSwerveMods) {
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
@@ -128,7 +128,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
     /* Used by SwerveControllerCommand in Auto */
     public void setModuleStates(SwerveModuleState[] desiredStates, boolean isOpenLoop) {
-        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.DrivebaseConstants.MAX_SPEED);
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, SharedConstants.DrivebaseConstants.MAX_SPEED);
 
         for (SwerveModule mod : mSwerveMods) {
             mod.setDesiredState(desiredStates[mod.moduleNumber], isOpenLoop);

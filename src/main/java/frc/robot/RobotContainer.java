@@ -15,6 +15,14 @@ import frc.robot.subsystems.RotatorSubsystem;
 import frc.robot.subsystems.CrocodileSubsystem;
 import frc.robot.RobotMap.Crocodile;
 import frc.robot.commands.*;
+import frc.robot.commands.Autos.BluePreloadOnly;
+import frc.robot.commands.Autos.BluePreloadParkCenter;
+import frc.robot.commands.Autos.RedPreloadOnly;
+import frc.robot.commands.Autos.RedPreloadParkCenter;
+import frc.robot.commands.DefaultCommands.CrocodileDefaultCommand;
+import frc.robot.commands.DefaultCommands.RotatorDefaultCommand;
+import frc.robot.commands.DefaultCommands.TeleopDrivebaseDefaultCommand;
+import frc.robot.commands.DefaultCommands.TelescopeDefault;
 import frc.robot.subsystems.TelescopeSubsystem;
 import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
 
@@ -28,13 +36,15 @@ import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  public static final int k_DRIVER_CONTROLLER_PORT = 0;
+  public static final int k_OPERATOR_CONTROLLER_PORT = 1;
   /* Controllers */
   private final Joystick driver = new Joystick(0);
   private final CommandXboxController driverController = new CommandXboxController(
-      Constants.IOConstants.k_DRIVER_CONTROLLER_PORT);
+      k_DRIVER_CONTROLLER_PORT);
 
   private final CommandXboxController mechController = new CommandXboxController(
-      Constants.IOConstants.k_OPERATOR_CONTROLLER_PORT);
+      k_OPERATOR_CONTROLLER_PORT);
 
   /* Drive Controls */
   private final int translationAxis = XboxController.Axis.kLeftY.value;

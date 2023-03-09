@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.DefaultCommands;
 
 import java.util.function.DoubleSupplier;
 
@@ -36,7 +36,7 @@ public class TelescopeDefault extends CommandBase {
             }
         }
         else{
-            telescopeSubsystem.setPosition(telescopeSubsystem.getCurrentPosition());
+            telescopeSubsystem.setPositionPercent(telescopeSubsystem.currentTicksToPercent());
         }
     }
 }

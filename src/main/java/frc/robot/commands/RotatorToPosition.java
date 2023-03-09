@@ -20,26 +20,25 @@ public class RotatorToPosition extends CommandBase {
 
         resetTelescope = new TelescopeToPosition(telescope, 0);
     }
-
+    //Set the setpoint to the desired position
     @Override
     public void initialize() {
-        // 4096 ticks is two rotations. I'm not going to change this atm because i dont
-        // care about percent right now, I care about actual rotations. This can be
-        // addressed after GPK
-        // if (telescope.currentTicksToPercent() > 0.1/* 10 percent */ && Math.abs(telescope.getCurrentPosition() - setpoint) > 4096) {
-        //     CommandScheduler.getInstance()
-        //             .schedule(resetTelescope.andThen(new RotatorToPosition(rotatorSubsystem, telescope, setpoint)));
-        //     resettingElevator = true;
-        // } else {
-            rotatorSubsystem.setSetpoint(setpoint);
-        // }
+        //If the telescope is extended, and we are more than 2 telescope rotations away from the setpoint, reset the telescope.
+        if (telescope.currentTicksToPercent() > 0.1/* 10 percent */) {
+            //So we reset the telescope, and then come back to this command.
+            CommandScheduler.getInstance()
+                    .schedule(resetTelescope.andThen(new RotatorToPosition(rotatorSubsystem, telescope, setpoint)));
+            resettingElevator = true;
+        } else {
+        rotatorSubsystem.setSetpoint(setpoint);
+        }
     }
-
+    //If we are at the end, or we are resetting the elevator, end the command.
     @Override
     public boolean isFinished() {
         return rotatorSubsystem.atSetpoint() || resettingElevator;
     }
-
+    //Keep the setpoint steady when we end
     @Override
     public void end(boolean interrupted) {
         rotatorSubsystem.setToCurrentPosition();
