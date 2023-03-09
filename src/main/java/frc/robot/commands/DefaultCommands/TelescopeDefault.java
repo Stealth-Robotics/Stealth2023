@@ -28,14 +28,12 @@ public class TelescopeDefault extends CommandBase {
         double joystickInput = joystickSupplier.getAsDouble();
 
         if (Math.abs(joystickInput) > 0.05) {
-            if (telescopeSubsystem.inBounds()){
+            if (telescopeSubsystem.inBounds()) {
                 telescopeSubsystem.setSpeed(MathUtil.clamp(joystickInput, -0.3, 0.3));
-            }
-            else {
+            } else {
                 telescopeSubsystem.setSpeed(MathUtil.clamp(joystickInput, -0.3, 0));
             }
-        }
-        else{
+        } else {
             telescopeSubsystem.setPositionPercent(telescopeSubsystem.currentTicksToPercent());
         }
     }

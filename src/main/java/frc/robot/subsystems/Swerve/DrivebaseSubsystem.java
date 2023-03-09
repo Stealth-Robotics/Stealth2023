@@ -34,7 +34,6 @@ public class DrivebaseSubsystem extends SubsystemBase {
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
 
-
     private final ProfiledPIDController thetaController = new ProfiledPIDController(
             SharedConstants.AutoConstants.k_P_THETA_CONTROLLER, 0, 0,
             SharedConstants.AutoConstants.k_THETA_CONTROLLER_CONSTRAINTS);
@@ -70,29 +69,29 @@ public class DrivebaseSubsystem extends SubsystemBase {
         // TODO: Set the actual pose
         field2d = new Field2d();
         SmartDashboard.putData(field2d);
-        swerveOdometry = new SwerveDrivePoseEstimator(SharedConstants.DrivebaseConstants.SWERVE_KINEMATICS, getGyroscopeRotation(),
+        swerveOdometry = new SwerveDrivePoseEstimator(SharedConstants.DrivebaseConstants.SWERVE_KINEMATICS,
+                getGyroscopeRotation(),
                 getModulePositions(), new Pose2d());
     }
 
-    public void resetModulesToAbsolute()
-    {
-        for(SwerveModule mod: mSwerveMods)
-        {
+    public void resetModulesToAbsolute() {
+        for (SwerveModule mod : mSwerveMods) {
             mod.resetToAbsolute();
         }
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
-        SwerveModuleState[] swerveModuleStates = SharedConstants.DrivebaseConstants.SWERVE_KINEMATICS.toSwerveModuleStates(
-                fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                        translation.getX(),
-                        translation.getY(),
-                        rotation,
-                        getGyroscopeRotation())
-                        : new ChassisSpeeds(
+        SwerveModuleState[] swerveModuleStates = SharedConstants.DrivebaseConstants.SWERVE_KINEMATICS
+                .toSwerveModuleStates(
+                        fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
                                 translation.getX(),
                                 translation.getY(),
-                                rotation));
+                                rotation,
+                                getGyroscopeRotation())
+                                : new ChassisSpeeds(
+                                        translation.getX(),
+                                        translation.getY(),
+                                        rotation));
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SharedConstants.DrivebaseConstants.MAX_SPEED);
 
         for (SwerveModule mod : mSwerveMods) {
@@ -106,8 +105,9 @@ public class DrivebaseSubsystem extends SubsystemBase {
      * @param chassisSpeeds The x, y, and theta the drivebase must move in.
      */
     public void drive(ChassisSpeeds chassisSpeeds, boolean isOpenLoop) {
-        SwerveModuleState[] swerveModuleStates = SharedConstants.DrivebaseConstants.SWERVE_KINEMATICS.toSwerveModuleStates(
-                chassisSpeeds);
+        SwerveModuleState[] swerveModuleStates = SharedConstants.DrivebaseConstants.SWERVE_KINEMATICS
+                .toSwerveModuleStates(
+                        chassisSpeeds);
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SharedConstants.DrivebaseConstants.MAX_SPEED);
 
         for (SwerveModule mod : mSwerveMods) {
@@ -163,11 +163,11 @@ public class DrivebaseSubsystem extends SubsystemBase {
         gyro.setYaw(0);
     }
 
-    public double getYawAsDouble(){
+    public double getYawAsDouble() {
         return gyro.getYaw();
     }
 
-    public double getPitchAsDouble(){
+    public double getPitchAsDouble() {
         return gyro.getPitch();
     }
 
@@ -186,14 +186,16 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
         swerveOdometry.update(getGyroscopeRotation(), getModulePositions());
 
-        // Optional<EstimatedRobotPose> result = pcw.getEstimatedGlobalPose(swerveOdometry.getEstimatedPosition());
-        /* 
-        if (result.isPresent()) {
-            EstimatedRobotPose camPose = result.get();
-            swerveOdometry.addVisionMeasurement(
-                    camPose.estimatedPose.toPose2d(),
-                    camPose.timestampSeconds);
-        }*/
+        // Optional<EstimatedRobotPose> result =
+        // pcw.getEstimatedGlobalPose(swerveOdometry.getEstimatedPosition());
+        /*
+         * if (result.isPresent()) {
+         * EstimatedRobotPose camPose = result.get();
+         * swerveOdometry.addVisionMeasurement(
+         * camPose.estimatedPose.toPose2d(),
+         * camPose.timestampSeconds);
+         * }
+         */
 
         field2d.setRobotPose(getPose());
         for (SwerveModule mod : mSwerveMods) {

@@ -133,7 +133,6 @@ public class RobotContainer {
     mechController.b().onTrue(new InstantCommand(() -> telescope.resetEncoder()));
     mechController.rightBumper().onTrue(new InstantCommand(() -> endEffector.toggleWrist(), endEffector));
 
-
     // driverController.rightBumper().onTrue(new LevelRobot(swerve));
     // mechController
     // .x()
@@ -146,13 +145,13 @@ public class RobotContainer {
   }
 
   public void teleopInit() {
-    //telescope.completeReset();
-    //telescope.resetEncoder();
+    // telescope.completeReset();
+    // telescope.resetEncoder();
     telescope.setSetpoint(telescope.getCurrentPosition());
   }
 
   public void autonomousInit() {
-    //telescope.completeReset();
+    // telescope.completeReset();
     telescope.setSetpoint(telescope.getCurrentPosition());
   }
 
@@ -162,9 +161,9 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    //System.out.println("Selected Autonomous: " + autoChooser.getSelected());
-    //return autoChooser.getSelected();
-    //return null;
-    return new BluePreloadOnly  (swerve, endEffector, rotator, telescope);
+    // System.out.println("Selected Autonomous: " + autoChooser.getSelected());
+    // return autoChooser.getSelected();
+    // return null;
+    return new BluePreloadOnly(swerve, endEffector, rotator, telescope);
   }
 }

@@ -11,11 +11,9 @@ public class CrocodileSubsystem extends SubsystemBase {
     private static final int FREE_CURRENT_LIMIT = 30;
     private static final int STALL_CURRENT_LIMIT = 20;
 
-
     private final Solenoid wristSolenoid;
     private final Solenoid chomperSolenoid;
     private final WPI_TalonFX intake;
-
 
     public CrocodileSubsystem() {
         intake = new WPI_TalonFX(RobotMap.Crocodile.INTAKE);

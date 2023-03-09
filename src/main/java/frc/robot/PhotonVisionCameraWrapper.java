@@ -16,41 +16,40 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 
 public class PhotonVisionCameraWrapper {
-    public final static String CAMERA_NAME = "photonvision";
+  public final static String CAMERA_NAME = "photonvision";
 
-    // TODO: Enter actual values (In meters and degrees)
-    public static final Transform3d ROBOT_CENTER_TO_CAMERA = new Transform3d(
-        new Translation3d(0.0, 0.0, 0.0),
-        new Rotation3d(Math.toRadians(180), 0, Math.toRadians(180)));
+  // TODO: Enter actual values (In meters and degrees)
+  public static final Transform3d ROBOT_CENTER_TO_CAMERA = new Transform3d(
+      new Translation3d(0.0, 0.0, 0.0),
+      new Rotation3d(Math.toRadians(180), 0, Math.toRadians(180)));
 
-    public final static AprilTagFieldLayout APRIL_TAG_FIELD_LAYOUT;
+  public final static AprilTagFieldLayout APRIL_TAG_FIELD_LAYOUT;
 
-    static {
-      try {
-        APRIL_TAG_FIELD_LAYOUT = AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField();
-      } catch (IOException e) {
-        throw new RuntimeException("I/O exception with april tag field layout", e);
-      }
+  static {
+    try {
+      APRIL_TAG_FIELD_LAYOUT = AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField();
+    } catch (IOException e) {
+      throw new RuntimeException("I/O exception with april tag field layout", e);
     }
-    // TODO: Choose Pose Strategy
-    public final static PoseStrategy POSE_STRATEGY = PoseStrategy.MULTI_TAG_PNP;
-    
-    PhotonCamera camera;
-    PhotonPoseEstimator photonPoseEstimator;
+  }
+  // TODO: Choose Pose Strategy
+  public final static PoseStrategy POSE_STRATEGY = PoseStrategy.MULTI_TAG_PNP;
 
-    public PhotonVisionCameraWrapper() {
-        camera = new PhotonCamera(CAMERA_NAME);
+  PhotonCamera camera;
+  PhotonPoseEstimator photonPoseEstimator;
 
-        photonPoseEstimator = new PhotonPoseEstimator(
-            APRIL_TAG_FIELD_LAYOUT,
-            POSE_STRATEGY, 
-            camera, 
-            ROBOT_CENTER_TO_CAMERA
-        );
-    }
+  public PhotonVisionCameraWrapper() {
+    camera = new PhotonCamera(CAMERA_NAME);
 
-    public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
-        photonPoseEstimator.setReferencePose(prevEstimatedRobotPose);
-        return photonPoseEstimator.update();
-    }
+    photonPoseEstimator = new PhotonPoseEstimator(
+        APRIL_TAG_FIELD_LAYOUT,
+        POSE_STRATEGY,
+        camera,
+        ROBOT_CENTER_TO_CAMERA);
+  }
+
+  public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
+    photonPoseEstimator.setReferencePose(prevEstimatedRobotPose);
+    return photonPoseEstimator.update();
+  }
 }

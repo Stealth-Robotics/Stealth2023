@@ -17,11 +17,11 @@ public class RotatorDefaultCommand extends CommandBase {
 
     private final TelescopeSubsystem telescope;
     private final RotatorSubsystem rotator;
-    //One of the joystick axes of the controller
+    // One of the joystick axes of the controller
     private final DoubleSupplier joystick;
-    //Debouncer to measure the depression of the joystick
+    // Debouncer to measure the depression of the joystick
     private final Debouncer crying = new Debouncer(0.5, Debouncer.DebounceType.kBoth);
-    //Command to reset the telescope
+    // Command to reset the telescope
     private final Command resetTelescopeCmd;
 
     public RotatorDefaultCommand(RotatorSubsystem rotator, TelescopeSubsystem telescope, DoubleSupplier joystick) {
@@ -35,7 +35,7 @@ public class RotatorDefaultCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        //Start with the rotator at the current position
+        // Start with the rotator at the current position
         rotator.setToCurrentPosition();
     }
 
@@ -63,8 +63,10 @@ public class RotatorDefaultCommand extends CommandBase {
         }
         // Otherwise, just move the rotator normally
         else {
-            if (joystickVal < 0 && rotator.getMeasurementDegrees() < 0) return;
-            if (joystickVal > 0 && rotator.getMeasurementDegrees() > 250) return;
+            if (joystickVal < 0 && rotator.getMeasurementDegrees() < 0)
+                return;
+            if (joystickVal > 0 && rotator.getMeasurementDegrees() > 250)
+                return;
             rotator.setSpeed(MathUtil.clamp(joystickVal * 0.5, -0.5, 0.5));
             rotator.setToCurrentPosition();
         }

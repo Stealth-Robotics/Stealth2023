@@ -6,31 +6,30 @@ import frc.robot.subsystems.TelescopeSubsystem;
 public class TelescopeToPosition extends CommandBase {
     // The subsystem the command runs on
     private final TelescopeSubsystem telescopeSubsystem;
-    //Setpoint to run the telescope to
-    //In percent of maximum extension
+    // Setpoint to run the telescope to
+    // In percent of maximum extension
     private final double percent;
 
-    public TelescopeToPosition(TelescopeSubsystem telescopeSubsystem, double percent)
-    {
+    public TelescopeToPosition(TelescopeSubsystem telescopeSubsystem, double percent) {
         this.telescopeSubsystem = telescopeSubsystem;
         this.percent = percent;
     }
-    
+
     @Override
     public void initialize() {
-        //Set the setpoint to the desired position
+        // Set the setpoint to the desired position
         telescopeSubsystem.setSetpoint(percent);
     }
 
     @Override
     public void execute() {
-        //Run the telescope to the setpoint
+        // Run the telescope to the setpoint
         telescopeSubsystem.setPositionPercent(telescopeSubsystem.getSetpoint());
     }
 
     @Override
     public boolean isFinished() {
-        //To end, check if we are at the setpoint
+        // To end, check if we are at the setpoint
         return telescopeSubsystem.atSetpoint();
     }
 }
