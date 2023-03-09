@@ -24,7 +24,8 @@ import frc.robot.RobotMap;
 import frc.robot.commands.ResetTelescope;
 
 public class RotatorSubsystem extends SubsystemBase {
-    private final WPI_TalonFX rotationMotor;
+    private final WPI_TalonFX rotationMotorA;
+    private final WPI_TalonFX rotationMotorB;
     private final PIDController pid;
     private final DutyCycleEncoder encoder;
     
@@ -35,9 +36,13 @@ public class RotatorSubsystem extends SubsystemBase {
     private final ArmFeedforward feedforward;
 
     public RotatorSubsystem() {
-        rotationMotor = new WPI_TalonFX(RobotMap.Rotator.ROTATOR_MOTOR);
-        rotationMotor.setNeutralMode(NeutralMode.Coast);
-        rotationMotor.setInverted(true);
+        rotationMotorA = new WPI_TalonFX(RobotMap.Rotator.ROTATOR_MOTOR);
+        rotationMotorA.setNeutralMode(NeutralMode.Brake);
+        rotationMotorA.setInverted(true);
+        rotationMotorB = new WPI_TalonFX(-1);
+        rotationMotorB.setNeutralMode(NeutralMode.Brake);
+        rotationMotorB.setInverted(true);
+        rotationMotorB.follow(rotationMotorA); 
 
         pid = new PIDController(
                 Constants.RotatorConstants.ROTATOR_P_COEFF,
@@ -93,7 +98,7 @@ public class RotatorSubsystem extends SubsystemBase {
     }
 
     public void setSpeed(double speed) {
-        rotationMotor.set(speed); // Defaults to PercentOutput
+        rotationMotorA.set(speed); // Defaults to PercentOutput
     }
 
     public boolean atSetpoint(){
@@ -102,7 +107,7 @@ public class RotatorSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        double ff = feedforward.calculate(pid.getSetpoint() - (Math.PI / 2), rotationMotor.getSelectedSensorVelocity());
+        double ff = feedforward.calculate(pid.getSetpoint() - (Math.PI / 2), rotationMotorA.getSelectedSensorVelocity());
         double speed = pid.calculate(getMeasurement());
         double safeSpeed = MathUtil.clamp(speed + ff, -speedLimit, speedLimit);
         if (log) {
