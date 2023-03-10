@@ -63,7 +63,7 @@ public class TelescopeSubsystem extends SubsystemBase {
         return getCurrentPosition() / MAXIMUM_TICKS;
     }
 
-    //Sets the PID setpoint to the current position
+    // Sets the PID setpoint to the current position
     public void setToCurrentPosition() {
         setSetpoint(getCurrentPosition());
     }
@@ -79,13 +79,8 @@ public class TelescopeSubsystem extends SubsystemBase {
     }
 
     // Converts a percentage of extension to encoder ticks
-    public double percentToTicks(double percent) {
+    private double percentToTicks(double percent) {
         return percent * MAXIMUM_TICKS;
-    }
-
-    // Converts encoder ticks to a percentage of extension
-    public double ticksToPercent(double ticks) {
-        return ticks / MAXIMUM_TICKS;
     }
 
     // Sets the speed of the telescope

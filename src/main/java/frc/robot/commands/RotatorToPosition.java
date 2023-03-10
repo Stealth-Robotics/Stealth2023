@@ -24,6 +24,7 @@ public class RotatorToPosition extends CommandBase {
     // Set the setpoint to the desired position
     @Override
     public void initialize() {
+        
         // If the telescope is extended, and we are more than 2 telescope rotations away
         // from the setpoint, reset the telescope.
         if (telescope.getExtensionPercent() > 0.1/* 10 percent */) {
