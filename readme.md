@@ -5,7 +5,7 @@ Here are some guidelines for writing code for our robot, for your reference when
 ##### General:
 - Code should follow general formatting rules. Class names are upper camel case, and method and variable names are lower camel case. Constants should be completely upper case, with underscores as separtors.
 - Stealth has a standard of calling subsystems _______Subsystem, Commands _______Command, and commands intended to be default commands _______DefaultCommand. Please stick to this standard for consistency.
-- Code should be formatted regularly to keep it readable (`Ctrl+Shift+I` on VSCode).
+- Code should be formatted regularly to keep it readable (`Alt+Shift+F` on VSCode).
 - Code should be commented when appropriate. 
 ##### Safety:
 - When tuning a PID for the first time, clamp the motor output. You can still print and graph the actual calculation, but limiting motor power when still tuning will prevent unexpected and unsafe robot action.
