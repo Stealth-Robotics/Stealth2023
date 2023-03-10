@@ -49,7 +49,7 @@ public class RotatorDefaultCommand extends CommandBase {
         }
         // If the telescope is extended, and the joystick is being pushed a lot for a
         // // perioid of time, reset the telescope
-        if (telescope.getCurrentPosition() > 2048 && crying.calculate(Math.abs(joystickVal) > 0.7)) {
+        if (telescope.getExtensionPercent() > 0.1 && crying.calculate(Math.abs(joystickVal) > 0.7)) {
             if (!resetTelescopeCmd.isScheduled()) {
                 CommandScheduler.getInstance().schedule(resetTelescopeCmd);
                 crying.calculate(false); // Make them push thru it again!
@@ -57,7 +57,7 @@ public class RotatorDefaultCommand extends CommandBase {
         }
         // // If the telescope is extended, and the joystick is being pushed a little,
         // // allow them to move it (but only a little)
-        else if (telescope.getCurrentPosition() > 2048) {
+        else if (telescope.getExtensionPercent() > 0.1) {
             rotator.setSpeed(MathUtil.clamp(joystickVal * 0.5, -0.3, 0.3));
             rotator.setToCurrentPosition();
         }

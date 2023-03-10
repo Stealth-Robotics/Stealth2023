@@ -7,13 +7,11 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.RotatorSubsystem;
 import frc.robot.subsystems.CrocodileSubsystem;
-import frc.robot.RobotMap.Crocodile;
 import frc.robot.commands.*;
 import frc.robot.commands.Autos.BluePreloadOnly;
 import frc.robot.commands.Autos.BluePreloadParkCenter;
@@ -53,7 +51,7 @@ public class RobotContainer {
 
   /* Driver Buttons */
   private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kA.value);
-  private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+  // private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
 
   /* Subsystems */
   private final DrivebaseSubsystem swerve;
@@ -132,27 +130,14 @@ public class RobotContainer {
     mechController.x().onTrue(new TelescopeToPosition(telescope, 75000));
     mechController.b().onTrue(new InstantCommand(() -> telescope.resetEncoder()));
     mechController.rightBumper().onTrue(new InstantCommand(() -> endEffector.toggleWrist(), endEffector));
-
-    // driverController.rightBumper().onTrue(new LevelRobot(swerve));
-    // mechController
-    // .x()
-    // .onTrue(
-    // Commands.runOnce(
-    // () -> {
-    // rotator.setGoal(130);
-    // },
-    // rotator));
   }
 
   public void teleopInit() {
-    // telescope.completeReset();
-    // telescope.resetEncoder();
-    telescope.setSetpoint(telescope.getCurrentPosition());
+    telescope.setToCurrentPosition();
   }
 
   public void autonomousInit() {
-    // telescope.completeReset();
-    telescope.setSetpoint(telescope.getCurrentPosition());
+    telescope.setToCurrentPosition();
   }
 
   /**

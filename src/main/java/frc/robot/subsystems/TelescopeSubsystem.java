@@ -52,11 +52,6 @@ public class TelescopeSubsystem extends SubsystemBase {
         telescopeMotor.config_kF(0, F_COEFF);
     }
 
-    // Sets the setpoint of the internal PID
-    public void setSetpoint(double setpoint) {
-        this.currentSetpoint = setpoint;
-    }
-
     // Gets the setpoint of the internal PID
     public double getSetpoint() {
         return currentSetpoint;
@@ -64,8 +59,18 @@ public class TelescopeSubsystem extends SubsystemBase {
 
     // Gets the current position of the telescope in a percentage of the maximum
     // extension
-    public double currentTicksToPercent() {
+    public double getExtensionPercent() {
         return getCurrentPosition() / MAXIMUM_TICKS;
+    }
+
+    //Sets the PID setpoint to the current position
+    public void setToCurrentPosition() {
+        setSetpoint(getCurrentPosition());
+    }
+
+    // Gets the current position of the telescope in encoder ticks
+    private double getCurrentPosition() {
+        return telescopeMotor.getSelectedSensorPosition();
     }
 
     // Rests the encoder to 0
@@ -83,11 +88,6 @@ public class TelescopeSubsystem extends SubsystemBase {
         return ticks / MAXIMUM_TICKS;
     }
 
-    // Gets the current position of the telescope in encoder ticks
-    public double getCurrentPosition() {
-        return telescopeMotor.getSelectedSensorPosition();
-    }
-
     // Sets the speed of the telescope
     // This should only ever be used for manual control
     public void setSpeed(double speed) {
@@ -96,23 +96,22 @@ public class TelescopeSubsystem extends SubsystemBase {
     }
 
     // Tells the PID where to go (percentage of extension)
-    public void setPositionPercent(double positionPercent) {
-        setPosition(percentToTicks(positionPercent));
+    public void setExtensionPercent(double percentExtension) {
+        setSetpoint(percentToTicks(percentExtension));
     }
 
     // Tells the PID where to go
-    private void setPosition(double positionTicks) {
+    private void setSetpoint(double positionTicks) {
         telescopeMotor.set(ControlMode.Position, positionTicks);
     }
 
     // Returns true if the motor is stalling, false otherwise
     public boolean checkVelocity() {
-
         return stallDebouncer.calculate(
                 Math.abs(telescopeMotor.getSelectedSensorVelocity()) < 50);
     }
 
-    // Rests the telescope encoder and setpoint
+    // Resets the telescope encoder and setpoint
     public void completeReset() {
         telescopeMotor.set(ControlMode.PercentOutput, 0);
         telescopeMotor.setSelectedSensorPosition(100);// 100 is 100 ticks backwards
@@ -133,6 +132,6 @@ public class TelescopeSubsystem extends SubsystemBase {
 
     // Returns true if the telescope is within its upper bound, false otherwise
     public boolean inBounds() {
-        return currentTicksToPercent() < 1;
+        return getExtensionPercent() < 1;
     }
 }

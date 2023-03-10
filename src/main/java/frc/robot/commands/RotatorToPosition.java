@@ -26,7 +26,7 @@ public class RotatorToPosition extends CommandBase {
     public void initialize() {
         // If the telescope is extended, and we are more than 2 telescope rotations away
         // from the setpoint, reset the telescope.
-        if (telescope.currentTicksToPercent() > 0.1/* 10 percent */) {
+        if (telescope.getExtensionPercent() > 0.1/* 10 percent */) {
             // So we reset the telescope, and then come back to this command.
             CommandScheduler.getInstance()
                     .schedule(resetTelescope.andThen(new RotatorToPosition(rotatorSubsystem, telescope, setpoint)));

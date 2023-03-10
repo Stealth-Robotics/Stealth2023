@@ -20,7 +20,7 @@ public class TelescopeDefault extends CommandBase {
 
     @Override
     public void initialize() {
-        telescopeSubsystem.setSetpoint(telescopeSubsystem.getCurrentPosition());
+        telescopeSubsystem.setToCurrentPosition();
     }
 
     @Override
@@ -34,7 +34,7 @@ public class TelescopeDefault extends CommandBase {
                 telescopeSubsystem.setSpeed(MathUtil.clamp(joystickInput, -0.3, 0));
             }
         } else {
-            telescopeSubsystem.setPositionPercent(telescopeSubsystem.currentTicksToPercent());
+            telescopeSubsystem.setToCurrentPosition();
         }
     }
 }
