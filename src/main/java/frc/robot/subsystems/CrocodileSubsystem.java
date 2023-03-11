@@ -1,21 +1,19 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.RobotMap;
 
 public class CrocodileSubsystem extends SubsystemBase {
+    private static final int FREE_CURRENT_LIMIT = 30;
+    private static final int STALL_CURRENT_LIMIT = 20;
+
     private final Solenoid wristSolenoid;
     private final Solenoid chomperSolenoid;
     private final WPI_TalonFX intake;
-    private Debouncer stallDebouncer = new Debouncer(0.050, Debouncer.DebounceType.kRising);
-    private double currentMotorPower;
 
     public CrocodileSubsystem() {
         intake = new WPI_TalonFX(RobotMap.Crocodile.INTAKE);
@@ -35,7 +33,6 @@ public class CrocodileSubsystem extends SubsystemBase {
 
     public void setMotorSpeed(double speed) {
         intake.set(speed);
-        currentMotorPower = speed;
     }
 
     public double getMotorVelocity() {

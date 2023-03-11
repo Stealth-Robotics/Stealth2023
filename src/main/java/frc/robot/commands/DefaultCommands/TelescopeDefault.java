@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.DefaultCommands;
 
 import java.util.function.DoubleSupplier;
 
@@ -20,7 +20,7 @@ public class TelescopeDefault extends CommandBase {
 
     @Override
     public void initialize() {
-        telescopeSubsystem.setSetpoint(telescopeSubsystem.getCurrentPosition());
+        telescopeSubsystem.setToCurrentPosition();
     }
 
     @Override
@@ -28,15 +28,13 @@ public class TelescopeDefault extends CommandBase {
         double joystickInput = joystickSupplier.getAsDouble();
 
         if (Math.abs(joystickInput) > 0.05) {
-            if (telescopeSubsystem.inBounds()){
+            if (telescopeSubsystem.inBounds()) {
                 telescopeSubsystem.setSpeed(MathUtil.clamp(joystickInput, -0.3, 0.3));
-            }
-            else {
+            } else {
                 telescopeSubsystem.setSpeed(MathUtil.clamp(joystickInput, -0.3, 0));
             }
-        }
-        else{
-            telescopeSubsystem.setPosition(telescopeSubsystem.getCurrentPosition());
+        } else {
+            telescopeSubsystem.setToCurrentPosition();
         }
     }
 }

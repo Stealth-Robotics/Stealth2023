@@ -90,8 +90,9 @@ public class SwerveTrajectoryFollowCommand extends CommandBase {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        //Default constructor of chassisSpeeds is 0 on everything
-        if (interrupted) drivetrain.drive(new ChassisSpeeds(), true);
+        // Default constructor of chassisSpeeds is 0 on everything
+        if (interrupted)
+            drivetrain.drive(new ChassisSpeeds(), true);
         timer.stop();
     }
 
