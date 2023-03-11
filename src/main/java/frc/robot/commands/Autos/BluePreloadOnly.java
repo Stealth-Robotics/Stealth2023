@@ -62,7 +62,7 @@ public class BluePreloadOnly extends SequentialCommandGroup {
         new WaitCommand(.2),
         new InstantCommand(() -> croc.wristUp()),
         new WaitCommand(.2),
-        new TelescopeToPosition(telescope, 2000),
+        new TelescopeToPosition(telescope, 0.05),
         new RotatorToPosition(rotator, telescope, 90),
         new ResetTelescope(telescope),
         new RotatorToPosition(rotator, telescope, 90),

@@ -22,9 +22,9 @@ public class TelescopeToPosition extends CommandBase {
     }
 
     @Override
-    public void execute() {
+    public void end(boolean interrupted) {
         // Run the telescope to the setpoint
-        telescopeSubsystem.setExtensionPercent(telescopeSubsystem.getSetpoint());
+        telescopeSubsystem.setToCurrentPosition();
     }
 
     @Override

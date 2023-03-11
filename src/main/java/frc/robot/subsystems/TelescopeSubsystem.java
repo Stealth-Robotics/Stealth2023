@@ -53,8 +53,14 @@ public class TelescopeSubsystem extends SubsystemBase {
     }
 
     // Gets the setpoint of the internal PID
-    public double getSetpoint() {
+    private double getSetpoint() {
         return currentSetpoint;
+    }
+
+    // Gets the setpoint of the internal PID in a percentage of the maximum
+    // extension
+    public double getSetpointPercent() {
+        return getSetpoint() / MAXIMUM_TICKS;
     }
 
     // Gets the current position of the telescope in a percentage of the maximum

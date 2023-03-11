@@ -64,7 +64,7 @@ public class RotatorSubsystem extends SubsystemBase {
                 ROTATOR_I_COEFF,
                 ROTATOR_D_COEFF);
         // pid.enableContinuousInput(0, Math.PI * 2);
-        pid.setTolerance(Math.toRadians(30));
+        pid.setTolerance(Math.toRadians(30)); //TODO: TUNE THIS
         feedforward = new ArmFeedforward(
                 ROTATOR_KS_COEFF,
                 ROTATOR_KG_COEFF,
@@ -76,29 +76,20 @@ public class RotatorSubsystem extends SubsystemBase {
         setToCurrentPosition();
     }
 
-    // Sets the setpiint to where the rotator is currently
+    // Sets the setpoint to where the rotator is currently
     public void setToCurrentPosition() {
-        setSetpoint(Math.toDegrees(getMeasurement()));
+        setSetpoint(Math.toDegrees(getMeasurementRadians()));
     }
 
     // Returns the position of the rotator in radians
-    private double getMeasurement() {
-        double currentPosition = encoder.getAbsolutePosition();
-        double result = Math.toRadians(((currentPosition * 360) + ENCODER_OFFSET) % 360);
-        if (log) {
-            System.out.println("RotatorPIDOnly.getMeasurement: Current encoder position (raw): " + currentPosition);
-            System.out.println(
-                    "RotatorPIDOnly.getMeasurement: Current encoder position (adj): " + Math.toDegrees(result));
-        }
-
-        return result;
+    private double getMeasurementRadians() {
+        return Math.toRadians(getMeasurementDegrees());
     }
 
     // Returns the position of the rotator in degrees
     public double getMeasurementDegrees() {
         double currentPosition = encoder.getAbsolutePosition();
         double result = (((currentPosition * 360) + ENCODER_OFFSET) % 360);
-
         return result;
     }
 
@@ -131,7 +122,7 @@ public class RotatorSubsystem extends SubsystemBase {
     public void periodic() {
         // caluclate using the feedforward and PID
         double ff = feedforward.calculate(pid.getSetpoint() - (Math.PI / 2), rotationMotor.getSelectedSensorVelocity());
-        double speed = pid.calculate(getMeasurement());
+        double speed = pid.calculate(getMeasurementRadians());
         // Constrain the calculation to the safe speed
         double safeSpeed = MathUtil.clamp(speed + ff, -speedLimit, speedLimit);
         // Set the speed of the rotator
