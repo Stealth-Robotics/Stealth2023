@@ -115,24 +115,11 @@ public class RobotContainer {
 
     zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
 
-    driverController.leftBumper().onTrue(new InstantCommand(() -> endEffector.toggleChomper(), endEffector));
-
     mechController.a().onTrue(new RotatorToPosition(rotator, telescope, 230));
     mechController.y().onTrue(new RotatorToPosition(rotator, telescope, 40));
     mechController.x().onTrue(new TelescopeToPosition(telescope, 75000));
     mechController.b().onTrue(new InstantCommand(() -> telescope.resetEncoder()));
-    mechController.rightBumper().onTrue(new InstantCommand(() -> endEffector.toggleWrist(), endEffector));
 
-
-    // driverController.rightBumper().onTrue(new LevelRobot(swerve));
-    // mechController
-    // .x()
-    // .onTrue(
-    // Commands.runOnce(
-    // () -> {
-    // rotator.setGoal(130);
-    // },
-    // rotator));
   }
 
   public void teleopInit() {
