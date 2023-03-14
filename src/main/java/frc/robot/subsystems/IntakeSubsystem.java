@@ -21,6 +21,7 @@ public class IntakeSubsystem extends SubsystemBase{
     private final int INTAKE_PORT = 0;
     private final int WRIST_PORT = 0;
     //variables for lower and upper wrist limit
+    //TODO: get wrist limits
     private final double WRIST_LOWER_LIMIT = 0;
     private final double WRIST_UPPER_LIMIT = 0;
     
@@ -36,17 +37,24 @@ public class IntakeSubsystem extends SubsystemBase{
     public void setIntakeSpeed(double speed){
         intakeMotor.set(ControlMode.PercentOutput, speed);
     }
-    public double getEncoderPosition(){
+    public double getWristPosition(){
         return encoder.getAbsolutePosition();
     }
     public boolean getBeamBreak(){
         return beamBreak.get();
     }
+    public void setWristSetpoint(double position){
+        wristPid.setSetpoint(position);
+    }
+    public double getWristsSetpoint(){
+        return wristPid.getSetpoint();
+    }
+
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
         //set wrist position to pid clamping between upper and lower limits
-        wristMotor.set(ControlMode.PercentOutput, MathUtil.clamp(wristPid.calculate(encoder.getAbsolutePosition()), WRIST_LOWER_LIMIT, WRIST_UPPER_LIMIT));
+        wristMotor.set(ControlMode.PercentOutput, MathUtil.clamp(wristPid.calculate(getWristPosition()), WRIST_LOWER_LIMIT, WRIST_UPPER_LIMIT));
         
     }
 
