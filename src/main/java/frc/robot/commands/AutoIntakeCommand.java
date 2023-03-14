@@ -3,29 +3,29 @@ package frc.robot.commands;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.CrocodileSubsystem;
 
 public class AutoIntakeCommand extends CommandBase{
-    private final IntakeSubsystem intakeSubsystem;
+    private final CrocodileSubsystem crocodileSubsystem;
     private final double speed;
-    public AutoIntakeCommand(IntakeSubsystem intakeSubsystem, double speed){
-        this.intakeSubsystem = intakeSubsystem;
+    public AutoIntakeCommand(CrocodileSubsystem crocodileSubsystem, double speed){
+        this.crocodileSubsystem = crocodileSubsystem;
         this.speed = speed;
-        addRequirements(intakeSubsystem);
+        addRequirements(crocodileSubsystem);
     }
     @Override
     public void initialize() {
-        intakeSubsystem.setIntakeSpeed(speed);
+        crocodileSubsystem.setIntakeSpeed(speed);
     }
     @Override
     public boolean isFinished() {
         Debouncer debouncer = new Debouncer(0.5, DebounceType.kBoth);
         //will return true if beam break is true for 0.5 seconds
-        return debouncer.calculate(intakeSubsystem.getBeamBreak());
+        return debouncer.calculate(crocodileSubsystem.getBeamBreak());
     }
     @Override
     public void end(boolean interrupted) {
-        intakeSubsystem.setIntakeSpeed(0);
+        crocodileSubsystem.setIntakeSpeed(0);
     }
 
     

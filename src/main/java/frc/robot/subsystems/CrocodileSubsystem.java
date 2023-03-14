@@ -18,14 +18,17 @@ public class CrocodileSubsystem extends SubsystemBase {
     private final WPI_TalonFX wrist;
     private final PIDController pid;
     private final DutyCycleEncoder encoder;
-    private final DigitalInput distanceSensor;
+    private final DigitalInput beamBreak;
+
+    //TODO: Set speed limit
+    private final double SPEED_LIMIT = 0;
 
     public CrocodileSubsystem() {
         intake = new WPI_TalonFX(RobotMap.Crocodile.INTAKE);
         wrist = new WPI_TalonFX(RobotMap.Crocodile.WRIST);
         pid = new PIDController(0, 0, 0);
         encoder = new DutyCycleEncoder(1);
-        distanceSensor = new DigitalInput(2);
+        beamBreak = new DigitalInput(2);
         intake.setNeutralMode(NeutralMode.Brake);
         wrist.setNeutralMode(NeutralMode.Brake);
         /* enabled | Limit(amp) | Trigger Threshold(amp) | Trigger Threshold Time(s) */
@@ -54,12 +57,12 @@ public class CrocodileSubsystem extends SubsystemBase {
         return encoder.getAbsolutePosition();
     }
 
-    public boolean getDistanceSensor() {
-        return distanceSensor.get();
+    public boolean getBeamBreak() {
+        return beamBreak.get();
     }
 
     @Override
     public void periodic() {
-        setWristSpeed(pid.calculate(encoder.getAbsolutePosition()));
+        setWristSpeed(pid.calculate(encoder.getAbsolutePosition()) * SPEED_LIMIT);
     }
 }
