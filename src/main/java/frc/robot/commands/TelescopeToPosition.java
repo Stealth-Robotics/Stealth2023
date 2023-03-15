@@ -24,7 +24,7 @@ public class TelescopeToPosition extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         // Run the telescope to the setpoint
-        telescopeSubsystem.setToCurrentPosition();
+        if (interrupted) telescopeSubsystem.setToCurrentPosition();
     }
 
     @Override

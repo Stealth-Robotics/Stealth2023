@@ -103,11 +103,6 @@ public class RotatorSubsystem extends SubsystemBase {
         pid.setSetpoint(Math.toRadians(degrees));
     }
 
-    // Sets the goal of the rotator in degrees
-    public void setGoal(double degrees) {
-        setSetpoint(degrees);
-    }
-
     // Sets the speed of the rotator
     public void setSpeed(double speed) {
         rotationMotor.set(speed); // Defaults to PercentOutput
