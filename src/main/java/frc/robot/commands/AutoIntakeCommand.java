@@ -8,9 +8,11 @@ import frc.robot.subsystems.CrocodileSubsystem;
 public class AutoIntakeCommand extends CommandBase{
     private final CrocodileSubsystem crocodileSubsystem;
     private final double speed;
+    private final Debouncer debouncer;
     public AutoIntakeCommand(CrocodileSubsystem crocodileSubsystem, double speed){
         this.crocodileSubsystem = crocodileSubsystem;
         this.speed = speed;
+        debouncer = new Debouncer(0.5, DebounceType.kBoth);
         addRequirements(crocodileSubsystem);
     }
     @Override
@@ -19,7 +21,6 @@ public class AutoIntakeCommand extends CommandBase{
     }
     @Override
     public boolean isFinished() {
-        Debouncer debouncer = new Debouncer(0.5, DebounceType.kBoth);
         //will return true if beam break is true for 0.5 seconds
         return debouncer.calculate(crocodileSubsystem.getBeamBreak());
     }

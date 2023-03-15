@@ -6,6 +6,8 @@ public class RobotMap {
     public static final class Crocodile {
         public static final int INTAKE = 5;
         public static final int WRIST = -1; //TODO: Set to an actual value on the robot.
+        public static final int WRIST_ENCODER_ID = 2;
+        public static final int BEAM_BREAK_ID = 3;
     }
 
     public static final class Telescope {
@@ -50,12 +52,6 @@ public class RobotMap {
         public static final PneumaticsModuleType PCM_TYPE = PneumaticsModuleType.CTREPCM;
         public static final int CLAW_PCM_CHANNEL = 1;
         public static final int CHOMPER_PCM_CHANNEL = 0;
-    }
-
-    public static final class IntakeIDs {
-        // TODO: Change to fit the IDs on the robot.
-        public static final int RIGHT_INTAKE_MOTOR_ID = 0;
-        public static final int LEFT_INTAKE_MOTOR_ID = 1;
     }
 
     public static final class Rotator {

@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -16,7 +17,7 @@ import frc.robot.RobotMap;
 public class CrocodileSubsystem extends SubsystemBase {
     private final WPI_TalonFX intake;
     private final WPI_TalonFX wrist;
-    private final PIDController pid;
+    private final PIDController wristPID;
     private final DutyCycleEncoder encoder;
     private final DigitalInput beamBreak;
 
@@ -26,9 +27,10 @@ public class CrocodileSubsystem extends SubsystemBase {
     public CrocodileSubsystem() {
         intake = new WPI_TalonFX(RobotMap.Crocodile.INTAKE);
         wrist = new WPI_TalonFX(RobotMap.Crocodile.WRIST);
-        pid = new PIDController(0, 0, 0);
-        encoder = new DutyCycleEncoder(1);
-        beamBreak = new DigitalInput(2);
+        //TODO: Tune PID
+        wristPID = new PIDController(0, 0, 0);
+        encoder = new DutyCycleEncoder(RobotMap.Crocodile.WRIST_ENCODER_ID);
+        beamBreak = new DigitalInput(RobotMap.Crocodile.BEAM_BREAK_ID);
         intake.setNeutralMode(NeutralMode.Brake);
         wrist.setNeutralMode(NeutralMode.Brake);
         /* enabled | Limit(amp) | Trigger Threshold(amp) | Trigger Threshold Time(s) */
@@ -46,11 +48,11 @@ public class CrocodileSubsystem extends SubsystemBase {
     }
 
     public void setSetpoint(double position) {
-        pid.setSetpoint(position);
+        wristPID.setSetpoint(position);
     }
 
     public double getSetpoint() {
-        return pid.getSetpoint();
+        return wristPID.getSetpoint();
     }
 
     public double getAbsolutePosition() {
@@ -63,6 +65,6 @@ public class CrocodileSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        setWristSpeed(pid.calculate(encoder.getAbsolutePosition()) * SPEED_LIMIT);
+        setWristSpeed(MathUtil.clamp(wristPID.calculate(encoder.getAbsolutePosition()), -SPEED_LIMIT, SPEED_LIMIT));
     }
 }
