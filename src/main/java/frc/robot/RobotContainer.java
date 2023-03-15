@@ -4,6 +4,7 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -95,7 +96,7 @@ public class RobotContainer {
     endEffector.setDefaultCommand(new CrocodileDefaultCommand(
         endEffector,
         () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
-        () -> mechController.leftBumper().getAsBoolean()));
+        (t) -> driverController.getHID().setRumble(RumbleType.kBothRumble, t)));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -123,13 +124,13 @@ public class RobotContainer {
   }
 
   public void teleopInit() {
-    //telescope.completeReset();
-    //telescope.resetEncoder();
+    // telescope.completeReset();
+    // telescope.resetEncoder();
     telescope.setSetpoint(telescope.getCurrentPosition());
   }
 
   public void autonomousInit() {
-    //telescope.completeReset();
+    // telescope.completeReset();
     telescope.setSetpoint(telescope.getCurrentPosition());
   }
 
@@ -139,9 +140,9 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    //System.out.println("Selected Autonomous: " + autoChooser.getSelected());
-    //return autoChooser.getSelected();
-    //return null;
-    return new BluePreloadOnly  (swerve, endEffector, rotator, telescope);
+    // System.out.println("Selected Autonomous: " + autoChooser.getSelected());
+    // return autoChooser.getSelected();
+    // return null;
+    return new BluePreloadOnly(swerve, endEffector, rotator, telescope);
   }
 }

@@ -21,13 +21,13 @@ public class CrocodileSubsystem extends SubsystemBase {
     private final DutyCycleEncoder encoder;
     private final DigitalInput beamBreak;
 
-    //TODO: Set speed limit
+    // TODO: Set speed limit
     private final double SPEED_LIMIT = 0;
 
     public CrocodileSubsystem() {
         intake = new WPI_TalonFX(RobotMap.Crocodile.INTAKE);
         wrist = new WPI_TalonFX(RobotMap.Crocodile.WRIST);
-        //TODO: Tune PID
+        // TODO: Tune PID
         wristPID = new PIDController(0, 0, 0);
         encoder = new DutyCycleEncoder(RobotMap.Crocodile.WRIST_ENCODER_ID);
         beamBreak = new DigitalInput(RobotMap.Crocodile.BEAM_BREAK_ID);

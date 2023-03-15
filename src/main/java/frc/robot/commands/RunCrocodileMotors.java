@@ -13,11 +13,11 @@ public class RunCrocodileMotors extends CommandBase{
     }
     @Override
     public void initialize() {
-        subsystem.setMotorSpeed(speed);
+        subsystem.setIntakeSpeed(speed);
     }
     @Override
     public void end(boolean interrupted) {
-        subsystem.setMotorSpeed(0);
+        subsystem.setIntakeSpeed(0);
     }
     
 }
