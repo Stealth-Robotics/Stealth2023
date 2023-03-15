@@ -44,7 +44,7 @@ public class CrocodileDefaultCommand extends CommandBase {
 
             giveHapticFeedback.accept(0.5);
         }
-        if (timer.get() > 0.5) {
+        if (timer.hasElapsed(0.5)) {
             // stop rumble after 500ms
             timer.stop();
             timer.reset();
