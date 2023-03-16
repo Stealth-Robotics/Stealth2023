@@ -13,7 +13,7 @@ public class HighPresetSequence extends SequentialCommandGroup {
         addCommands(
             new RotatorToPosition(rotator, telescope, 230),
             new TelescopeToPosition(telescope, 80000)
-            // new InstantCommand(()->crocodile.openChomper())
+            //rotate wrist to score position
         );
     }
 }
