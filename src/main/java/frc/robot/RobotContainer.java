@@ -4,6 +4,7 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -103,7 +104,7 @@ public class RobotContainer {
     endEffector.setDefaultCommand(new CrocodileDefaultCommand(
         endEffector,
         () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
-        () -> mechController.leftBumper().getAsBoolean()));
+        (t) -> driverController.getHID().setRumble(RumbleType.kBothRumble, t)));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -123,13 +124,10 @@ public class RobotContainer {
 
     zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
 
-    driverController.leftBumper().onTrue(new InstantCommand(() -> endEffector.toggleChomper(), endEffector));
-
     mechController.a().onTrue(new RotatorToPosition(rotator, telescope, 230));
     mechController.y().onTrue(new RotatorToPosition(rotator, telescope, 40));
     mechController.x().onTrue(new TelescopeToPosition(telescope, 0.9));
     mechController.b().onTrue(new InstantCommand(() -> telescope.resetEncoder()));
-    mechController.rightBumper().onTrue(new InstantCommand(() -> endEffector.toggleWrist(), endEffector));
   }
 
   public void teleopInit() {

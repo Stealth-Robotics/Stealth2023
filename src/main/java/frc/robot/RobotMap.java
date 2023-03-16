@@ -5,6 +5,9 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 public class RobotMap {
     public static final class Crocodile {
         public static final int INTAKE = 5;
+        public static final int WRIST = -1; // TODO: Set to an actual value on the robot.
+        public static final int WRIST_ENCODER_ID = 2;
+        public static final int BEAM_BREAK_ID = 3;
     }
 
     public static final class Telescope {
@@ -50,13 +53,9 @@ public class RobotMap {
         public static final int CHOMPER_PCM_CHANNEL = 0;
     }
 
-    public static final class IntakeIDs {
-        public static final int RIGHT_INTAKE_MOTOR_ID = 0;
-        public static final int LEFT_INTAKE_MOTOR_ID = 1;
-    }
-
     public static final class Rotator {
         public static final int ROTATOR_MOTOR = 7;
+        public static final int ROTATOR_MOTOR_B = -1; //TODO: Set to actual ID
         public static final int ENCODER_PORT = 0;
     }
 

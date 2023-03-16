@@ -20,6 +20,8 @@ import frc.robot.RobotMap;
  */
 
 public class RotatorSubsystem extends SubsystemBase {
+    private final WPI_TalonFX rotationMotorA;
+    private final WPI_TalonFX rotationMotorB;
     // Radians Per Second
     private static final double MAX_VELOCITY = 3.0;
     // Radians Per Second Squared
@@ -43,7 +45,6 @@ public class RotatorSubsystem extends SubsystemBase {
     // Speed Multiplier
     private static final double ROTATOR_SPEED_MULTIPLIER = 1.0;
 
-    private final WPI_TalonFX rotationMotor;
     private final PIDController pid;
     private final ArmFeedforward feedforward;
     // Absolute encoder
@@ -55,16 +56,20 @@ public class RotatorSubsystem extends SubsystemBase {
     private double speedLimit = 0.2;
 
     public RotatorSubsystem() {
-        rotationMotor = new WPI_TalonFX(RobotMap.Rotator.ROTATOR_MOTOR);
-        rotationMotor.setNeutralMode(NeutralMode.Coast);
-        rotationMotor.setInverted(true);
+        rotationMotorA = new WPI_TalonFX(RobotMap.Rotator.ROTATOR_MOTOR);
+        rotationMotorA.setNeutralMode(NeutralMode.Brake);
+        rotationMotorA.setInverted(true);
+        rotationMotorB = new WPI_TalonFX(RobotMap.Rotator.ROTATOR_MOTOR_B);
+        rotationMotorB.setNeutralMode(NeutralMode.Brake);
+        rotationMotorB.setInverted(true);
+        rotationMotorB.follow(rotationMotorA);
 
         pid = new PIDController(
                 ROTATOR_P_COEFF,
                 ROTATOR_I_COEFF,
                 ROTATOR_D_COEFF);
         // pid.enableContinuousInput(0, Math.PI * 2);
-        pid.setTolerance(Math.toRadians(30)); //TODO: TUNE THIS
+        pid.setTolerance(Math.toRadians(30)); // TODO: TUNE THIS
         feedforward = new ArmFeedforward(
                 ROTATOR_KS_COEFF,
                 ROTATOR_KG_COEFF,
@@ -105,7 +110,7 @@ public class RotatorSubsystem extends SubsystemBase {
 
     // Sets the speed of the rotator
     public void setSpeed(double speed) {
-        rotationMotor.set(speed); // Defaults to PercentOutput
+        rotationMotorA.set(speed); // Defaults to PercentOutput
     }
 
     // Returns true if the PID is at the setpoint, false otherwise
@@ -116,7 +121,8 @@ public class RotatorSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // caluclate using the feedforward and PID
-        double ff = feedforward.calculate(pid.getSetpoint() - (Math.PI / 2), rotationMotor.getSelectedSensorVelocity());
+        double ff = feedforward.calculate(pid.getSetpoint() - (Math.PI / 2),
+                rotationMotorA.getSelectedSensorVelocity());
         double speed = pid.calculate(getMeasurementRadians());
         // Constrain the calculation to the safe speed
         double safeSpeed = MathUtil.clamp(speed + ff, -speedLimit, speedLimit);
