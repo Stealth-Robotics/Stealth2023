@@ -62,14 +62,14 @@ public class RotatorSubsystem extends SubsystemBase {
         rotationMotorB = new WPI_TalonFX(RobotMap.Rotator.ROTATOR_MOTOR_B);
         rotationMotorB.setNeutralMode(NeutralMode.Brake);
         rotationMotorB.setInverted(true);
-        rotationMotorB.follow(rotationMotorA); 
+        rotationMotorB.follow(rotationMotorA);
 
         pid = new PIDController(
                 ROTATOR_P_COEFF,
                 ROTATOR_I_COEFF,
                 ROTATOR_D_COEFF);
         // pid.enableContinuousInput(0, Math.PI * 2);
-        pid.setTolerance(Math.toRadians(30)); //TODO: TUNE THIS
+        pid.setTolerance(Math.toRadians(30)); // TODO: TUNE THIS
         feedforward = new ArmFeedforward(
                 ROTATOR_KS_COEFF,
                 ROTATOR_KG_COEFF,
@@ -121,7 +121,8 @@ public class RotatorSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // caluclate using the feedforward and PID
-        double ff = feedforward.calculate(pid.getSetpoint() - (Math.PI / 2), rotationMotor.getSelectedSensorVelocity());
+        double ff = feedforward.calculate(pid.getSetpoint() - (Math.PI / 2),
+                rotationMotorA.getSelectedSensorVelocity());
         double speed = pid.calculate(getMeasurementRadians());
         // Constrain the calculation to the safe speed
         double safeSpeed = MathUtil.clamp(speed + ff, -speedLimit, speedLimit);
