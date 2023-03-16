@@ -3,87 +3,69 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import edu.wpi.first.wpilibj.Solenoid;
+
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 
 public class CrocodileSubsystem extends SubsystemBase {
-    private static final int FREE_CURRENT_LIMIT = 30;
-    private static final int STALL_CURRENT_LIMIT = 20;
-
-    private final Solenoid wristSolenoid;
-    private final Solenoid chomperSolenoid;
     private final WPI_TalonFX intake;
+    private final WPI_TalonFX wrist;
+    private final PIDController wristPID;
+    private final DutyCycleEncoder encoder;
+    private final DigitalInput beamBreak;
+    //TODO: Tune PID
+    private final double WRIST_kP = 0;
+    private final double WRIST_kI = 0;
+    private final double WRIST_kD = 0;
+
+
+    // TODO: Set speed limit
+    private final double SPEED_LIMIT = 0;
 
     public CrocodileSubsystem() {
         intake = new WPI_TalonFX(RobotMap.Crocodile.INTAKE);
+        wrist = new WPI_TalonFX(RobotMap.Crocodile.WRIST);
+        wristPID = new PIDController(WRIST_kP, WRIST_kI, WRIST_kD);
+        encoder = new DutyCycleEncoder(RobotMap.Crocodile.WRIST_ENCODER_ID);
+        beamBreak = new DigitalInput(RobotMap.Crocodile.BEAM_BREAK_ID);
         intake.setNeutralMode(NeutralMode.Brake);
+        wrist.setNeutralMode(NeutralMode.Brake);
         /* enabled | Limit(amp) | Trigger Threshold(amp) | Trigger Threshold Time(s) */
         intake.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 35, 60, 0.1));
+        setSetpoint(encoder.getAbsolutePosition());
 
-        wristSolenoid = new Solenoid(
-                RobotMap.Pneumatics.PCM,
-                RobotMap.Pneumatics.PCM_TYPE,
-                RobotMap.Pneumatics.CLAW_PCM_CHANNEL);
-        chomperSolenoid = new Solenoid(
-                RobotMap.Pneumatics.PCM,
-                RobotMap.Pneumatics.PCM_TYPE,
-                RobotMap.Pneumatics.CHOMPER_PCM_CHANNEL);
     }
 
-    public void setMotorSpeed(double speed) {
+    public void setIntakeSpeed(double speed) {
         intake.set(speed);
     }
 
-    public double getMotorVelocity() {
-        return intake.getSelectedSensorVelocity();
+    private void setWristSpeed(double speed) {
+        wrist.set(speed);
     }
 
-    private void setWrist(boolean newValue) {
-        wristSolenoid.set(newValue);
+    public void setSetpoint(double position) {
+        wristPID.setSetpoint(position);
     }
 
-    public void toggleWrist() {
-        wristSolenoid.toggle();
+    public double getSetpoint() {
+        return wristPID.getSetpoint();
     }
 
-    public boolean getWristPositionBool() {
-        return wristSolenoid.get();
+    public double getAbsolutePosition() {
+        return encoder.getAbsolutePosition();
     }
 
-    public void wristUp() {
-        setWrist(true);
-    }
-
-    public void wristDown() {
-        setWrist(false);
-    }
-
-    private void setChomper(boolean newValue) {
-        chomperSolenoid.set(newValue);
-    }
-
-    public void toggleChomper() {
-        chomperSolenoid.toggle();
-    }
-
-    public void closeChomper() {
-        setChomper(true);
-    }
-
-    public void openChomper() {
-        setChomper(false);
-    }
-
-    public boolean getChomperPositionBool() {
-        return chomperSolenoid.get();
+    public boolean getBeamBreak() {
+        return beamBreak.get();
     }
 
     @Override
     public void periodic() {
-        // if (currentMotorPower > 0 && stallDebouncer.calculate((getMotorVelocity() <
-        // 50))) {
-        // setMotorSpeed(0);
-        // }
+        setWristSpeed(MathUtil.clamp(wristPID.calculate(encoder.getAbsolutePosition()), -SPEED_LIMIT, SPEED_LIMIT));
     }
 }
