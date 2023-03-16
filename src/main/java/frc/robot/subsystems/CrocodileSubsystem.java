@@ -15,28 +15,30 @@ public class CrocodileSubsystem extends SubsystemBase {
     private final WPI_TalonFX intake;
     private final WPI_TalonFX wrist;
     private final PIDController wristPID;
-    private final DutyCycleEncoder encoder;
+    private final DutyCycleEncoder wristEncoder;
     private final DigitalInput beamBreak;
     //TODO: Tune PID
-    private final double WRIST_kP = 0;
-    private final double WRIST_kI = 0;
-    private final double WRIST_kD = 0;
-
+    private final double WRIST_kP = 1.0;
+    private final double WRIST_kI = 0.0;
+    private final double WRIST_kD = 0.0;
 
     // TODO: Set speed limit
-    private final double SPEED_LIMIT = 0;
+    private final double SPEED_LIMIT = 0.0;
+
+    // Offset of the encoder. See diagram above for reference
+    private final double ENCODER_OFFSET = 0.3;
 
     public CrocodileSubsystem() {
         intake = new WPI_TalonFX(RobotMap.Crocodile.INTAKE);
         wrist = new WPI_TalonFX(RobotMap.Crocodile.WRIST);
         wristPID = new PIDController(WRIST_kP, WRIST_kI, WRIST_kD);
-        encoder = new DutyCycleEncoder(RobotMap.Crocodile.WRIST_ENCODER_ID);
+        wristEncoder = new DutyCycleEncoder(RobotMap.Crocodile.WRIST_ENCODER_ID);
         beamBreak = new DigitalInput(RobotMap.Crocodile.BEAM_BREAK_ID);
         intake.setNeutralMode(NeutralMode.Brake);
         wrist.setNeutralMode(NeutralMode.Brake);
         /* enabled | Limit(amp) | Trigger Threshold(amp) | Trigger Threshold Time(s) */
-        intake.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 35, 60, 0.1));
-        setSetpoint(encoder.getAbsolutePosition());
+        //intake.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 35, 60, 0.1));
+        setWristSetpoint(wristEncoder.getAbsolutePosition());
 
     }
 
@@ -48,16 +50,19 @@ public class CrocodileSubsystem extends SubsystemBase {
         wrist.set(speed);
     }
 
-    public void setSetpoint(double position) {
+    public void setWristSetpoint(double position) {
         wristPID.setSetpoint(position);
     }
 
-    public double getSetpoint() {
+    public double getWristSetpoint() {
         return wristPID.getSetpoint();
     }
 
-    public double getAbsolutePosition() {
-        return encoder.getAbsolutePosition();
+    // In degrees
+    public double getWristPosition() {
+        double currentPosition = wristEncoder.getAbsolutePosition();
+        double result = (((currentPosition * 360) - ENCODER_OFFSET) % 360);
+        return result;
     }
 
     public boolean getBeamBreak() {
@@ -66,6 +71,6 @@ public class CrocodileSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        setWristSpeed(MathUtil.clamp(wristPID.calculate(encoder.getAbsolutePosition()), -SPEED_LIMIT, SPEED_LIMIT));
+        setWristSpeed(MathUtil.clamp(wristPID.calculate(wristEncoder.getAbsolutePosition()), -SPEED_LIMIT, SPEED_LIMIT));
     }
 }
