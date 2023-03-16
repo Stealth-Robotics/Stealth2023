@@ -8,14 +8,20 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.RotatorSubsystem;
 import frc.robot.subsystems.CrocodileSubsystem;
-import frc.robot.RobotMap.Crocodile;
 import frc.robot.commands.*;
+import frc.robot.commands.Autos.BluePreloadOnly;
+import frc.robot.commands.Autos.BluePreloadParkCenter;
+import frc.robot.commands.Autos.RedPreloadOnly;
+import frc.robot.commands.Autos.RedPreloadParkCenter;
+import frc.robot.commands.DefaultCommands.CrocodileDefaultCommand;
+import frc.robot.commands.DefaultCommands.RotatorDefaultCommand;
+import frc.robot.commands.DefaultCommands.TeleopDrivebaseDefaultCommand;
+import frc.robot.commands.DefaultCommands.TelescopeDefault;
 import frc.robot.subsystems.TelescopeSubsystem;
 import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
 
@@ -29,13 +35,15 @@ import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  public static final int k_DRIVER_CONTROLLER_PORT = 0;
+  public static final int k_OPERATOR_CONTROLLER_PORT = 1;
   /* Controllers */
   private final Joystick driver = new Joystick(0);
   private final CommandXboxController driverController = new CommandXboxController(
-      Constants.IOConstants.k_DRIVER_CONTROLLER_PORT);
+      k_DRIVER_CONTROLLER_PORT);
 
   private final CommandXboxController mechController = new CommandXboxController(
-      Constants.IOConstants.k_OPERATOR_CONTROLLER_PORT);
+      k_OPERATOR_CONTROLLER_PORT);
 
   /* Drive Controls */
   private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -44,7 +52,7 @@ public class RobotContainer {
 
   /* Driver Buttons */
   private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kA.value);
-  private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+  // private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
 
   /* Subsystems */
   private final DrivebaseSubsystem swerve;
@@ -118,20 +126,17 @@ public class RobotContainer {
 
     mechController.a().onTrue(new RotatorToPosition(rotator, telescope, 230));
     mechController.y().onTrue(new RotatorToPosition(rotator, telescope, 40));
-    mechController.x().onTrue(new TelescopeToPosition(telescope, 75000));
+    mechController.x().onTrue(new TelescopeToPosition(telescope, 0.9));
     mechController.b().onTrue(new InstantCommand(() -> telescope.resetEncoder()));
-
+    mechController.rightBumper().onTrue(new InstantCommand(() -> endEffector.toggleWrist(), endEffector));
   }
 
   public void teleopInit() {
-    // telescope.completeReset();
-    // telescope.resetEncoder();
-    telescope.setSetpoint(telescope.getCurrentPosition());
+    telescope.setToCurrentPosition();
   }
 
   public void autonomousInit() {
-    // telescope.completeReset();
-    telescope.setSetpoint(telescope.getCurrentPosition());
+    telescope.setToCurrentPosition();
   }
 
   /**

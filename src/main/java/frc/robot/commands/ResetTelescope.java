@@ -11,16 +11,19 @@ public class ResetTelescope extends CommandBase {
         addRequirements(extender);
     }
 
+    // Starts retracting the telescope
     @Override
     public void initialize() {
         tlescope.retractTelescope();
     }
 
+    // Stops the telescope and resets the encoder
     @Override
     public void end(boolean interrupted) {
         tlescope.completeReset();
     }
 
+    // If our debouncer says we are at the bottom, we are done
     @Override
     public boolean isFinished() {
         return tlescope.checkVelocity();

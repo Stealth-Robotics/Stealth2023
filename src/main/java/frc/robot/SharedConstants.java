@@ -19,66 +19,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
-public final class Constants {
-
-  public static final class LevelRobotConstants {
-    public static final double PID_kP = 0.1;
-    public static final double PID_kI = 0.001;
-    public static final double PID_kD = 0.05;
-
-    public static final double HEADING_PID_kP = 0.04;
-    public static final double HEADING_PID_kI = 0;
-    public static final double HEADING_PID_kD = 0.0025;
-
-    public static final double LEVELING_DRIVE_SPEED_LIMIT = 0.7;
-    public static final double LEVELING_ROTATION_SPEED_LIMIT = 0.5;
-}
-  public static final class CrocodileConstants {
-    public static final int FREE_CURRENT_LIMIT = 30;
-    public static final int STALL_CURRENT_LIMIT = 20;
-  }
-
-  public static final class TelescopeConstants {
-    public static final double P_COEFF = 0.05;
-    public static final double I_COEFF = 0.0;
-    public static final double D_COEFF = 0.025;
-    public static final double POSITIONAL_TOLERANCE = 1000;
-    public static final double VELOCITY_TOLERANCE = Double.POSITIVE_INFINITY;
-    public static final double F_COEFF = 0;
-    public static final double TELESCOPE_SPEED_MULTIPLIER = 1.0;
-
-    public static final int UPPER_BOUND = 97105;
-  }
-
-  public static final class PhotonVisionConstants {
-    public final static String CAMERA_NAME = "photonvision";
-
-    // TODO: Enter actual values (In meters and degrees)
-    public static final Transform3d ROBOT_CENTER_TO_CAMERA = new Transform3d(
-        new Translation3d(0.0, 0.0, 0.0),
-        new Rotation3d(Math.toRadians(180), 0, Math.toRadians(180)));
-
-    public final static AprilTagFieldLayout APRIL_TAG_FIELD_LAYOUT;
-
-    static {
-      try {
-        APRIL_TAG_FIELD_LAYOUT = AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField();
-      } catch (IOException e) {
-        throw new RuntimeException("I/O exception with april tag field layout", e);
-      }
-    }
-    // TODO: Choose Pose Strategy
-    public final static PoseStrategy POSE_STRATEGY = PoseStrategy.MULTI_TAG_PNP;
-  }
-
-  public static final class TeleopConstants {
-    public static final double SITCK_DEADBAND = 0.1;
-  }
-
-  public static final class IOConstants {
-    public static final int k_DRIVER_CONTROLLER_PORT = 0;
-    public static final int k_OPERATOR_CONTROLLER_PORT = 1;
-  }
+public final class SharedConstants {
 
   public static final class DrivebaseConstants {
     public static final int PIGEON_ID = 1;
@@ -225,35 +166,4 @@ public final class Constants {
     public static final TrapezoidProfile.Constraints k_THETA_CONTROLLER_CONSTRAINTS = new TrapezoidProfile.Constraints(
         k_MAX_ANGULAR_SPEED_RADS_PER_SEC, k_MAX_ANGULAR_ACCEL_RADS_PER_SEC_SQUARED);
   }
-
-  public static final class RotatorConstants {
-    // Radians Per Second
-    public static final double MAX_VELOCITY = 3.0;
-    // Radians Per Second Squared
-    public static final double MAX_ACCELERATION = 10.0;
-
-    // TODO: Tune After Feedforward is tuned
-    public static final double ROTATOR_P_COEFF = 0.75;
-    public static final double ROTATOR_I_COEFF = 0;
-    public static final double ROTATOR_D_COEFF = 0;
-
-    // TODO: Gain values through SysID
-    public static final double ROTATOR_KS_COEFF = 0;
-    public static final double ROTATOR_KG_COEFF = 0.12;
-    // Volt Second Per Rad
-    public static final double ROTATOR_KV_COEFF = 0;
-    // Volt Second Squared Per Rad
-    public static final double ROTATOR_KA_COEFF = 0;
-
-    public static final double ENCODER_OFFSET = 138;
-
-    public static final double HIGH_BOUND = 285;
-    public static final double LOW_BOUND = 70;
-
-    public static final double ROTATOR_SPEED_MULTIPLIER = 1.0;
-
-    public static final double RotatorJoystickDeadband = 0.05;
-
-  }
-
 }
