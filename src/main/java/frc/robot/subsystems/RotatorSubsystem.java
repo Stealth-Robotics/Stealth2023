@@ -77,8 +77,6 @@ public class RotatorSubsystem extends SubsystemBase {
                 ROTATOR_KA_COEFF);
 
         encoder = new DutyCycleEncoder(0);
-        // update the rotator PID to the current position
-        setToCurrentPosition();
     }
 
     // Sets the setpoint to where the rotator is currently

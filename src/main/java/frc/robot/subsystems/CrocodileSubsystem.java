@@ -36,10 +36,10 @@ public class CrocodileSubsystem extends SubsystemBase {
         beamBreak = new DigitalInput(RobotMap.Crocodile.BEAM_BREAK_ID);
         intake.setNeutralMode(NeutralMode.Brake);
         wrist.setNeutralMode(NeutralMode.Brake);
-        /* enabled | Limit(amp) | Trigger Threshold(amp) | Trigger Threshold Time(s) */
-        //intake.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 35, 60, 0.1));
-        setWristSetpoint(wristEncoder.getAbsolutePosition());
+    }
 
+    public void setToCurrentPosition() {
+        setWristSetpoint(wristEncoder.getAbsolutePosition());
     }
 
     public void setIntakeSpeed(double speed) {
