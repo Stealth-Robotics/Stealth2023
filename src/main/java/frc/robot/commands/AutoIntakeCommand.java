@@ -2,18 +2,21 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.CrocodileSubsystem;
 
 public class AutoIntakeCommand extends CommandBase {
     private final CrocodileSubsystem crocodileSubsystem;
     private final double speed;
+    private final Timer timer;
     private final Debouncer debouncer;
 
     public AutoIntakeCommand(CrocodileSubsystem crocodileSubsystem, double speed) {
         this.crocodileSubsystem = crocodileSubsystem;
         this.speed = speed;
         debouncer = new Debouncer(0.5, DebounceType.kBoth);
+        timer = new Timer();
         addRequirements(crocodileSubsystem);
     }
 
@@ -24,8 +27,22 @@ public class AutoIntakeCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        // will return true if beam break is true for 0.5 seconds
-        return debouncer.calculate(crocodileSubsystem.getBeamBreak());
+        //if outtaking, keep running motors until beam break hasn't been broken for 0.5 seconds
+        if(speed < 0){
+            if(!crocodileSubsystem.getBeamBreak()){
+                timer.start();
+                if(timer.hasElapsed(0.5)){
+                    timer.stop();
+                    timer.reset();
+                    return true;
+                }
+            }
+        }
+        //otherwise, keep running motors until beam break has been broken for 0.5 seconds
+        else if(debouncer.calculate(crocodileSubsystem.getBeamBreak())){
+            return true;
+        }
+        return false;
     }
 
     @Override
