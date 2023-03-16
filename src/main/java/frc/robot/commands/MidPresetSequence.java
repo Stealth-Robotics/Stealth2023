@@ -10,8 +10,8 @@ public class MidPresetSequence extends SequentialCommandGroup {
     public MidPresetSequence(TelescopeSubsystem telescope, RotatorSubsystem rotator, CrocodileSubsystem crocodile) {
         addCommands(
             new RotatorToPosition(rotator, telescope, 150),
-            new TelescopeToPosition(telescope, 90000),
-            new RunCrocodileMotors(crocodile, -0.2)
+            new TelescopeToPosition(telescope, 90000)
+            // new RunCrocodileMotors(crocodile, -0.2)
             // new InstantCommand(()->crocodile.openChomper())
         );
     }
