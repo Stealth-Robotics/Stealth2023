@@ -1,6 +1,5 @@
 package frc.robot.commands;
 
-import java.util.function.BooleanSupplier;
 import java.util.function.DoubleConsumer;
 import java.util.function.DoubleSupplier;
 
@@ -23,8 +22,7 @@ public class CrocodileDefaultCommand extends CommandBase {
         this.subsystem = subsystem;
         this.trigger = trigger;
         timer = new Timer();
-        // TODO: get driver controller port
-        // controller to use for rumble
+        
         debouncer = new Debouncer(0.5, DebounceType.kBoth);
         this.giveHapticFeedback = giveHapticFeedback;
         addRequirements(subsystem);
