@@ -39,7 +39,7 @@ public class RotatorSubsystem extends SubsystemBase {
         rotationMotorA = new WPI_TalonFX(RobotMap.Rotator.ROTATOR_MOTOR);
         rotationMotorA.setNeutralMode(NeutralMode.Brake);
         rotationMotorA.setInverted(true);
-        rotationMotorB = new WPI_TalonFX(-1);
+        rotationMotorB = new WPI_TalonFX(RobotMap.Rotator.ROTATOR_MOTOR_B);
         rotationMotorB.setNeutralMode(NeutralMode.Brake);
         rotationMotorB.setInverted(true);
         rotationMotorB.follow(rotationMotorA); 
