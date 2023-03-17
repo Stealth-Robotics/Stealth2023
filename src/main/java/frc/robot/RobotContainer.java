@@ -132,10 +132,14 @@ public class RobotContainer {
 
   public void teleopInit() {
     telescope.setToCurrentPosition();
+    rotator.setToCurrentPosition();
+    endEffector.setToCurrentPosition();
   }
 
   public void autonomousInit() {
     telescope.setToCurrentPosition();
+    rotator.setToCurrentPosition();
+    endEffector.setToCurrentPosition();
   }
 
   /**
