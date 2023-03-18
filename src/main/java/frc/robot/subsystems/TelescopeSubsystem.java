@@ -12,7 +12,7 @@ import frc.robot.RobotMap;
 public class TelescopeSubsystem extends SubsystemBase {
     // PID Constants
     // P for telescope PID
-    private static final double P_COEFF = 0.05;
+    private static final double P_COEFF = 0.1;
     // I for telescope PID
     private static final double I_COEFF = 0.0;
     // D for telescope PID
@@ -36,7 +36,7 @@ public class TelescopeSubsystem extends SubsystemBase {
     // The current setpoint of the telescope
     private double currentSetpoint;
     // The telescope cannot exceed these ticks
-    private final int MAXIMUM_TICKS = 50000;
+    private final int MAXIMUM_TICKS = -75000;
 
     public TelescopeSubsystem() {
         // Config motor settings
@@ -104,6 +104,7 @@ public class TelescopeSubsystem extends SubsystemBase {
     // Tells the PID where to go
     private void setSetpoint(double positionTicks) {
         telescopeMotor.set(ControlMode.Position, positionTicks);
+        currentSetpoint = positionTicks;
     }
 
     // Returns true if the motor is stalling, false otherwise
@@ -128,11 +129,16 @@ public class TelescopeSubsystem extends SubsystemBase {
 
     // Returns true if the telescope is at its setpoint, false otherwise
     public boolean atSetpoint() {
-        return Math.abs(telescopeMotor.getClosedLoopError()) < POSITIONAL_TOLERANCE;
+        return Math.abs(currentSetpoint - getCurrentPosition()) < POSITIONAL_TOLERANCE;
     }
 
     // Returns true if the telescope is within its upper bound, false otherwise
     public boolean inBounds() {
         return getExtensionPercent() < 1;
+    }
+
+    @Override
+    public void periodic() {
+        System.out.println(getCurrentPosition() +  " | err:" +  Math.abs(telescopeMotor.getClosedLoopError()));
     }
 }
