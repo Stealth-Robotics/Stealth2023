@@ -5,6 +5,7 @@ import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.CrocodileSubsystem;
+import java.util.function.BooleanSupplier;
 
 public class AutoIntakeCommand extends CommandBase {
     private final CrocodileSubsystem crocodileSubsystem;
