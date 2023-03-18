@@ -10,7 +10,7 @@ public class RotatorToPosition extends CommandBase {
     private final TelescopeSubsystem telescope;
     private final double setpoint;
     private final TelescopeToPosition resetTelescope;
-    private boolean resettingElevator;
+    private boolean resettingElevator = false;
 
     public RotatorToPosition(RotatorSubsystem rotatorSubsystem, TelescopeSubsystem telescope, double setpoint) {
         this.rotatorSubsystem = rotatorSubsystem;
@@ -25,16 +25,22 @@ public class RotatorToPosition extends CommandBase {
     @Override
     public void initialize() {
         
-        // If the telescope is extended, and we are more than 2 telescope rotations away
-        // from the setpoint, reset the telescope.
-        if (telescope.getExtensionPercent() > 0.1/* 10 percent */) {
-            // So we reset the telescope, and then come back to this command.
-            CommandScheduler.getInstance()
-                    .schedule(resetTelescope.andThen(new RotatorToPosition(rotatorSubsystem, telescope, setpoint)));
-            resettingElevator = true;
-        } else {
-            rotatorSubsystem.setSetpoint(setpoint);
-        }
+        // // If the telescope is extended, and we are more than 2 telescope rotations away
+        // // from the setpoint, reset the telescope.
+        // if (telescope.getExtensionPercent() > 0.1/* 10 percent */) {
+        //     // So we reset the telescope, and then come back to this command.
+        //     CommandScheduler.getInstance()
+        //             .schedule(resetTelescope.andThen(new RotatorToPosition(rotatorSubsystem, telescope, setpoint)));
+        //     resettingElevator = true;
+        // } else {
+        //     rotatorSubsystem.setSetpoint(setpoint);
+        // }
+        rotatorSubsystem.setSetpoint(setpoint);
+    }
+
+    @Override
+    public void execute() {
+        rotatorSubsystem.setSetpoint(setpoint);
     }
 
     // If we are at the end, or we are resetting the elevator, end the command.

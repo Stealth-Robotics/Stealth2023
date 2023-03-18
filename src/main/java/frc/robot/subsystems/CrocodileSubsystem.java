@@ -36,6 +36,7 @@ public class CrocodileSubsystem extends SubsystemBase {
         beamBreak = new DigitalInput(RobotMap.Crocodile.BEAM_BREAK_ID);
         intake.setNeutralMode(NeutralMode.Brake);
         wrist.setNeutralMode(NeutralMode.Brake);
+        intake.setInverted(true);
     }
 
     public void setToCurrentPosition() {
@@ -72,6 +73,5 @@ public class CrocodileSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         setWristSpeed(MathUtil.clamp(wristPID.calculate(wristEncoder.getAbsolutePosition()), -SPEED_LIMIT, SPEED_LIMIT));
-        System.out.println(beamBreak.get());
     }
 }

@@ -23,7 +23,7 @@ public class CrocodileDefaultCommand extends CommandBase {
         this.trigger = trigger;
         timer = new Timer();
         
-        debouncer = new Debouncer(0.5, DebounceType.kBoth);
+        debouncer = new Debouncer(0.5, DebounceType.kFalling);
         this.giveHapticFeedback = giveHapticFeedback;
         addRequirements(subsystem);
     }
@@ -35,12 +35,12 @@ public class CrocodileDefaultCommand extends CommandBase {
         subsystem.setIntakeSpeed(trigger.getAsDouble());
         // sets rumble if beam break is broken for 0.5 seconds and is not already
         // rumbling
-        if (debouncer.calculate(subsystem.getBeamBreak()) && !beamBreakTracker) {
+        if (!subsystem.getBeamBreak() && !beamBreakTracker) {
             // get current time and do something to rumble
             timer.start();
             beamBreakTracker = true;
 
-            giveHapticFeedback.accept(0.5);
+            giveHapticFeedback.accept(1.0);
         }
         if (timer.hasElapsed(0.5)) {
             // stop rumble after 500ms
@@ -48,7 +48,7 @@ public class CrocodileDefaultCommand extends CommandBase {
             timer.reset();
             giveHapticFeedback.accept(0);
         }
-        if (!subsystem.getBeamBreak()) {
+        if (subsystem.getBeamBreak()) {
             // reset beam break tracker if beam break is not broken for 0.5 seconds
             beamBreakTracker = false;
         }
