@@ -72,5 +72,6 @@ public class CrocodileSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         setWristSpeed(MathUtil.clamp(wristPID.calculate(wristEncoder.getAbsolutePosition()), -SPEED_LIMIT, SPEED_LIMIT));
+        System.out.println(beamBreak.get());
     }
 }

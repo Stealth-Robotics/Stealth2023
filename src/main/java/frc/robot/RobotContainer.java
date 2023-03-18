@@ -52,11 +52,12 @@ public class RobotContainer {
 
   /* Driver Buttons */
   private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kA.value);
-  // private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+  // private final JoystickButton robotCentric = new JoystickButton(driver,
+  // XboxController.Button.kLeftBumper.value);
 
   /* Subsystems */
   private final DrivebaseSubsystem swerve;
-  private final RotatorSubsystem rotator;
+  //private final RotatorSubsystem rotator;
   private final CrocodileSubsystem endEffector;
   private final TelescopeSubsystem telescope;
 
@@ -70,7 +71,7 @@ public class RobotContainer {
 
     swerve = new DrivebaseSubsystem();
     telescope = new TelescopeSubsystem();
-    rotator = new RotatorSubsystem();
+    // rotator = new RotatorSubsystem();
     endEffector = new CrocodileSubsystem();
 
     camera.setResolution(160, 120);
@@ -85,20 +86,24 @@ public class RobotContainer {
             () -> driverController.b().getAsBoolean(),
             () -> driverController.rightBumper().getAsBoolean()));
 
-    rotator.setDefaultCommand(new RotatorDefaultCommand(
-        rotator,
-        telescope,
-        () -> -mechController.getRightY()));
+    // rotator.setDefaultCommand(new RotatorDefaultCommand(
+    //     rotator,
+    //     telescope,
+    //     () -> -mechController.getRightY()));
 
     telescope.setDefaultCommand(
         new TelescopeDefault(
             telescope,
             () -> -mechController.getLeftY()));
 
-    autoChooser.setDefaultOption("Blue 1+Park", new BluePreloadParkCenter(swerve, endEffector, rotator, telescope));
-    autoChooser.addOption("Blue Preload", new BluePreloadOnly(swerve, endEffector, rotator, telescope));
-    autoChooser.addOption("Red 1+Park", new RedPreloadParkCenter(swerve, endEffector, rotator, telescope));
-    autoChooser.addOption("Red Preload", new RedPreloadOnly(swerve, endEffector, rotator, telescope));
+    endEffector.setDefaultCommand(new CrocodileDefaultCommand(endEffector,
+        () -> driverController.getRightTriggerAxis(),
+        (t) -> driverController.getHID().setRumble(RumbleType.kBothRumble, t)));
+
+    // autoChooser.setDefaultOption("Blue 1+Park", new BluePreloadParkCenter(swerve, endEffector, rotator, telescope));
+    // autoChooser.addOption("Blue Preload", new BluePreloadOnly(swerve, endEffector, rotator, telescope));
+    // autoChooser.addOption("Red 1+Park", new RedPreloadParkCenter(swerve, endEffector, rotator, telescope));
+    // autoChooser.addOption("Red Preload", new RedPreloadOnly(swerve, endEffector, rotator, telescope));
 
     SmartDashboard.putData("Selected Autonomous", autoChooser);
     endEffector.setDefaultCommand(new CrocodileDefaultCommand(
@@ -124,21 +129,21 @@ public class RobotContainer {
 
     zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
 
-    mechController.a().onTrue(new RotatorToPosition(rotator, telescope, 230));
-    mechController.y().onTrue(new RotatorToPosition(rotator, telescope, 40));
+    // mechController.a().onTrue(new RotatorToPosition(rotator, telescope, 230));
+    // mechController.y().onTrue(new RotatorToPosition(rotator, telescope, 40));
     mechController.x().onTrue(new TelescopeToPosition(telescope, 0.9));
     mechController.b().onTrue(new InstantCommand(() -> telescope.resetEncoder()));
   }
 
   public void teleopInit() {
     telescope.setToCurrentPosition();
-    rotator.setToCurrentPosition();
+    //rotator.setToCurrentPosition();
     endEffector.setToCurrentPosition();
   }
 
   public void autonomousInit() {
     telescope.setToCurrentPosition();
-    rotator.setToCurrentPosition();
+    //rotator.setToCurrentPosition();
     endEffector.setToCurrentPosition();
   }
 
@@ -151,6 +156,7 @@ public class RobotContainer {
     // System.out.println("Selected Autonomous: " + autoChooser.getSelected());
     // return autoChooser.getSelected();
     // return null;
-    return new BluePreloadOnly(swerve, endEffector, rotator, telescope);
+    return new InstantCommand();
+    //return new BluePreloadOnly(swerve, endEffector, rotator, telescope);
   }
 }
