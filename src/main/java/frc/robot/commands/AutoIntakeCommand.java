@@ -11,12 +11,14 @@ public class AutoIntakeCommand extends CommandBase {
     private final double speed;
     private final Timer timer;
     private final Debouncer debouncer;
+    private final BooleanSupplier stopIntake;
 
-    public AutoIntakeCommand(CrocodileSubsystem crocodileSubsystem, double speed) {
+    public AutoIntakeCommand(CrocodileSubsystem crocodileSubsystem, double speed, BooleanSupplier stopIntake) {
         this.crocodileSubsystem = crocodileSubsystem;
         this.speed = speed;
         debouncer = new Debouncer(0.5, DebounceType.kBoth);
         timer = new Timer();
+        this.stopIntake = stopIntake;
         addRequirements(crocodileSubsystem);
     }
 
@@ -42,7 +44,12 @@ public class AutoIntakeCommand extends CommandBase {
         else if(debouncer.calculate(crocodileSubsystem.getBeamBreak())){
             return true;
         }
+        //if none of the above, return the value of stopIntake which is bound to a button, unless it is null
+        if(stopIntake != null){
+            return stopIntake.getAsBoolean();
+        }
         return false;
+        
     }
 
     @Override
