@@ -106,10 +106,6 @@ public class RobotContainer {
     // autoChooser.addOption("Red Preload", new RedPreloadOnly(swerve, endEffector, rotator, telescope));
 
     SmartDashboard.putData("Selected Autonomous", autoChooser);
-    endEffector.setDefaultCommand(new CrocodileDefaultCommand(
-        endEffector,
-        () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
-        (t) -> driverController.getHID().setRumble(RumbleType.kBothRumble, t)));
 
     // Configure the button bindings
     configureButtonBindings();
