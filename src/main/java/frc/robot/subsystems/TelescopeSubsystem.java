@@ -50,6 +50,7 @@ public class TelescopeSubsystem extends SubsystemBase {
         telescopeMotor.config_kI(0, I_COEFF);
         telescopeMotor.config_kD(0, D_COEFF);
         telescopeMotor.config_kF(0, F_COEFF);
+        telescopeMotor.setInverted(true);
     }
 
     // Gets the setpoint of the internal PID
@@ -140,5 +141,7 @@ public class TelescopeSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         System.out.println(getCurrentPosition() +  " | err:" +  Math.abs(telescopeMotor.getClosedLoopError()));
+        System.out.println("Telescope Position: " + getCurrentPosition() + " Telescope Setpoint: "
+                + getSetpoint());
     }
 }
