@@ -10,10 +10,10 @@ public class TelescopeToPosition extends CommandBase {
     // Setpoint to run the telescope to
     // In percent of maximum extension
     private final double percent;
-
+    
     public TelescopeToPosition(TelescopeSubsystem telescopeSubsystem, double percent) {
         this.telescopeSubsystem = telescopeSubsystem;
-        percent = MathUtil.clamp(percent, telescopeSubsystem.LOWER_BOUND, telescopeSubsystem.UPPER_BOUND);
+        percent = MathUtil.clamp(percent, 0.025, 0.9);
         this.percent = percent;
     }
 
