@@ -17,6 +17,7 @@ public class CrocodileSubsystem extends SubsystemBase {
     private final PIDController wristPID;
     private final DutyCycleEncoder wristEncoder;
     private final DigitalInput beamBreak;
+    private GamePiece gamePiece = GamePiece.CONE;
     //TODO: Tune PID
     private final double WRIST_kP = 1.0;
     private final double WRIST_kI = 0.0;
@@ -27,6 +28,11 @@ public class CrocodileSubsystem extends SubsystemBase {
 
     // Offset of the encoder. See diagram above for reference
     private final double ENCODER_OFFSET = 0.3;
+
+    public enum GamePiece {
+        CONE, 
+        CUBE
+    }
 
     public CrocodileSubsystem() {
         intake = new WPI_TalonFX(RobotMap.Crocodile.INTAKE);
@@ -68,6 +74,14 @@ public class CrocodileSubsystem extends SubsystemBase {
 
     public boolean getBeamBreak() {
         return beamBreak.get();
+    }
+    
+    public GamePiece getGamePiece() {
+        return gamePiece;
+    }
+
+    public void setGamePiece(GamePiece gamePiece) {
+        this.gamePiece = gamePiece;
     }
 
     @Override
