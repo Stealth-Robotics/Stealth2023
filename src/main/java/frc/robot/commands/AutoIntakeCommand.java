@@ -46,9 +46,9 @@ public class AutoIntakeCommand extends CommandBase {
                 return true;
             }
         }
-        //otherwise, keep running motors until beam break has been broken 
-        else if(!crocodileSubsystem.getBeamBreak()){
-            return  true;
+        //otherwise, keep running motors until beam break has been broken for 0.5 seconds
+        else if(!debouncer.calculate(crocodileSubsystem.getBeamBreak())){
+            return true;
         }
         //if none of the above, return the value of stopIntake which is bound to a button, unless it is null
         if(stopIntake != null){
