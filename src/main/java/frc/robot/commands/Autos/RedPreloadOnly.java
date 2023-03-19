@@ -13,6 +13,7 @@ import frc.robot.RobotMap.Crocodile;
 import frc.robot.commands.ResetTelescope;
 import frc.robot.commands.RotatorToPosition;
 import frc.robot.commands.SwerveTrajectoryFollowCommand;
+import frc.robot.commands.ReverseSwerveTrajectoryFollowCommand;
 import frc.robot.commands.TelescopeToPosition;
 import frc.robot.subsystems.CrocodileSubsystem;
 import frc.robot.subsystems.RotatorSubsystem;
@@ -65,7 +66,7 @@ public class RedPreloadOnly extends SequentialCommandGroup {
         new RotatorToPosition(rotator, telescope, 90),
         new ResetTelescope(telescope),
         new RotatorToPosition(rotator, telescope, 90),
-        new SwerveTrajectoryFollowCommand(driveBase, "preloadPlusOneLeft1", defaultConfig, false, true)
+        new SwerveTrajectoryFollowCommand(driveBase, "preloadPlusOneLeft1", defaultConfig, true)
 
     );
     // grabs any requirements needed for the drivebase from other running commands.

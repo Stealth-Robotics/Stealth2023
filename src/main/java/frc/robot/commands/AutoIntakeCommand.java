@@ -12,7 +12,7 @@ public class AutoIntakeCommand extends CommandBase {
     private final Timer timer;
     private final Debouncer debouncer;
 
-    public AutoIntakeCommand(CrocodileSubsystem crocodileSubsystem, double speed) {
+    public AutoIntakeCommand(CrocodileSubsystem crocodileSubsystem, double speed/*, boolean intakeLonger*/) {
         this.crocodileSubsystem = crocodileSubsystem;
         this.speed = speed;
         debouncer = new Debouncer(0.5, DebounceType.kBoth);
