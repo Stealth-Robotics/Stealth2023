@@ -18,7 +18,7 @@ public class CrocodileSubsystem extends SubsystemBase {
     private final PIDController wristPID;
     private final DutyCycleEncoder wristEncoder;
     private final DigitalInput beamBreak;
-    //TODO: Tune PID
+    // TODO: Tune PID
     private final double WRIST_kP = 1.0;
     private final double WRIST_kI = 0.0;
     private final double WRIST_kD = 0.0;
@@ -29,19 +29,21 @@ public class CrocodileSubsystem extends SubsystemBase {
     // Offset of the encoder. See diagram above for reference
     private final double ENCODER_OFFSET = 0.3;
 
-    //TODO: set to actual position values
+    // TODO: set to actual position values
     public enum WristPosition {
-        CONE_PICKUP(-1), 
-        CUBE_PICKUP(-1), 
-        CONE_SCORE(-1), 
-        CUBE_SCORE(-1), 
-        CONE_SHELF(-1), 
+        CONE_PICKUP(-1),
+        CUBE_PICKUP(-1),
+        CONE_SCORE(-1),
+        CUBE_SCORE(-1),
+        CONE_SHELF(-1),
         CUBE_SHELF(-1);
 
         private final int value;
-        private WristPosition(int position){
+
+        private WristPosition(int position) {
             this.value = position;
         }
+
         public int getValue() {
             return value;
         }
@@ -78,13 +80,15 @@ public class CrocodileSubsystem extends SubsystemBase {
         return wristPID.getSetpoint();
     }
 
-
-    private void setWristToPosition(WristPosition position){
+    private void setWristToPosition(WristPosition position) {
         setWristSetpoint(position.getValue());
     }
 
-    public Command setWristToPositionCommand(WristPosition position){
-        return this.startEnd(() -> this.setWristToPosition(position), () -> this.setToCurrentPosition()).until(() -> this.atSetpoint());  
+    public Command setWristToPositionCommand(WristPosition position) {
+        return this.startEnd(
+            () -> this.setWristToPosition(position), 
+            () -> this.setToCurrentPosition())
+            .until(() -> this.atSetpoint());
     }
 
     // In degrees
@@ -100,6 +104,7 @@ public class CrocodileSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        setWristSpeed(MathUtil.clamp(wristPID.calculate(wristEncoder.getAbsolutePosition()), -SPEED_LIMIT, SPEED_LIMIT));
+        setWristSpeed(
+                MathUtil.clamp(wristPID.calculate(wristEncoder.getAbsolutePosition()), -SPEED_LIMIT, SPEED_LIMIT));
     }
 }
