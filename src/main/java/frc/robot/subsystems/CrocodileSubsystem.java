@@ -8,6 +8,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 
@@ -25,8 +26,33 @@ public class CrocodileSubsystem extends SubsystemBase {
     // TODO: Set speed limit
     private final double SPEED_LIMIT = 0.0;
 
+    private final double WRIST_CONE_PICKUP_POS = -1;
+    private final double WRIST_CUBE_PICKUP_POS = -1;
+    private final double WRIST_CONE_SCORE_POS = -1;
+    private final double WRIST_CUBE_SCORE_POS = -1;
+    private final double WRIST_CONE_SHELF_POS = -1;
+    private final double WRIST_CUBE_SHELF_POS = -1;
+
     // Offset of the encoder. See diagram above for reference
     private final double ENCODER_OFFSET = 0.3;
+
+    //TODO: set to actual position values
+    public enum WristPosition {
+        CONE_PICKUP(-1), 
+        CUBE_PICKUP(-1), 
+        CONE_SCORE(-1), 
+        CUBE_SCORE(-1), 
+        CONE_SHELF(-1), 
+        CUBE_SHELF(-1);
+
+        private final int value;
+        private WristPosition(int position){
+            this.value = position;
+        }
+        public int getValue() {
+            return value;
+        }
+    }
 
     public CrocodileSubsystem() {
         intake = new WPI_TalonFX(RobotMap.Crocodile.INTAKE);
@@ -57,6 +83,15 @@ public class CrocodileSubsystem extends SubsystemBase {
 
     public double getWristSetpoint() {
         return wristPID.getSetpoint();
+    }
+
+
+    private void setWristToPosition(WristPosition position){
+        setWristSetpoint(position.getValue());
+    }
+
+    public Command setWristToPositionCommand(WristPosition position){
+        return this.startEnd(() -> this.setWristToPosition(position), () -> this.setToCurrentPosition());  
     }
 
     // In degrees
