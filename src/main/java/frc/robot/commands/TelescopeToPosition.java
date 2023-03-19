@@ -10,6 +10,8 @@ public class TelescopeToPosition extends CommandBase {
     // In percent of maximum extension
     private final double percent;
 
+    private boolean hasCheckedIsFinished = false;
+
     public TelescopeToPosition(TelescopeSubsystem telescopeSubsystem, double percent) {
         this.telescopeSubsystem = telescopeSubsystem;
         this.percent = percent;
@@ -29,6 +31,10 @@ public class TelescopeToPosition extends CommandBase {
 
     @Override
     public boolean isFinished() {
+        if (!hasCheckedIsFinished) {
+            hasCheckedIsFinished = true;
+            return false;
+        }
         // To end, check if we are at the setpoint
         return telescopeSubsystem.atSetpoint();
     }
