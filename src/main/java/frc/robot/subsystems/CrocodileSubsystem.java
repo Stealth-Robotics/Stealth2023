@@ -84,7 +84,7 @@ public class CrocodileSubsystem extends SubsystemBase {
     }
 
     public Command setWristToPositionCommand(WristPosition position){
-        return this.startEnd(() -> this.setWristToPosition(position), () -> this.setToCurrentPosition());  
+        return this.startEnd(() -> this.setWristToPosition(position), () -> this.setToCurrentPosition()).until(() -> this.atSetpoint());  
     }
 
     // In degrees

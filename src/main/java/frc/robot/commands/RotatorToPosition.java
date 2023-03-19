@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.RotatorSubsystem;
 import frc.robot.subsystems.TelescopeSubsystem;
+import frc.robot.subsystems.RotatorSubsystem.RotatorPosition;
 
 public class RotatorToPosition extends CommandBase {
     private final RotatorSubsystem rotatorSubsystem;
@@ -15,6 +16,15 @@ public class RotatorToPosition extends CommandBase {
     public RotatorToPosition(RotatorSubsystem rotatorSubsystem, TelescopeSubsystem telescope, double setpoint) {
         this.rotatorSubsystem = rotatorSubsystem;
         this.setpoint = setpoint;
+        this.telescope = telescope;
+        addRequirements(rotatorSubsystem);
+
+        resetTelescope = new TelescopeToPosition(telescope, 0);
+    }
+
+    public RotatorToPosition(RotatorSubsystem rotatorSubsystem, TelescopeSubsystem telescope, RotatorPosition position) {
+        this.rotatorSubsystem = rotatorSubsystem;
+        this.setpoint = position.getValue();
         this.telescope = telescope;
         addRequirements(rotatorSubsystem);
 

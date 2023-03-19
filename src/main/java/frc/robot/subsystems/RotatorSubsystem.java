@@ -7,6 +7,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 /*
@@ -54,6 +55,23 @@ public class RotatorSubsystem extends SubsystemBase {
     private double speedLimit = 1;
     
     private boolean runPID = true;
+
+    //TODO: set to actual position values
+    public enum RotatorPosition {
+        GROUND_PICKUP(-1), 
+        SHELF_PICKUP(-1), 
+        HIGH_SCORE(-1), 
+        MID_SCORE(-1), 
+        LOW_SCORE(-1);
+
+        private final int value;
+        private RotatorPosition(int position){
+            this.value = position;
+        }
+        public int getValue() {
+            return value;
+        }
+    }
 
     public RotatorSubsystem() {
         rotationMotorA = new WPI_TalonFX(RobotMap.Rotator.ROTATOR_MOTOR);
@@ -122,8 +140,6 @@ public class RotatorSubsystem extends SubsystemBase {
     public void setRunPID(boolean set){
         runPID = set;
     }
-
-    
 
     @Override
     public void periodic() {

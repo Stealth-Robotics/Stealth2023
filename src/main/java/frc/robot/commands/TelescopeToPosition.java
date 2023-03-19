@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.TelescopeSubsystem;
+import frc.robot.subsystems.TelescopeSubsystem.TelescopePosition;
 
 public class TelescopeToPosition extends CommandBase {
     // The subsystem the command runs on
@@ -13,6 +14,11 @@ public class TelescopeToPosition extends CommandBase {
     public TelescopeToPosition(TelescopeSubsystem telescopeSubsystem, double percent) {
         this.telescopeSubsystem = telescopeSubsystem;
         this.percent = percent;
+    }
+
+    public TelescopeToPosition(TelescopeSubsystem telescopeSubsystem, TelescopePosition position) {
+        this.telescopeSubsystem = telescopeSubsystem;
+        this.percent = position.getValue();
     }
 
     @Override

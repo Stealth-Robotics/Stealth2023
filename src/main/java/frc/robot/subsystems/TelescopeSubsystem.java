@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 
@@ -37,6 +38,23 @@ public class TelescopeSubsystem extends SubsystemBase {
     private double currentSetpoint;
     // The telescope cannot exceed these ticks
     private final int MAXIMUM_TICKS = 50000;
+
+    //TODO: set to actual position values
+    public enum TelescopePosition {
+        GROUND_PICKUP(-1), 
+        SHELF_PICKUP(-1), 
+        HIGH_SCORE(-1), 
+        MID_SCORE(-1), 
+        LOW_SHELF(-1);
+
+        private final int value;
+        private TelescopePosition(int position){
+            this.value = position;
+        }
+        public int getValue() {
+            return value;
+        }
+    }
 
     public TelescopeSubsystem() {
         // Config motor settings
