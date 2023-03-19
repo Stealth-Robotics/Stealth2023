@@ -17,11 +17,16 @@ public class AutoIntakeCommand extends CommandBase {
     public AutoIntakeCommand(CrocodileSubsystem crocodileSubsystem, double speed, BooleanSupplier stopIntake) {
         this.crocodileSubsystem = crocodileSubsystem;
         this.speed = speed;
-        debouncer = new Debouncer(0.5, DebounceType.kBoth);
+        debouncer = new Debouncer(0.5, DebounceType.kFalling);
         timer = new Timer();
         this.stopIntake = stopIntake;
         addRequirements(crocodileSubsystem);
     }
+    //overload autointke and set stopIntake to null
+    public AutoIntakeCommand(CrocodileSubsystem crocodileSubsystem, double speed) {
+        this(crocodileSubsystem, speed, null);
+    }
+
 
     @Override
     public void initialize() {
