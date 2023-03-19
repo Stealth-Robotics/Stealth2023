@@ -15,6 +15,7 @@ public class TelescopeToPosition extends CommandBase {
         this.telescopeSubsystem = telescopeSubsystem;
         percent = MathUtil.clamp(percent, 0.025, 0.9);
         this.percent = percent;
+        addRequirements(telescopeSubsystem);
     }
 
     @Override

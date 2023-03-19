@@ -21,7 +21,7 @@ public class TelescopeDefault extends CommandBase {
 
     @Override
     public void initialize() {
-        telescopeSubsystem.setToCurrentPosition();
+        // telescopeSubsystem.setToCurrentPosition();
     }
 
     @Override
@@ -36,7 +36,10 @@ public class TelescopeDefault extends CommandBase {
             } else if (telescopeSubsystem.inBounds() == TelescopeBoundState.UNDER_LOWER_BOUND) {
                 telescopeSubsystem.setSpeed(MathUtil.clamp(joystickInput, 0, 0.3));
             }
+            telescopeSubsystem.setRunPID(false);
         } else {
+            telescopeSubsystem.setRunPID(true);
+
             telescopeSubsystem.setToCurrentPosition();
         }
     }
