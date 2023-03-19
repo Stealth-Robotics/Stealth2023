@@ -6,6 +6,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
@@ -27,13 +29,13 @@ public class RotatorSubsystem extends SubsystemBase {
     // Radians Per Second Squared
     private static final double MAX_ACCELERATION = 10.0;
     // PID Constants
-    private static final double ROTATOR_P_COEFF = 1;
-    private static final double ROTATOR_I_COEFF = 0.0005;
-    private static final double ROTATOR_D_COEFF = 0.075;
+    private static final double ROTATOR_P_COEFF = 0;//1;
+    private static final double ROTATOR_I_COEFF = 0;//0.0005;
+    private static final double ROTATOR_D_COEFF = 0;//0.075;;
     // Feedforward Constants
     private static final double ROTATOR_KS_COEFF = 0;
-    private static final double ROTATOR_KG_COEFF_RETRACTED = 0.065;// 0.12;
-    private static final double ROTATOR_KG_COEFF_EXTENDED = 0.065; //TODO: Find actual value
+    private double ROTATOR_KG_COEFF_RETRACTED = 0.065;
+    private double ROTATOR_KG_COEFF_EXTENDED = 0.07;
     // Volt Second Per Rad
     private static final double ROTATOR_KV_COEFF = 0;
     // Volt Second Squared Per Rad
@@ -57,7 +59,7 @@ public class RotatorSubsystem extends SubsystemBase {
 
     private TelescopeSubsystem telescope;
 
-    private static double currentKG = ROTATOR_KG_COEFF_RETRACTED;
+    private double currentKG = ROTATOR_KG_COEFF_RETRACTED;
 
     public RotatorSubsystem(TelescopeSubsystem telescope) {
         rotationMotorA = new WPI_TalonFX(RobotMap.Rotator.ROTATOR_MOTOR);
@@ -127,6 +129,26 @@ public class RotatorSubsystem extends SubsystemBase {
         currentKG = F;
     }
 
+    public double getKg(){
+        return currentKG;
+    }
+
+    public double getRetractedKg(){
+        return ROTATOR_KG_COEFF_RETRACTED;
+    }
+
+    public double getExtendedKg(){
+        return ROTATOR_KG_COEFF_EXTENDED;
+    }
+
+    public void setRetractedKg(double kg){
+        ROTATOR_KG_COEFF_RETRACTED = kg;
+    }
+
+    public void setExtendedKg(double kg){
+        ROTATOR_KG_COEFF_EXTENDED = kg;
+    }
+
     public double calculateF(double extensionPercent) {
         return ((ROTATOR_KG_COEFF_EXTENDED - ROTATOR_KG_COEFF_RETRACTED) * extensionPercent)
                 + ROTATOR_KG_COEFF_RETRACTED;
@@ -138,9 +160,10 @@ public class RotatorSubsystem extends SubsystemBase {
     // https://docs.wpilib.org/en/stable/docs/software/advanced-controls/controllers/feedforward.html#armfeedforward
     // Copyright (c) FIRST and other WPILib contributors.
     public double calculateFeedForward(
+    
         double positionRadians, double velocityRadPerSec, double accelRadPerSecSquared) {
         return ROTATOR_KS_COEFF * Math.signum(velocityRadPerSec)
-            + currentKG * Math.cos(positionRadians)
+            + currentKG * Math.sin(positionRadians)
             + ROTATOR_KV_COEFF * velocityRadPerSec
             + ROTATOR_KA_COEFF * accelRadPerSecSquared;
     }
@@ -150,13 +173,14 @@ public class RotatorSubsystem extends SubsystemBase {
         setKg(calculateF(telescope.getExtensionPercent()));
 
         // caluclate using the feedforward and PID
-        double ff = calculateFeedForward(pid.getSetpoint() - (Math.PI / 2),
+        double ff = -calculateFeedForward(getMeasurementRadians() -  Math.PI,
                 rotationMotorA.getSelectedSensorVelocity(), 0);
         double speed = pid.calculate(getMeasurementRadians());
         // Constrain the calculation to the safe speed
         double safeSpeed = MathUtil.clamp(speed + ff, -speedLimit, speedLimit);
         // Set the speed of the rotator
         if (runPID) setSpeed(safeSpeed);
+        // System.out.println("Result " + ff);
         // System.out.println( safeSpeed + " | M:" + getMeasurementDegrees() + " | SP:" + Math.toDegrees(pid.getSetpoint()));
         if (log) {
             System.out.println("RotatorPIDOnly.periodic: current setpoint: " + Math.toDegrees(pid.getSetpoint()));
@@ -165,5 +189,15 @@ public class RotatorSubsystem extends SubsystemBase {
             System.out.println("RotatorPIDOnly.periodic: safe speed: " + safeSpeed);
         }
     }
+
+    @Override
+  public void initSendable(SendableBuilder builder) {
+    super.initSendable(builder);
+    builder.setSmartDashboardType("FeedforwardTuning");
+    builder.addDoubleProperty("current Kg", this::getKg, this::setKg);
+    builder.addDoubleProperty("retracted Kg", this::getRetractedKg, this::setRetractedKg);
+    builder.addDoubleProperty("extended Kg", this::getExtendedKg, this::setExtendedKg);
+
+  }
 
 }
