@@ -156,10 +156,8 @@ public class RotatorSubsystem extends SubsystemBase {
         // Constrain the calculation to the safe speed
         double safeSpeed = MathUtil.clamp(speed + ff, -speedLimit, speedLimit);
         // Set the speed of the rotator
-        if (runPID)
-            setSpeed(safeSpeed);
-        System.out
-                .println(safeSpeed + " | M:" + getMeasurementDegrees() + " | SP:" + Math.toDegrees(pid.getSetpoint()));
+        if (runPID) setSpeed(safeSpeed);
+        // System.out.println( safeSpeed + " | M:" + getMeasurementDegrees() + " | SP:" + Math.toDegrees(pid.getSetpoint()));
         if (log) {
             System.out.println("RotatorPIDOnly.periodic: current setpoint: " + Math.toDegrees(pid.getSetpoint()));
             System.out.println("RotatorPIDOnly.periodic: speed: " + speed);
