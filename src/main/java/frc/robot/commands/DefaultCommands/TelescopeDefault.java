@@ -33,7 +33,10 @@ public class TelescopeDefault extends CommandBase {
             } else {
                 telescopeSubsystem.setSpeed(MathUtil.clamp(joystickInput, 0.3, 0));
             }
+            telescopeSubsystem.setRunPID(false);
         } else {
+            telescopeSubsystem.setRunPID(true);
+
             telescopeSubsystem.setToCurrentPosition();
         }
     }
