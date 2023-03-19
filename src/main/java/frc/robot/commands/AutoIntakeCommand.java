@@ -16,20 +16,27 @@ public class AutoIntakeCommand extends CommandBase {
     private final BooleanSupplier stopIntake;
     private final GamePiece gamePiece;
 
-    public AutoIntakeCommand(CrocodileSubsystem crocodileSubsystem, double speed, BooleanSupplier stopIntake) {
+    public AutoIntakeCommand(CrocodileSubsystem crocodileSubsystem, double speed, BooleanSupplier stopIntake, GamePiece gamePiece) {
         this.crocodileSubsystem = crocodileSubsystem;
         this.speed = speed;
         debouncer = new Debouncer(0.5, DebounceType.kFalling);
         timer = new Timer();
         this.stopIntake = stopIntake;
+        crocodileSubsystem.setGamePiece(gamePiece);
         this.gamePiece = crocodileSubsystem.getGamePiece();
         addRequirements(crocodileSubsystem);
     }
 
-    // overload autointke and set stopIntake to null
-    public AutoIntakeCommand(CrocodileSubsystem crocodileSubsystem, double speed) {
-        this(crocodileSubsystem, speed, null);
+    // overload autointke and set stopIntake to null, use for auto
+    public AutoIntakeCommand(CrocodileSubsystem crocodileSubsystem, double speed, GamePiece gamePiece) {
+        this(crocodileSubsystem, speed, null, gamePiece);
     }
+
+    //overload autointake and set gamepiece to getGamePiece
+    public AutoIntakeCommand(CrocodileSubsystem crocodileSubsystem, double speed, BooleanSupplier stopIntake) {
+        this(crocodileSubsystem, speed, stopIntake, crocodileSubsystem.getGamePiece());
+    }
+
 
     @Override
     public void initialize() {
