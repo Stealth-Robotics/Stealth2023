@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.CrocodileSubsystem;
 import java.util.function.BooleanSupplier;
+import frc.robot.subsystems.CrocodileSubsystem.GamePiece;
 
 public class AutoIntakeCommand extends CommandBase {
     private final CrocodileSubsystem crocodileSubsystem;
@@ -13,6 +14,7 @@ public class AutoIntakeCommand extends CommandBase {
     private final Timer timer;
     private final Debouncer debouncer;
     private final BooleanSupplier stopIntake;
+    private final GamePiece gamePiece;
 
     public AutoIntakeCommand(CrocodileSubsystem crocodileSubsystem, double speed, BooleanSupplier stopIntake) {
         this.crocodileSubsystem = crocodileSubsystem;
@@ -20,6 +22,7 @@ public class AutoIntakeCommand extends CommandBase {
         debouncer = new Debouncer(0.5, DebounceType.kFalling);
         timer = new Timer();
         this.stopIntake = stopIntake;
+        this.gamePiece = crocodileSubsystem.getGamePiece();
         addRequirements(crocodileSubsystem);
     }
 
@@ -30,14 +33,21 @@ public class AutoIntakeCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        crocodileSubsystem.setIntakeSpeed(speed);
+        //TODO: check if this is the right negation
+        if(gamePiece == GamePiece.CONE){
+            crocodileSubsystem.setIntakeSpeed(speed);
+        }
+        else{
+            crocodileSubsystem.setIntakeSpeed(-speed);
+        }
     }
 
     @Override
     public boolean isFinished() {
         // if outtaking, keep running motors until beam break hasn't been broken for 0.5
         // seconds
-        if (speed < 0) {
+        
+        if ((speed < 0 && gamePiece == GamePiece.CONE) || (speed > 0 && gamePiece == GamePiece.CUBE)) {
             if (crocodileSubsystem.getBeamBreak()) {
                 timer.start();
             }
