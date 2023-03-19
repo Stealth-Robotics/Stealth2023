@@ -26,13 +26,6 @@ public class CrocodileSubsystem extends SubsystemBase {
     // TODO: Set speed limit
     private final double SPEED_LIMIT = 0.0;
 
-    private final double WRIST_CONE_PICKUP_POS = -1;
-    private final double WRIST_CUBE_PICKUP_POS = -1;
-    private final double WRIST_CONE_SCORE_POS = -1;
-    private final double WRIST_CUBE_SCORE_POS = -1;
-    private final double WRIST_CONE_SHELF_POS = -1;
-    private final double WRIST_CUBE_SHELF_POS = -1;
-
     // Offset of the encoder. See diagram above for reference
     private final double ENCODER_OFFSET = 0.3;
 
