@@ -123,7 +123,7 @@ public class RotatorSubsystem extends SubsystemBase {
         runPID = set;
     }
 
-    public void setF(double F) {
+    public void setKg(double F) {
         currentKG = F;
     }
 
@@ -147,7 +147,7 @@ public class RotatorSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        setF(calculateF(telescope.getExtensionPercent()));
+        setKg(calculateF(telescope.getExtensionPercent()));
 
         // caluclate using the feedforward and PID
         double ff = calculateFeedForward(pid.getSetpoint() - (Math.PI / 2),
