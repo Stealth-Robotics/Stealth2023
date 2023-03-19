@@ -54,6 +54,10 @@ public class AutoIntakeCommand extends CommandBase {
         if(stopIntake != null){
             return stopIntake.getAsBoolean();
         }
+        //if none of the above, return the value of stopIntake which is bound to a button, unless it is null
+        if(stopIntake != null){
+            return stopIntake.getAsBoolean();
+        }
         return false;
         
     }
