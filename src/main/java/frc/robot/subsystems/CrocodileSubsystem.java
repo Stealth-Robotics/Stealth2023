@@ -90,6 +90,10 @@ public class CrocodileSubsystem extends SubsystemBase {
             () -> this.setToCurrentPosition())
             .until(() -> this.atSetpoint());
     }
+    
+    public boolean atSetpoint() {
+        return wristPID.atSetpoint();
+    }
 
     // In degrees
     public double getWristPosition() {
