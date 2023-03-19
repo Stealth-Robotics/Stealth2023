@@ -39,6 +39,10 @@ public class CrocodileSubsystem extends SubsystemBase {
         intake.setInverted(true);
     }
 
+    public void onInit(){
+        setToCurrentPosition();
+    }
+
     public void setToCurrentPosition() {
         setWristSetpoint(wristEncoder.getAbsolutePosition());
     }

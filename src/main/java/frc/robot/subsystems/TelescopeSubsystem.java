@@ -52,6 +52,10 @@ public class TelescopeSubsystem extends SubsystemBase {
         telescopeMotor.config_kF(0, F_COEFF);
     }
 
+    public void onInit(){
+        setToCurrentPosition();
+    }
+
     // Gets the setpoint of the internal PID
     private double getSetpoint() {
         return currentSetpoint;

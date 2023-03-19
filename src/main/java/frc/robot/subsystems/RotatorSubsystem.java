@@ -78,6 +78,11 @@ public class RotatorSubsystem extends SubsystemBase {
         encoder = new DutyCycleEncoder(0);
     }
 
+    public void onInit(){
+        setToCurrentPosition();
+        runPID = true;
+    }
+
     // Sets the setpoint to where the rotator is currently
     public void setToCurrentPosition() {
         setSetpoint(Math.toDegrees(getMeasurementRadians()));
