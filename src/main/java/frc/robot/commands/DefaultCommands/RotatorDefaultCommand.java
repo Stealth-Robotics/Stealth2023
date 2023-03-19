@@ -36,40 +36,49 @@ public class RotatorDefaultCommand extends CommandBase {
     @Override
     public void initialize() {
         // Start with the rotator at the current position
-        rotator.setToCurrentPosition();
+        //rotator.setToCurrentPosition();
     }
 
     @Override
     public void execute() {
 
         double joystickVal = joystick.getAsDouble();
-        // If we are within the deadband, do nothing
-        if (Math.abs(joystickVal) < ROTATOR_JOYSTICK_DEADBAND) {
-            return;
-        }
-        // If the telescope is extended, and the joystick is being pushed a lot for a
-        // // perioid of time, reset the telescope
-        if (telescope.getExtensionPercent() > 0.1 && crying.calculate(Math.abs(joystickVal) > 0.7)) {
-            if (!resetTelescopeCmd.isScheduled()) {
-                CommandScheduler.getInstance().schedule(resetTelescopeCmd);
-                crying.calculate(false); // Make them push thru it again!
-            }
-        }
-        // // If the telescope is extended, and the joystick is being pushed a little,
-        // // allow them to move it (but only a little)
-        else if (telescope.getExtensionPercent() > 0.1) {
-            rotator.setSpeed(MathUtil.clamp(joystickVal * 0.5, -0.3, 0.3));
-            rotator.setToCurrentPosition();
-        }
-        // Otherwise, just move the rotator normally
-        else {
-            if (joystickVal < 0 && rotator.getMeasurementDegrees() < 0)
-                return;
-            if (joystickVal > 0 && rotator.getMeasurementDegrees() > 250)
-                return;
+        // // If we are within the deadband, do nothing
+        // if (Math.abs(joystickVal) < ROTATOR_JOYSTICK_DEADBAND) {
+        //     return;
+        // }
+        // // If the telescope is extended, and the joystick is being pushed a lot for a
+        // // // perioid of time, reset the telescope
+        // if (telescope.getExtensionPercent() > 0.1 && crying.calculate(Math.abs(joystickVal) > 0.7)) {
+        //     if (!resetTelescopeCmd.isScheduled()) {
+        //         CommandScheduler.getInstance().schedule(resetTelescopeCmd);
+        //         crying.calculate(false); // Make them push thru it again!
+        //     }
+        // }
+        // // // If the telescope is extended, and the joystick is being pushed a little,
+        // // // allow them to move it (but only a little)
+        // else if (telescope.getExtensionPercent() > 0.1) {
+        //     rotator.setSpeed(MathUtil.clamp(joystickVal * 0.5, -0.3, 0.3));
+        //     rotator.setToCurrentPosition();
+        // }
+        // // Otherwise, just move the rotator normally
+        // else {
+            // if (joystickVal < 0 && rotator.getMeasurementDegrees() < 0)
+            //     return;
+            // if (joystickVal > 0 && rotator.getMeasurementDegrees() > 250)
+            //     return;
+         if (Math.abs(joystickVal) > 0.05){
             rotator.setSpeed(MathUtil.clamp(joystickVal * 0.5, -0.5, 0.5));
-            rotator.setToCurrentPosition();
-        }
+            rotator.setRunPID(false);
+         }
+         else
+         {
+            rotator.setRunPID(true);
+         }
+         rotator.setToCurrentPosition();
+
+            
+        // }
 
     }
 

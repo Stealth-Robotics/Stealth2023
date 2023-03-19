@@ -27,23 +27,21 @@ public class RotatorSubsystem extends SubsystemBase {
     // Radians Per Second Squared
     private static final double MAX_ACCELERATION = 10.0;
     // PID Constants
-    private static final double ROTATOR_P_COEFF = 0.75;
-    private static final double ROTATOR_I_COEFF = 0;
-    private static final double ROTATOR_D_COEFF = 0;
+    private static final double ROTATOR_P_COEFF = 1;
+    private static final double ROTATOR_I_COEFF = 0.0005;
+    private static final double ROTATOR_D_COEFF = 0.075;
     // Feedforward Constants
     private static final double ROTATOR_KS_COEFF = 0;
-    private static final double ROTATOR_KG_COEFF = 0.12;
+    private static final double ROTATOR_KG_COEFF = 0.065;//0.12;
     // Volt Second Per Rad
     private static final double ROTATOR_KV_COEFF = 0;
     // Volt Second Squared Per Rad
     private static final double ROTATOR_KA_COEFF = 0;
     // Offset of the encoder. See diagram above for reference
-    private static final double ENCODER_OFFSET = 138;
+    private static final double ENCODER_OFFSET = -157 + 180;//(157.36 - 180);//(0.18439 * 360);     //138;
     // Bounds of the rotator, degrees
     private static final double HIGH_BOUND = 285;
     private static final double LOW_BOUND = 70;
-    // Speed Multiplier
-    private static final double ROTATOR_SPEED_MULTIPLIER = 1.0;
 
     private final PIDController pid;
     private final ArmFeedforward feedforward;
@@ -53,15 +51,15 @@ public class RotatorSubsystem extends SubsystemBase {
     private boolean log = false;
     // The speed limit of the rotator
     // This is for safety of people and robot
-    private double speedLimit = 0.2;
+    private double speedLimit = 1;
+    
+    private boolean runPID = true;
 
     public RotatorSubsystem() {
         rotationMotorA = new WPI_TalonFX(RobotMap.Rotator.ROTATOR_MOTOR);
         rotationMotorA.setNeutralMode(NeutralMode.Brake);
-        rotationMotorA.setInverted(true);
         rotationMotorB = new WPI_TalonFX(RobotMap.Rotator.ROTATOR_MOTOR_B);
         rotationMotorB.setNeutralMode(NeutralMode.Brake);
-        rotationMotorB.setInverted(true);
         rotationMotorB.follow(rotationMotorA);
 
         pid = new PIDController(
@@ -69,12 +67,13 @@ public class RotatorSubsystem extends SubsystemBase {
                 ROTATOR_I_COEFF,
                 ROTATOR_D_COEFF);
         // pid.enableContinuousInput(0, Math.PI * 2);
-        pid.setTolerance(Math.toRadians(30)); // TODO: TUNE THIS
         feedforward = new ArmFeedforward(
                 ROTATOR_KS_COEFF,
                 ROTATOR_KG_COEFF,
                 ROTATOR_KV_COEFF,
                 ROTATOR_KA_COEFF);
+
+        pid.setTolerance(Math.toRadians(6));
 
         encoder = new DutyCycleEncoder(0);
     }
@@ -116,6 +115,14 @@ public class RotatorSubsystem extends SubsystemBase {
         return pid.atSetpoint();
     }
 
+    public void togglePID(){
+        runPID = !runPID;
+    }
+
+    public void setRunPID(boolean set){
+        runPID = set;
+    }
+
     @Override
     public void periodic() {
         // caluclate using the feedforward and PID
@@ -125,8 +132,8 @@ public class RotatorSubsystem extends SubsystemBase {
         // Constrain the calculation to the safe speed
         double safeSpeed = MathUtil.clamp(speed + ff, -speedLimit, speedLimit);
         // Set the speed of the rotator
-        setSpeed(safeSpeed);
-
+        if (runPID) setSpeed(safeSpeed);
+        System.out.println( safeSpeed + " | M:" + getMeasurementDegrees() + " | SP:" + Math.toDegrees(pid.getSetpoint()));
         if (log) {
             System.out.println("RotatorPIDOnly.periodic: current setpoint: " + Math.toDegrees(pid.getSetpoint()));
             System.out.println("RotatorPIDOnly.periodic: speed: " + speed);

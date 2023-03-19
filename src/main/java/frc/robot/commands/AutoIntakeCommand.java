@@ -37,18 +37,18 @@ public class AutoIntakeCommand extends CommandBase {
     public boolean isFinished() {
         //if outtaking, keep running motors until beam break hasn't been broken for 0.5 seconds
         if(speed < 0){
-            if(!crocodileSubsystem.getBeamBreak()){
+            if(crocodileSubsystem.getBeamBreak()){
                 timer.start();
-                if(timer.hasElapsed(0.5)){
-                    timer.stop();
-                    timer.reset();
-                    return true;
-                }
+            }
+            if(timer.hasElapsed(0.5)){
+                timer.stop();
+                timer.reset();
+                return true;
             }
         }
-        //otherwise, keep running motors until beam break has been broken for 0.5 seconds
-        else if(debouncer.calculate(crocodileSubsystem.getBeamBreak())){
-            return true;
+        //otherwise, keep running motors until beam break has been broken 
+        else if(!crocodileSubsystem.getBeamBreak()){
+            return  true;
         }
         //if none of the above, return the value of stopIntake which is bound to a button, unless it is null
         if(stopIntake != null){

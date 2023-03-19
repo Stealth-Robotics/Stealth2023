@@ -57,7 +57,7 @@ public class RobotContainer {
 
   /* Subsystems */
   private final DrivebaseSubsystem swerve;
-  //private final RotatorSubsystem rotator;
+  private final RotatorSubsystem rotator;
   private final CrocodileSubsystem endEffector;
   private final TelescopeSubsystem telescope;
 
@@ -71,7 +71,7 @@ public class RobotContainer {
 
     swerve = new DrivebaseSubsystem();
     telescope = new TelescopeSubsystem();
-    // rotator = new RotatorSubsystem();
+    rotator = new RotatorSubsystem();
     endEffector = new CrocodileSubsystem();
 
     camera.setResolution(160, 120);
@@ -86,10 +86,10 @@ public class RobotContainer {
             () -> driverController.b().getAsBoolean(),
             () -> driverController.rightBumper().getAsBoolean()));
 
-    // rotator.setDefaultCommand(new RotatorDefaultCommand(
-    //     rotator,
-    //     telescope,
-    //     () -> -mechController.getRightY()));
+    rotator.setDefaultCommand(new RotatorDefaultCommand(
+        rotator,
+        telescope,
+        () -> -mechController.getRightY()));
 
     telescope.setDefaultCommand(
         new TelescopeDefault(
@@ -130,20 +130,22 @@ public class RobotContainer {
     zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
 
     // mechController.a().onTrue(new RotatorToPosition(rotator, telescope, 230));
-    // mechController.y().onTrue(new RotatorToPosition(rotator, telescope, 40));
+    mechController.y().onTrue(new RotatorToPosition(rotator, telescope, 200));
     mechController.x().onTrue(new TelescopeToPosition(telescope, 0.9));
     mechController.b().onTrue(new InstantCommand(() -> telescope.resetEncoder()));
+    driverController.y().onTrue(new AutoIntakeCommand(endEffector, 0.5));
+    driverController.x().onTrue(new AutoIntakeCommand(endEffector, -0.5));
   }
 
   public void teleopInit() {
     telescope.setToCurrentPosition();
-    //rotator.setToCurrentPosition();
+    rotator.setToCurrentPosition();
     endEffector.setToCurrentPosition();
   }
 
   public void autonomousInit() {
     telescope.setToCurrentPosition();
-    //rotator.setToCurrentPosition();
+    rotator.setToCurrentPosition();
     endEffector.setToCurrentPosition();
   }
 
