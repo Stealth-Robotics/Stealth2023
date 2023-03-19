@@ -32,7 +32,8 @@ public class RotatorSubsystem extends SubsystemBase {
     private static final double ROTATOR_D_COEFF = 0.075;
     // Feedforward Constants
     private static final double ROTATOR_KS_COEFF = 0;
-    private static final double ROTATOR_KG_COEFF = 0.065;//0.12;
+    private static final double ROTATOR_KG_COEFF_RETRACTED = 0.065;//0.12;
+    private static final double ROTATOR_KG_COEFF_EXTENDED = 0.065;//0.12;
     // Volt Second Per Rad
     private static final double ROTATOR_KV_COEFF = 0;
     // Volt Second Squared Per Rad
@@ -55,7 +56,9 @@ public class RotatorSubsystem extends SubsystemBase {
     
     private boolean runPID = true;
 
-    public RotatorSubsystem() {
+    private TelescopeSubsystem telescope;
+
+    public RotatorSubsystem(TelescopeSubsystem telescope) {
         rotationMotorA = new WPI_TalonFX(RobotMap.Rotator.ROTATOR_MOTOR);
         rotationMotorA.setNeutralMode(NeutralMode.Brake);
         rotationMotorB = new WPI_TalonFX(RobotMap.Rotator.ROTATOR_MOTOR_B);
@@ -69,13 +72,15 @@ public class RotatorSubsystem extends SubsystemBase {
         // pid.enableContinuousInput(0, Math.PI * 2);
         feedforward = new ArmFeedforward(
                 ROTATOR_KS_COEFF,
-                ROTATOR_KG_COEFF,
+                ROTATOR_KG_COEFF_RETRACTED,
                 ROTATOR_KV_COEFF,
                 ROTATOR_KA_COEFF);
 
         pid.setTolerance(Math.toRadians(6));
 
         encoder = new DutyCycleEncoder(0);
+
+        this.telescope = telescope;
     }
 
     // Sets the setpoint to where the rotator is currently
@@ -123,8 +128,18 @@ public class RotatorSubsystem extends SubsystemBase {
         runPID = set;
     }
 
+    public void setF(double F){
+        feedforward.setKg(F);
+    }
+
+    public double calculateF(double extensionPercent){
+        return ((ROTATOR_KG_COEFF_EXTENDED - ROTATOR_KG_COEFF_RETRACTED) * extensionPercent) + ROTATOR_KG_COEFF_RETRACTED;
+    }
+
     @Override
     public void periodic() {
+        setF(calculateF(telescope.getExtensionPercent()));
+
         // caluclate using the feedforward and PID
         double ff = feedforward.calculate(pid.getSetpoint() - (Math.PI / 2),
                 rotationMotorA.getSelectedSensorVelocity());

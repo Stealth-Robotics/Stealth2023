@@ -71,7 +71,7 @@ public class RobotContainer {
 
     swerve = new DrivebaseSubsystem();
     telescope = new TelescopeSubsystem();
-    rotator = new RotatorSubsystem();
+    rotator = new RotatorSubsystem(telescope);
     endEffector = new CrocodileSubsystem();
 
     camera.setResolution(160, 120);
