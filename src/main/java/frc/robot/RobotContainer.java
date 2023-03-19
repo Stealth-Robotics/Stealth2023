@@ -96,20 +96,17 @@ public class RobotContainer {
             telescope,
             () -> -mechController.getLeftY()));
 
-    endEffector.setDefaultCommand(new CrocodileDefaultCommand(endEffector,
-        () -> driverController.getRightTriggerAxis(),
+    endEffector.setDefaultCommand(new CrocodileDefaultCommand(
+        endEffector,
+        () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
         (t) -> driverController.getHID().setRumble(RumbleType.kBothRumble, t)));
-
     // autoChooser.setDefaultOption("Blue 1+Park", new BluePreloadParkCenter(swerve, endEffector, rotator, telescope));
     // autoChooser.addOption("Blue Preload", new BluePreloadOnly(swerve, endEffector, rotator, telescope));
     // autoChooser.addOption("Red 1+Park", new RedPreloadParkCenter(swerve, endEffector, rotator, telescope));
     // autoChooser.addOption("Red Preload", new RedPreloadOnly(swerve, endEffector, rotator, telescope));
 
     SmartDashboard.putData("Selected Autonomous", autoChooser);
-    endEffector.setDefaultCommand(new CrocodileDefaultCommand(
-        endEffector,
-        () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
-        (t) -> driverController.getHID().setRumble(RumbleType.kBothRumble, t)));
+
 
     // Configure the button bindings
     configureButtonBindings();
