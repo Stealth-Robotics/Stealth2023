@@ -33,7 +33,7 @@ public class RotatorSubsystem extends SubsystemBase {
     // Feedforward Constants
     private static final double ROTATOR_KS_COEFF = 0;
     private static final double ROTATOR_KG_COEFF_RETRACTED = 0.065;// 0.12;
-    private static final double ROTATOR_KG_COEFF_EXTENDED = 0.065;// 0.12;
+    private static final double ROTATOR_KG_COEFF_EXTENDED = 0.065; //TODO: Find actual value
     // Volt Second Per Rad
     private static final double ROTATOR_KV_COEFF = 0;
     // Volt Second Squared Per Rad
