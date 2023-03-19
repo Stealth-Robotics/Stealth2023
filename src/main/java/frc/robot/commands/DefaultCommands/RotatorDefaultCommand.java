@@ -74,8 +74,9 @@ public class RotatorDefaultCommand extends CommandBase {
          else
          {
             rotator.setRunPID(true);
+            rotator.setToCurrentPosition();
          }
-         rotator.setToCurrentPosition();
+         
 
             
         // }
