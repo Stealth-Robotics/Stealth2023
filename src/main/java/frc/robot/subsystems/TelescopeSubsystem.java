@@ -5,6 +5,8 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
@@ -12,11 +14,11 @@ import frc.robot.RobotMap;
 public class TelescopeSubsystem extends SubsystemBase {
     // PID Constants
     // P for telescope PID
-    private static final double P_COEFF = 0.05;
+    private static final double P_COEFF = 0.0001;
     // I for telescope PID
     private static final double I_COEFF = 0.0;
     // D for telescope PID
-    private static final double D_COEFF = 0.025;
+    private static final double D_COEFF = 0;
     // Tolerance for telescope PID
     private static final double POSITIONAL_TOLERANCE = 1000;
     // Velocity tolerance for telescope PID
@@ -36,8 +38,11 @@ public class TelescopeSubsystem extends SubsystemBase {
     // The current setpoint of the telescope
     private double currentSetpoint;
     // The telescope cannot exceed these ticks
-    private final int MAXIMUM_TICKS = 50000;
+    private final int MAXIMUM_TICKS = 75000;
 
+    private boolean runPID = true;
+
+    private final PIDController pid;
     public TelescopeSubsystem() {
         // Config motor settings
         telescopeMotor = new WPI_TalonFX(RobotMap.Telescope.TELESCOPE_ID);
@@ -45,17 +50,20 @@ public class TelescopeSubsystem extends SubsystemBase {
         telescopeMotor.setNeutralMode(NeutralMode.Brake);
         telescopeMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
         telescopeMotor.configAllowableClosedloopError(0, POSITIONAL_TOLERANCE);
-        // Config motor PID values
-        telescopeMotor.config_kP(0, P_COEFF);
-        telescopeMotor.config_kI(0, I_COEFF);
-        telescopeMotor.config_kD(0, D_COEFF);
-        telescopeMotor.config_kF(0, F_COEFF);
+        // // Config motor PID values
+        // telescopeMotor.config_kP(0, P_COEFF);
+        // telescopeMotor.config_kI(0, I_COEFF);
+        // telescopeMotor.config_kD(0, D_COEFF);
+        // telescopeMotor.config_kF(0, F_COEFF);
+        pid = new PIDController(P_COEFF, I_COEFF, D_COEFF);
+
+        pid.setTolerance(POSITIONAL_TOLERANCE);
         telescopeMotor.setInverted(true);
     }
 
     // Gets the setpoint of the internal PID
     private double getSetpoint() {
-        return currentSetpoint;
+        return pid.getSetpoint();
     }
 
     // Gets the setpoint of the internal PID in a percentage of the maximum
@@ -103,8 +111,10 @@ public class TelescopeSubsystem extends SubsystemBase {
     }
 
     // Tells the PID where to go
-    private void setSetpoint(double positionTicks) {
-        telescopeMotor.set(ControlMode.Position, positionTicks);
+    public void setSetpoint(double positionTicks) {
+        // telescopeMotor.set(ControlMode.Position, positionTicks);
+        // currentSetpoint = positionTicks;
+        pid.setSetpoint(positionTicks);
     }
 
     // Returns true if the motor is stalling, false otherwise
@@ -129,7 +139,8 @@ public class TelescopeSubsystem extends SubsystemBase {
 
     // Returns true if the telescope is at its setpoint, false otherwise
     public boolean atSetpoint() {
-        return Math.abs(telescopeMotor.getClosedLoopError()) < POSITIONAL_TOLERANCE;
+        // return Math.abs(currentSetpoint - getCurrentPosition()) < POSITIONAL_TOLERANCE;
+        return pid.atSetpoint();
     }
 
     // Returns true if the telescope is within its upper bound, false otherwise
@@ -137,8 +148,14 @@ public class TelescopeSubsystem extends SubsystemBase {
         return getExtensionPercent() < 1;
     }
 
+
+    public void setRunPID(boolean set){
+        runPID = set;
+    }
+    @Override
     public void periodic() {
         System.out.println("Telescope Position: " + getCurrentPosition() + " Telescope Setpoint: "
                 + getSetpoint());
+        if (runPID) setSpeed(MathUtil.clamp(pid.calculate(getCurrentPosition()), -0.2, 0.2));
     }
 }

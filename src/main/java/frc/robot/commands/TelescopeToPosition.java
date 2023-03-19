@@ -13,6 +13,7 @@ public class TelescopeToPosition extends CommandBase {
     public TelescopeToPosition(TelescopeSubsystem telescopeSubsystem, double percent) {
         this.telescopeSubsystem = telescopeSubsystem;
         this.percent = percent;
+        addRequirements(telescopeSubsystem);
     }
 
     @Override
