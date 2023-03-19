@@ -59,6 +59,10 @@ public class CrocodileSubsystem extends SubsystemBase {
         return wristPID.getSetpoint();
     }
 
+    public boolean atSetpoint() {
+        return wristPID.atSetpoint();
+    }
+
     // In degrees
     public double getWristPosition() {
         double currentPosition = wristEncoder.getAbsolutePosition();
