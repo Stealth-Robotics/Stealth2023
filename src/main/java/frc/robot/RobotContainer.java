@@ -131,8 +131,7 @@ public class RobotContainer {
     mechController.y().onTrue(new RotatorToPosition(rotator, telescope, 200));
     mechController.x().onTrue(new TelescopeToPosition(telescope, 0.9));
     mechController.b().onTrue(new InstantCommand(() -> telescope.resetEncoder()));
-    driverController.y().onTrue(new AutoIntakeCommand(endEffector, 0.5));
-    driverController.x().onTrue(new AutoIntakeCommand(endEffector, -0.5));
+    driverController.y().onTrue(new AutoIntakeCommand(endEffector, 0.5, driverController.y()));
   }
 
   public void teleopInit() {
