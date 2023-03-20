@@ -8,6 +8,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 
@@ -30,8 +31,16 @@ public class CrocodileSubsystem extends SubsystemBase {
     private final double ENCODER_OFFSET = 0.3;
 
     public enum GamePiece {
-        CONE, 
-        CUBE
+        CONE("CONE"), 
+        CUBE("CUBE");
+        private final String name;
+
+        private GamePiece(String name) {
+            this.name = name;
+        }
+        String getData(){
+            return name;
+        }
     }
 
     public CrocodileSubsystem() {
@@ -91,5 +100,7 @@ public class CrocodileSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         setWristSpeed(MathUtil.clamp(wristPID.calculate(wristEncoder.getAbsolutePosition()), -SPEED_LIMIT, SPEED_LIMIT));
+        SmartDashboard.putBoolean("Beam Break Status", !getBeamBreak());
+        SmartDashboard.putString("Current Piece Selection", gamePiece.getData());
     }
 }
