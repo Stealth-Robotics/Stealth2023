@@ -75,7 +75,6 @@ public class RotatorSubsystem extends SubsystemBase {
         }
     }
 
-    public RotatorSubsystem() {
     private TelescopeSubsystem telescope;
 
     private double currentKG = ROTATOR_KG_COEFF_RETRACTED;
