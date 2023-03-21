@@ -188,6 +188,7 @@ public class RotatorSubsystem extends SubsystemBase {
             System.out.println("RotatorPIDOnly.periodic: ff: " + ff);
             System.out.println("RotatorPIDOnly.periodic: safe speed: " + safeSpeed);
         }
+        System.out.println(" rotator " + getMeasurementDegrees());
     }
 
     @Override

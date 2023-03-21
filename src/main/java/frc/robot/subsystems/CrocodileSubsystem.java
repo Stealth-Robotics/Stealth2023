@@ -28,7 +28,7 @@ public class CrocodileSubsystem extends SubsystemBase {
     private final double SPEED_LIMIT = 0.0;
 
     // Offset of the encoder. See diagram above for reference
-    private final double ENCODER_OFFSET = 0.3;
+    private final double ENCODER_OFFSET = 0;
 
     public enum GamePiece {
         CONE("CONE"), 
@@ -56,7 +56,7 @@ public class CrocodileSubsystem extends SubsystemBase {
 
     public void setToCurrentPosition() {
         setWristSetpoint(wristEncoder.getAbsolutePosition());
-    }
+    } 
 
     public void setIntakeSpeed(double speed) {
         intake.set(speed);
@@ -99,8 +99,9 @@ public class CrocodileSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        setWristSpeed(MathUtil.clamp(wristPID.calculate(wristEncoder.getAbsolutePosition()), -SPEED_LIMIT, SPEED_LIMIT));
+        // setWristSpeed(MathUtil.clamp(wristPID.calculate(wristEncoder.getAbsolutePosition()), -SPEED_LIMIT, SPEED_LIMIT));
         SmartDashboard.putBoolean("Beam Break Status", !getBeamBreak());
         SmartDashboard.putString("Current Piece Selection", gamePiece.getData());
+        System.out.println(getBeamBreak() + " " + getWristPosition());
     }
 }
