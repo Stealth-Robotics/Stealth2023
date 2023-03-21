@@ -71,8 +71,11 @@ public class RobotContainer {
 
     swerve = new DrivebaseSubsystem();
     telescope = new TelescopeSubsystem();
-    rotator = new RotatorSubsystem();
+    SmartDashboard.putData("Telescope", telescope);
+    rotator = new RotatorSubsystem(telescope);
+    SmartDashboard.putData("Rotator", rotator);
     endEffector = new CrocodileSubsystem();
+    SmartDashboard.putData("Intake", endEffector);
 
     camera.setResolution(160, 120);
     camera.setFPS(30);
@@ -130,8 +133,7 @@ public class RobotContainer {
     mechController.y().onTrue(new RotatorToPosition(rotator, telescope, 200));
     mechController.x().onTrue(new TelescopeToPosition(telescope, 0.9));
     mechController.b().onTrue(new InstantCommand(() -> telescope.resetEncoder()));
-    driverController.y().onTrue(new AutoIntakeCommand(endEffector, 0.5));
-    driverController.x().onTrue(new AutoIntakeCommand(endEffector, -0.5));
+    driverController.y().onTrue(new AutoIntakeCommand(endEffector, 0.5, driverController.y()));
   }
 
   public void teleopInit() {

@@ -31,8 +31,13 @@ public class CrocodileDefaultCommand extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-
-        subsystem.setIntakeSpeed(trigger.getAsDouble());
+        //TODO: check if this is the right negation
+        if(subsystem.getGamePiece() == CrocodileSubsystem.GamePiece.CONE){
+            subsystem.setIntakeSpeed(trigger.getAsDouble());
+        }
+        else{
+            subsystem.setIntakeSpeed(-trigger.getAsDouble());
+        }
         // sets rumble if beam break is broken for 0.5 seconds and is not already
         // rumbling
         if (!subsystem.getBeamBreak() && !beamBreakTracker) {
