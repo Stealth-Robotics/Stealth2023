@@ -12,15 +12,17 @@ import frc.robot.subsystems.RotatorSubsystem;
 import frc.robot.subsystems.TelescopeSubsystem;
 import frc.robot.subsystems.CrocodileSubsystem.GamePiece;
 import frc.robot.subsystems.CrocodileSubsystem.WristPosition;
+import frc.robot.subsystems.RotatorSubsystem.RotatorPosition;
 import frc.robot.subsystems.TelescopeSubsystem.TelescopePosition;
 
-public class StowPresetSequence extends SequentialCommandGroup {
-    public StowPresetSequence(TelescopeSubsystem telescope, RotatorSubsystem rotator, CrocodileSubsystem crocodile) {
+public class SubstationPickupPresetSequence extends SequentialCommandGroup {
+    public SubstationPickupPresetSequence(TelescopeSubsystem telescope, RotatorSubsystem rotator, CrocodileSubsystem crocodile, BooleanSupplier button) {
         addRequirements(telescope,rotator,crocodile);
         addCommands(
-            new TelescopeToPosition(telescope, TelescopePosition.RETRACTED).withTimeout(2),
-            new RotatorToPosition(rotator, telescope, 90).withTimeout(2),
-            crocodile.setWristToPositionCommand(WristPosition.CONE_SCORE).withTimeout(2)
+            new RotatorToPosition(rotator, telescope, RotatorPosition.SHELF_PICKUP).withTimeout(2),
+            new TelescopeToPosition(telescope, TelescopePosition.SHELF_PICKUP).withTimeout(2),
+            crocodile.setWristToPositionCommand(WristPosition.CONE_SHELF).withTimeout(2),
+            new AutoIntakeCommand(crocodile, 1, button)
         );
     }
 }

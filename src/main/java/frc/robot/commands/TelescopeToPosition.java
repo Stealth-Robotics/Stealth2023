@@ -20,8 +20,7 @@ public class TelescopeToPosition extends CommandBase {
     }
 
     public TelescopeToPosition(TelescopeSubsystem telescopeSubsystem, TelescopePosition position) {
-        this.telescopeSubsystem = telescopeSubsystem;
-        this.percent = position.getValue();
+        this(telescopeSubsystem, position.getValue());
     }
 
     @Override

@@ -23,12 +23,7 @@ public class RotatorToPosition extends CommandBase {
     }
 
     public RotatorToPosition(RotatorSubsystem rotatorSubsystem, TelescopeSubsystem telescope, RotatorPosition position) {
-        this.rotatorSubsystem = rotatorSubsystem;
-        this.setpoint = position.getValue();
-        this.telescope = telescope;
-        addRequirements(rotatorSubsystem);
-
-        resetTelescope = new TelescopeToPosition(telescope, 0);
+        this(rotatorSubsystem, telescope, position.getValue());
     }
 
     // Set the setpoint to the desired position

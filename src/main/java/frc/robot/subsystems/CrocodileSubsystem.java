@@ -26,10 +26,12 @@ public class CrocodileSubsystem extends SubsystemBase {
     private final double WRIST_kD = 0.00075;
 
     // TODO: Set speed limit
-    private final double SPEED_LIMIT = 0.75;
+    public final double SPEED_LIMIT = 0.75;
 
     // Offset of the encoder. See diagram above for reference
     private final double ENCODER_OFFSET = 0;
+
+    private boolean runPID = true;
 
     public enum GamePiece {
         CONE("CONE"), 
@@ -47,10 +49,10 @@ public class CrocodileSubsystem extends SubsystemBase {
     // TODO: set to actual position values
     public enum WristPosition {
         CONE_PICKUP(160),
-        CUBE_PICKUP(151),
+        CUBE_PICKUP(142),
         CONE_SCORE(89),
         CUBE_SCORE(-1),
-        CONE_SHELF(-1),
+        CONE_SHELF(80),
         CUBE_SHELF(-1);
 
         private final int value;
@@ -85,7 +87,7 @@ public class CrocodileSubsystem extends SubsystemBase {
         intake.set(speed);
     }
 
-    private void setWristSpeed(double speed) {
+    public void setWristSpeed(double speed) {
         wrist.set(speed);
     }
 
@@ -131,12 +133,15 @@ public class CrocodileSubsystem extends SubsystemBase {
         this.gamePiece = gamePiece;
     }
 
+    public void setRunPID(boolean set) {
+        runPID = set;
+    }
+
     @Override
     public void periodic() {
-        setWristSpeed(
-                MathUtil.clamp(wristPID.calculate(getWristPosition()), -SPEED_LIMIT, SPEED_LIMIT));
+        if (runPID) setWristSpeed(MathUtil.clamp(wristPID.calculate(getWristPosition()), -SPEED_LIMIT, SPEED_LIMIT));
         SmartDashboard.putBoolean("Beam Break Status", !getBeamBreak());
         SmartDashboard.putString("Current Piece Selection", gamePiece.getData());
-        // System.out.println(getBeamBreak() + " " + getWristPosition() + " pwr " + MathUtil.clamp(wristPID.calculate(getWristPosition()), -SPEED_LIMIT, SPEED_LIMIT));
+        System.out.println(getBeamBreak() + " " + getWristPosition() + " pwr " + MathUtil.clamp(wristPID.calculate(getWristPosition()), -SPEED_LIMIT, SPEED_LIMIT));
     }
 }

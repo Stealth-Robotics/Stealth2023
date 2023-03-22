@@ -49,15 +49,14 @@ public class TelescopeSubsystem extends SubsystemBase {
     // The current setpoint of the telescope
     private double currentSetpoint;
     // The telescope cannot exceed these ticks
-    private final int MAXIMUM_TICKS = 75000;
+    private final static int MAXIMUM_TICKS = 75000;
 
-    //TODO: set to actual position values
     public enum TelescopePosition {
-        GROUND_PICKUP(-1), 
-        SHELF_PICKUP(-1), 
-        HIGH_SCORE(-1), 
-        MID_SCORE(-1), 
-        LOW_SHELF(-1);
+        GROUND_PICKUP(10000 / MAXIMUM_TICKS), 
+        SHELF_PICKUP(40000 / MAXIMUM_TICKS), 
+        HIGH_SCORE(37349 / MAXIMUM_TICKS), 
+        MID_SCORE(1000 / MAXIMUM_TICKS), 
+        RETRACTED(1000 / MAXIMUM_TICKS);
 
         private final int value;
         private TelescopePosition(int position){
