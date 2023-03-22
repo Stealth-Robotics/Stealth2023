@@ -18,6 +18,7 @@ import frc.robot.commands.TelescopeToPosition;
 import frc.robot.commands.Presets.HighPresetSequence;
 import frc.robot.commands.Presets.PickupPresetSequence;
 import frc.robot.commands.Presets.StowPresetSequence;
+import frc.robot.subsystems.CandleSubsystem;
 import frc.robot.subsystems.CrocodileSubsystem;
 import frc.robot.subsystems.RotatorSubsystem;
 import frc.robot.subsystems.TelescopeSubsystem;
@@ -32,7 +33,7 @@ public class PreloadPlusOneLeft extends SequentialCommandGroup {
   private final TelescopeSubsystem telescope;
 
   public PreloadPlusOneLeft(DrivebaseSubsystem driveBase, CrocodileSubsystem croc, RotatorSubsystem rotator,
-      TelescopeSubsystem telescope) {
+      TelescopeSubsystem telescope, CandleSubsystem candle) {
     // assign the drivebase and config file
     this.driveBase = driveBase;
     this.croc = croc;
@@ -47,7 +48,7 @@ public class PreloadPlusOneLeft extends SequentialCommandGroup {
         new WaitCommand(0.25),
         new InstantCommand(()->croc.setIntakeSpeed(0)),
         new ParallelCommandGroup(
-          new PickupPresetSequence(telescope, rotator, croc, null).withTimeout(3),
+          new PickupPresetSequence(telescope, rotator, croc, candle, null).withTimeout(3),
           new SwerveTrajectoryFollowCommand(driveBase, "preloadPlusOneLeft1", defaultConfig)
         ),
         new StowPresetSequence(telescope, rotator, croc),
