@@ -89,6 +89,7 @@ public class TelescopeSubsystem extends SubsystemBase {
     }
 
     public void onInit(){
+        resetEncoder();
         setToCurrentPosition();
     }
 
