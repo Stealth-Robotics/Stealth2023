@@ -22,7 +22,14 @@ import frc.robot.commands.DefaultCommands.CrocodileDefaultCommand;
 import frc.robot.commands.DefaultCommands.RotatorDefaultCommand;
 import frc.robot.commands.DefaultCommands.TeleopDrivebaseDefaultCommand;
 import frc.robot.commands.DefaultCommands.TelescopeDefault;
+import frc.robot.commands.Presets.HighPresetSequence;
+import frc.robot.commands.Presets.MidPresetSequence;
+import frc.robot.commands.Presets.PickupPresetSequence;
+import frc.robot.commands.Presets.StowPresetSequence;
+import frc.robot.commands.Presets.SubstationPickupPresetSequence;
 import frc.robot.subsystems.TelescopeSubsystem;
+import frc.robot.subsystems.CrocodileSubsystem.GamePiece;
+import frc.robot.subsystems.CrocodileSubsystem.WristPosition;
 import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
 
 /**
@@ -71,8 +78,11 @@ public class RobotContainer {
 
     swerve = new DrivebaseSubsystem();
     telescope = new TelescopeSubsystem();
-    rotator = new RotatorSubsystem();
+    SmartDashboard.putData("Telescope", telescope);
+    rotator = new RotatorSubsystem(telescope);
+    SmartDashboard.putData("Rotator", rotator);
     endEffector = new CrocodileSubsystem();
+    SmartDashboard.putData("Intake", endEffector);
 
     camera.setResolution(160, 120);
     camera.setFPS(30);
@@ -94,11 +104,13 @@ public class RobotContainer {
     telescope.setDefaultCommand(
         new TelescopeDefault(
             telescope,
-            () -> -mechController.getLeftY()));
+            () -> -mechController.getLeftY(),
+            mechController.leftBumper()));
 
     endEffector.setDefaultCommand(new CrocodileDefaultCommand(
         endEffector,
         () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
+        () -> (mechController.getRightTriggerAxis() - mechController.getLeftTriggerAxis()),
         (t) -> driverController.getHID().setRumble(RumbleType.kBothRumble, t)));
     // autoChooser.setDefaultOption("Blue 1+Park", new BluePreloadParkCenter(swerve, endEffector, rotator, telescope));
     // autoChooser.addOption("Blue Preload", new BluePreloadOnly(swerve, endEffector, rotator, telescope));
@@ -126,12 +138,15 @@ public class RobotContainer {
 
     zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
 
-    // mechController.a().onTrue(new RotatorToPosition(rotator, telescope, 230));
-    mechController.y().onTrue(new RotatorToPosition(rotator, telescope, 200));
-    mechController.x().onTrue(new TelescopeToPosition(telescope, 0.9));
-    mechController.b().onTrue(new InstantCommand(() -> telescope.resetEncoder()));
-    driverController.y().onTrue(new AutoIntakeCommand(endEffector, 0.5));
-    driverController.x().onTrue(new AutoIntakeCommand(endEffector, -0.5));
+    mechController.a().onTrue(new PickupPresetSequence(telescope, rotator, endEffector, driverController.y()));
+    mechController.y().onTrue(new StowPresetSequence(telescope, rotator, endEffector));
+    mechController.x().onTrue(new HighPresetSequence(telescope, rotator, endEffector, () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis())));
+    mechController.b().onTrue(new MidPresetSequence(telescope, rotator, endEffector));
+    mechController.povLeft().onTrue(new InstantCommand(()->telescope.resetEncoder()));  
+    mechController.button(8).onTrue(new InstantCommand(() -> endEffector.setGamePiece(GamePiece.CONE)));
+    mechController.button(7).onTrue(new InstantCommand(() -> endEffector.setGamePiece(GamePiece.CUBE)));
+    mechController.povDown().onTrue(new SubstationPickupPresetSequence(telescope, rotator, endEffector, driverController.y()));
+    driverController.y().onTrue(new AutoIntakeCommand(endEffector, 0.5, driverController.y()));
   }
 
   public void teleopInit() {

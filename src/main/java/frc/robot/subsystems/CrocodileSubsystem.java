@@ -8,6 +8,8 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 
@@ -17,16 +19,52 @@ public class CrocodileSubsystem extends SubsystemBase {
     private final PIDController wristPID;
     private final DutyCycleEncoder wristEncoder;
     private final DigitalInput beamBreak;
+    private GamePiece gamePiece = GamePiece.CONE;
     //TODO: Tune PID
-    private final double WRIST_kP = 1.0;
+    private final double WRIST_kP = 0.015;
     private final double WRIST_kI = 0.0;
-    private final double WRIST_kD = 0.0;
+    private final double WRIST_kD = 0.00075;
 
     // TODO: Set speed limit
-    private final double SPEED_LIMIT = 0.0;
+    public final double SPEED_LIMIT = 0.75;
 
     // Offset of the encoder. See diagram above for reference
-    private final double ENCODER_OFFSET = 0.3;
+    private final double ENCODER_OFFSET = 0;
+
+    private boolean runPID = true;
+
+    public enum GamePiece {
+        CONE("CONE"), 
+        CUBE("CUBE");
+        private final String name;
+
+        private GamePiece(String name) {
+            this.name = name;
+        }
+        String getData(){
+            return name;
+        }
+    }
+
+    // TODO: set to actual position values
+    public enum WristPosition {
+        CONE_PICKUP(160),
+        CUBE_PICKUP(142),
+        CONE_SCORE(89),
+        CUBE_SCORE(-1),
+        CONE_SHELF(80),
+        CUBE_SHELF(-1);
+
+        private final int value;
+
+        private WristPosition(int position) {
+            this.value = position;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
 
     public CrocodileSubsystem() {
         intake = new WPI_TalonFX(RobotMap.Crocodile.INTAKE);
@@ -37,6 +75,8 @@ public class CrocodileSubsystem extends SubsystemBase {
         intake.setNeutralMode(NeutralMode.Brake);
         wrist.setNeutralMode(NeutralMode.Brake);
         intake.setInverted(true);
+        wrist.setInverted(false);
+        wristPID.setTolerance(5);
     }
 
     public void onInit(){
@@ -44,14 +84,14 @@ public class CrocodileSubsystem extends SubsystemBase {
     }
 
     public void setToCurrentPosition() {
-        setWristSetpoint(wristEncoder.getAbsolutePosition());
-    }
+        setWristSetpoint(getWristPosition());
+    } 
 
     public void setIntakeSpeed(double speed) {
         intake.set(speed);
     }
 
-    private void setWristSpeed(double speed) {
+    public void setWristSpeed(double speed) {
         wrist.set(speed);
     }
 
@@ -61,6 +101,21 @@ public class CrocodileSubsystem extends SubsystemBase {
 
     public double getWristSetpoint() {
         return wristPID.getSetpoint();
+    }
+
+    private void setWristToPosition(WristPosition position) {
+        setWristSetpoint(position.getValue());
+    }
+
+    public Command setWristToPositionCommand(WristPosition position) {
+        return this.startEnd(
+            () -> this.setWristToPosition(position), 
+            () -> this.setToCurrentPosition())
+            .until(() -> this.atSetpoint());
+    }
+    
+    public boolean atSetpoint() {
+        return wristPID.atSetpoint();
     }
 
     // In degrees
@@ -73,9 +128,24 @@ public class CrocodileSubsystem extends SubsystemBase {
     public boolean getBeamBreak() {
         return beamBreak.get();
     }
+    
+    public GamePiece getGamePiece() {
+        return gamePiece;
+    }
+
+    public void setGamePiece(GamePiece gamePiece) {
+        this.gamePiece = gamePiece;
+    }
+
+    public void setRunPID(boolean set) {
+        runPID = set;
+    }
 
     @Override
     public void periodic() {
-        setWristSpeed(MathUtil.clamp(wristPID.calculate(wristEncoder.getAbsolutePosition()), -SPEED_LIMIT, SPEED_LIMIT));
+        if (runPID) setWristSpeed(MathUtil.clamp(wristPID.calculate(getWristPosition()), -SPEED_LIMIT, SPEED_LIMIT));
+        SmartDashboard.putBoolean("Beam Break Status", !getBeamBreak());
+        SmartDashboard.putString("Current Piece Selection", gamePiece.getData());
+        System.out.println(getBeamBreak() + " " + getWristPosition() + " pwr " + MathUtil.clamp(wristPID.calculate(getWristPosition()), -SPEED_LIMIT, SPEED_LIMIT));
     }
 }

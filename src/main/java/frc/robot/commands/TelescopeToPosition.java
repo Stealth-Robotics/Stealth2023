@@ -1,7 +1,9 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.TelescopeSubsystem;
+import frc.robot.subsystems.TelescopeSubsystem.TelescopePosition;
 
 public class TelescopeToPosition extends CommandBase {
     // The subsystem the command runs on
@@ -9,10 +11,16 @@ public class TelescopeToPosition extends CommandBase {
     // Setpoint to run the telescope to
     // In percent of maximum extension
     private final double percent;
-
+    
     public TelescopeToPosition(TelescopeSubsystem telescopeSubsystem, double percent) {
         this.telescopeSubsystem = telescopeSubsystem;
+        percent = MathUtil.clamp(percent, 0.025, 0.9);
         this.percent = percent;
+        addRequirements(telescopeSubsystem);
+    }
+
+    public TelescopeToPosition(TelescopeSubsystem telescopeSubsystem, TelescopePosition position) {
+        this(telescopeSubsystem, position.getValue());
     }
 
     @Override

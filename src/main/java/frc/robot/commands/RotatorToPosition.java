@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.RotatorSubsystem;
 import frc.robot.subsystems.TelescopeSubsystem;
+import frc.robot.subsystems.RotatorSubsystem.RotatorPosition;
 
 public class RotatorToPosition extends CommandBase {
     private final RotatorSubsystem rotatorSubsystem;
@@ -19,6 +20,10 @@ public class RotatorToPosition extends CommandBase {
         addRequirements(rotatorSubsystem);
 
         resetTelescope = new TelescopeToPosition(telescope, 0);
+    }
+
+    public RotatorToPosition(RotatorSubsystem rotatorSubsystem, TelescopeSubsystem telescope, RotatorPosition position) {
+        this(rotatorSubsystem, telescope, position.getValue());
     }
 
     // Set the setpoint to the desired position
@@ -38,15 +43,10 @@ public class RotatorToPosition extends CommandBase {
         rotatorSubsystem.setSetpoint(setpoint);
     }
 
-    @Override
-    public void execute() {
-        rotatorSubsystem.setSetpoint(setpoint);
-    }
-
     // If we are at the end, or we are resetting the elevator, end the command.
     @Override
     public boolean isFinished() {
-        return rotatorSubsystem.atSetpoint() || resettingElevator;
+        return rotatorSubsystem.atSetpoint();
     }
 
     // Keep the setpoint steady when we end

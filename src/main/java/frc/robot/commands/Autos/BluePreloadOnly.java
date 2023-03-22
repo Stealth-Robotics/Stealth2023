@@ -13,10 +13,13 @@ import frc.robot.RobotMap.Crocodile;
 import frc.robot.commands.ResetTelescope;
 import frc.robot.commands.RotatorToPosition;
 import frc.robot.commands.SwerveTrajectoryFollowCommand;
+import frc.robot.commands.ReverseSwerveTrajectoryFollowCommand;
 import frc.robot.commands.TelescopeToPosition;
 import frc.robot.subsystems.CrocodileSubsystem;
+import frc.robot.subsystems.CrocodileSubsystem.WristPosition;
 import frc.robot.subsystems.RotatorSubsystem;
 import frc.robot.subsystems.TelescopeSubsystem;
+import frc.robot.subsystems.CrocodileSubsystem.WristPosition;
 import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
 
 public class BluePreloadOnly extends SequentialCommandGroup {
@@ -61,12 +64,13 @@ public class BluePreloadOnly extends SequentialCommandGroup {
         // new InstantCommand(() -> croc.setMotorSpeed(-0.2)),
         new WaitCommand(.2),
         // new InstantCommand(() -> croc.wristUp()),
+        croc.setWristToPositionCommand(WristPosition.CONE_PICKUP),
         new WaitCommand(.2),
         new TelescopeToPosition(telescope, 0.05),
         new RotatorToPosition(rotator, telescope, 90),
         new ResetTelescope(telescope),
         new RotatorToPosition(rotator, telescope, 90),
-        new SwerveTrajectoryFollowCommand(driveBase, "preloadPlusOneLeft1", defaultConfig, false, true)
+        new SwerveTrajectoryFollowCommand(driveBase, "preloadPlusOneLeft1", defaultConfig, true)
     // new SwerveTrajectoryFollowCommand(driveBase, "preloadParkCenter",
     // defaultConfig, false, true),
     // //LEVEL

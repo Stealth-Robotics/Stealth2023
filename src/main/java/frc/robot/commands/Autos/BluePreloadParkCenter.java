@@ -13,6 +13,7 @@ import frc.robot.commands.LevelRobot;
 import frc.robot.commands.ResetTelescope;
 import frc.robot.commands.RotatorToPosition;
 import frc.robot.commands.SwerveTrajectoryFollowCommand;
+import frc.robot.commands.ReverseSwerveTrajectoryFollowCommand;
 import frc.robot.commands.TelescopeToPosition;
 import frc.robot.subsystems.CrocodileSubsystem;
 import frc.robot.subsystems.RotatorSubsystem;
@@ -66,7 +67,7 @@ public class BluePreloadParkCenter extends SequentialCommandGroup {
         new RotatorToPosition(rotator, telescope, 90),
         new ResetTelescope(telescope),
         new RotatorToPosition(rotator, telescope, 90),
-        new SwerveTrajectoryFollowCommand(driveBase, "preloadParkCenter", defaultConfig, false, true),
+        new SwerveTrajectoryFollowCommand(driveBase, "preloadParkCenter", defaultConfig, true),
         // LEVEL
         new LevelRobot(driveBase),
         new RotatorToPosition(rotator, telescope, 90)
