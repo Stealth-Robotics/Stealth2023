@@ -98,6 +98,11 @@ public class RotatorSubsystem extends SubsystemBase {
         this.telescope = telescope;
     }
 
+    public void onInit(){
+        setToCurrentPosition();
+        runPID = true;
+    }
+
     // Sets the setpoint to where the rotator is currently
     public void setToCurrentPosition() {
         setSetpoint(Math.toDegrees(getMeasurementRadians()));

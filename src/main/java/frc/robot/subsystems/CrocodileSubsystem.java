@@ -79,6 +79,10 @@ public class CrocodileSubsystem extends SubsystemBase {
         wristPID.setTolerance(5);
     }
 
+    public void onInit(){
+        setToCurrentPosition();
+    }
+
     public void setToCurrentPosition() {
         setWristSetpoint(getWristPosition());
     } 

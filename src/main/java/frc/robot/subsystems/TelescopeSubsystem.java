@@ -88,6 +88,10 @@ public class TelescopeSubsystem extends SubsystemBase {
         telescopeMotor.setInverted(true);
     }
 
+    public void onInit(){
+        setToCurrentPosition();
+    }
+
     // Gets the setpoint of the internal PID
     private double getSetpoint() {
         return pid.getSetpoint();
