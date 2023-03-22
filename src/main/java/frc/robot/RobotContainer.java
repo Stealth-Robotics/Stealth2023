@@ -22,7 +22,11 @@ import frc.robot.commands.DefaultCommands.CrocodileDefaultCommand;
 import frc.robot.commands.DefaultCommands.RotatorDefaultCommand;
 import frc.robot.commands.DefaultCommands.TeleopDrivebaseDefaultCommand;
 import frc.robot.commands.DefaultCommands.TelescopeDefault;
+import frc.robot.commands.Presets.HighPresetSequence;
+import frc.robot.commands.Presets.PickupPresetSequence;
+import frc.robot.commands.Presets.StowPresetSequence;
 import frc.robot.subsystems.TelescopeSubsystem;
+import frc.robot.subsystems.CrocodileSubsystem.WristPosition;
 import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
 
 /**
@@ -129,9 +133,9 @@ public class RobotContainer {
 
     zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
 
-    // mechController.a().onTrue(new RotatorToPosition(rotator, telescope, 230));
-    mechController.y().onTrue(new RotatorToPosition(rotator, telescope, 200));
-    mechController.x().onTrue(new TelescopeToPosition(telescope, 0.9));
+    mechController.a().onTrue(new PickupPresetSequence(telescope, rotator, endEffector, driverController.y()));
+    mechController.y().onTrue(new StowPresetSequence(telescope, rotator, endEffector));
+    mechController.x().onTrue(new HighPresetSequence(telescope, rotator, endEffector));
     mechController.b().onTrue(new InstantCommand(() -> telescope.resetEncoder()));
     driverController.y().onTrue(new AutoIntakeCommand(endEffector, 0.5, driverController.y()));
   }

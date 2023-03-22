@@ -116,6 +116,10 @@ public class TelescopeSubsystem extends SubsystemBase {
         return percent * MAXIMUM_TICKS;
     }
 
+    // Converts a percentage of extension to encoder ticks
+    public double ticksToPercent(double ticks) {
+        return ticks / MAXIMUM_TICKS;
+    }
     // Sets the speed of the telescope
     // This should only ever be used for manual control
     public void setSpeed(double speed) {
@@ -174,6 +178,6 @@ public class TelescopeSubsystem extends SubsystemBase {
     public void periodic() {
         System.out.println("Telescope Position: " + getCurrentPosition() + " Telescope Setpoint: "
                 + getSetpoint());
-        if (runPID) setSpeed(MathUtil.clamp(pid.calculate(getCurrentPosition()), -0.2, 0.2));
+        if (runPID) setSpeed(MathUtil.clamp(pid.calculate(getCurrentPosition()), -0.5, 0.5));
     }
 }

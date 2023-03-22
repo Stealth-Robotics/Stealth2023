@@ -48,15 +48,10 @@ public class RotatorToPosition extends CommandBase {
         rotatorSubsystem.setSetpoint(setpoint);
     }
 
-    @Override
-    public void execute() {
-        rotatorSubsystem.setSetpoint(setpoint);
-    }
-
     // If we are at the end, or we are resetting the elevator, end the command.
     @Override
     public boolean isFinished() {
-        return rotatorSubsystem.atSetpoint() || resettingElevator;
+        return rotatorSubsystem.atSetpoint();
     }
 
     // Keep the setpoint steady when we end
