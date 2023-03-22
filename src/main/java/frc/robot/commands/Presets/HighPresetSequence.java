@@ -26,15 +26,10 @@ public class HighPresetSequence extends SequentialCommandGroup {
             multiplier = -1;
         }
         addCommands(
-            new ParallelCommandGroup(
-                new SequentialCommandGroup(
-                    new RotatorToPosition(rotator, telescope, RotatorPosition.HIGH_SCORE).withTimeout(2),
-                    new TelescopeToPosition(telescope, TelescopePosition.HIGH_SCORE).withTimeout(2),
-                    crocodile.setWristToPositionCommand(WristPosition.CONE_SCORE).withTimeout(2)
-                    // new InstantCommand(()->crocodile.openChomper())
-                ),
-                new InstantCommand(() -> crocodile.setIntakeSpeed(intake.getAsDouble() * multiplier))                
-            )
+            new InstantCommand(()->crocodile.setIntakeSpeed(0.25 * multiplier)),
+            new RotatorToPosition(rotator, telescope, RotatorPosition.HIGH_SCORE).withTimeout(2),
+            new TelescopeToPosition(telescope, TelescopePosition.HIGH_SCORE).withTimeout(2),
+            crocodile.setWristToPositionCommand(WristPosition.CONE_SCORE).withTimeout(2)
             
         );
     }
