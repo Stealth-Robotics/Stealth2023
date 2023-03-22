@@ -27,7 +27,17 @@ public class TelescopeSubsystem extends SubsystemBase {
     // F for telescope PID
     private static final double F_COEFF = 0;
     // The telecope cannot exceed these ticks
-    private static final int UPPER_BOUND = 97105;
+    public static final int UPPER_BOUND = 70000;
+    public static final int LOWER_BOUND = 1000;
+
+    public enum TelescopeBoundState {
+        // The telescope is within the bounds
+        IN_BOUNDS,
+        // The telescope is at the upper bound
+        OVER_UPPER_BOUND,
+        // The telescope is at the lower bound
+        UNDER_LOWER_BOUND
+    }
 
     // Telescope motor
     private final WPI_TalonFX telescopeMotor;
@@ -166,8 +176,14 @@ public class TelescopeSubsystem extends SubsystemBase {
     }
 
     // Returns true if the telescope is within its upper bound, false otherwise
-    public boolean inBounds() {
-        return getExtensionPercent() < 1;
+    public TelescopeBoundState inBounds() {
+        if (getCurrentPosition() > UPPER_BOUND) {
+            return TelescopeBoundState.OVER_UPPER_BOUND;
+        } else if (getCurrentPosition() < LOWER_BOUND) {
+            return TelescopeBoundState.UNDER_LOWER_BOUND;
+        } else {
+            return TelescopeBoundState.IN_BOUNDS;
+        }
     }
 
 

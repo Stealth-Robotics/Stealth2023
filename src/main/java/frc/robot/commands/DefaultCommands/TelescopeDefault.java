@@ -5,6 +5,7 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.TelescopeSubsystem;
+import frc.robot.subsystems.TelescopeSubsystem.TelescopeBoundState;
 
 public class TelescopeDefault extends CommandBase {
 
@@ -28,10 +29,12 @@ public class TelescopeDefault extends CommandBase {
         double joystickInput = joystickSupplier.getAsDouble();
 
         if (Math.abs(joystickInput) > 0.05) {
-            if (telescopeSubsystem.inBounds()) {
+            if (telescopeSubsystem.inBounds() == TelescopeBoundState.IN_BOUNDS) {
                 telescopeSubsystem.setSpeed(MathUtil.clamp(joystickInput, -0.3, 0.3));
-            } else {
-                telescopeSubsystem.setSpeed(MathUtil.clamp(joystickInput, 0.3, 0));
+            } else if (telescopeSubsystem.inBounds() == TelescopeBoundState.OVER_UPPER_BOUND) {
+                telescopeSubsystem.setSpeed(MathUtil.clamp(joystickInput, -0.3, 0));
+            } else if (telescopeSubsystem.inBounds() == TelescopeBoundState.UNDER_LOWER_BOUND) {
+                telescopeSubsystem.setSpeed(MathUtil.clamp(joystickInput, 0, 0.3));
             }
             telescopeSubsystem.setRunPID(false);
         } else {
