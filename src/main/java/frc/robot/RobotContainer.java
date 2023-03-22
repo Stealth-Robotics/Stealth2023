@@ -14,10 +14,9 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.RotatorSubsystem;
 import frc.robot.subsystems.CrocodileSubsystem;
 import frc.robot.commands.*;
-import frc.robot.commands.Autos.BluePreloadOnly;
-import frc.robot.commands.Autos.BluePreloadParkCenter;
-import frc.robot.commands.Autos.RedPreloadOnly;
-import frc.robot.commands.Autos.RedPreloadParkCenter;
+import frc.robot.commands.Autos.PreloadParkCenter;
+import frc.robot.commands.Autos.PreloadPlusOneLeft;
+import frc.robot.commands.Autos.PreloadPlusOneRight;
 import frc.robot.commands.DefaultCommands.CrocodileDefaultCommand;
 import frc.robot.commands.DefaultCommands.RotatorDefaultCommand;
 import frc.robot.commands.DefaultCommands.TeleopDrivebaseDefaultCommand;
@@ -112,11 +111,11 @@ public class RobotContainer {
         () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
         () -> (mechController.getRightTriggerAxis() - mechController.getLeftTriggerAxis()),
         (t) -> driverController.getHID().setRumble(RumbleType.kBothRumble, t)));
-    // autoChooser.setDefaultOption("Blue 1+Park", new BluePreloadParkCenter(swerve, endEffector, rotator, telescope));
-    // autoChooser.addOption("Blue Preload", new BluePreloadOnly(swerve, endEffector, rotator, telescope));
-    // autoChooser.addOption("Red 1+Park", new RedPreloadParkCenter(swerve, endEffector, rotator, telescope));
-    // autoChooser.addOption("Red Preload", new RedPreloadOnly(swerve, endEffector, rotator, telescope));
 
+
+    autoChooser.setDefaultOption("CENTER Preload Park", new PreloadParkCenter(swerve, endEffector, rotator, telescope));
+    autoChooser.addOption("RIGHT Preload + 1", new PreloadPlusOneRight(swerve, endEffector, rotator, telescope));
+    autoChooser.addOption("LEFT Preload + 1", new PreloadPlusOneLeft(swerve, endEffector, rotator, telescope));
     SmartDashboard.putData("Selected Autonomous", autoChooser);
 
 

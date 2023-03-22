@@ -6,20 +6,24 @@ package frc.robot.commands.Autos;
 
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.SharedConstants;
 import frc.robot.RobotMap.Crocodile;
+import frc.robot.commands.LevelRobot;
 import frc.robot.commands.ResetTelescope;
 import frc.robot.commands.RotatorToPosition;
 import frc.robot.commands.SwerveTrajectoryFollowCommand;
 import frc.robot.commands.TelescopeToPosition;
+import frc.robot.commands.Presets.HighPresetSequence;
+import frc.robot.commands.Presets.StowPresetSequence;
 import frc.robot.subsystems.CrocodileSubsystem;
 import frc.robot.subsystems.RotatorSubsystem;
 import frc.robot.subsystems.TelescopeSubsystem;
 import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
 
-public class PreloadPlusOne extends SequentialCommandGroup {
+public class PreloadParkCenter extends SequentialCommandGroup {
   // creates variables for the drivebase and defaultconfig.
   private final DrivebaseSubsystem driveBase;
   private final TrajectoryConfig defaultConfig;
@@ -27,7 +31,7 @@ public class PreloadPlusOne extends SequentialCommandGroup {
   private final RotatorSubsystem rotator;
   private final TelescopeSubsystem telescope;
 
-  public PreloadPlusOne(DrivebaseSubsystem driveBase, CrocodileSubsystem croc, RotatorSubsystem rotator,
+  public PreloadParkCenter(DrivebaseSubsystem driveBase, CrocodileSubsystem croc, RotatorSubsystem rotator,
       TelescopeSubsystem telescope) {
     // assign the drivebase and config file
     this.driveBase = driveBase;
@@ -38,7 +42,16 @@ public class PreloadPlusOne extends SequentialCommandGroup {
     this.defaultConfig = new TrajectoryConfig(SharedConstants.AutoConstants.k_MAX_SPEED_MPS,
         SharedConstants.AutoConstants.k_MAX_ACCEL_MPS_SQUARED);
     addCommands(
-        new RotatorToPosition(rotator, telescope, 230 )
+        new HighPresetSequence(telescope, rotator, croc, null),
+        new HighPresetSequence(telescope, rotator, croc, null),
+        new InstantCommand(()->croc.setIntakeSpeed(-1)),
+        new WaitCommand(0.25),
+        new InstantCommand(()->croc.setIntakeSpeed(0)),
+        new ParallelCommandGroup(
+          new StowPresetSequence(telescope, rotator, croc).withTimeout(3),
+          new SwerveTrajectoryFollowCommand(driveBase, "preloadParkCenter", defaultConfig)
+        ),
+        new LevelRobot(driveBase)
         /*
             * start
          * rotate telescope to scoring position
@@ -62,6 +75,8 @@ public class PreloadPlusOne extends SequentialCommandGroup {
          * move wrist back up to original position
          * retract arm back in
          * rotate arm to standby/pickup position
+         * move forward onto charging station
+         * level robot command 
              * end
          */
         
