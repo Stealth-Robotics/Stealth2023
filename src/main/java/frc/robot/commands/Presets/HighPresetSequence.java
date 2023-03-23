@@ -1,7 +1,9 @@
 package frc.robot.commands.Presets;
 
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -17,20 +19,22 @@ import frc.robot.subsystems.TelescopeSubsystem.TelescopePosition;
 
 public class HighPresetSequence extends SequentialCommandGroup {
     private DoubleSupplier intake;
-    private double multiplier = 1; 
-    public HighPresetSequence(TelescopeSubsystem telescope, RotatorSubsystem rotator, CrocodileSubsystem crocodile, DoubleSupplier intake) {
+
+    public HighPresetSequence(TelescopeSubsystem telescope, RotatorSubsystem rotator, CrocodileSubsystem crocodile,
+            DoubleSupplier intake, Supplier<GamePiece> gamePiece) {
         this.intake = intake;
-        addRequirements(rotator,telescope,crocodile);
-        
-        if(crocodile.getGamePiece() == GamePiece.CUBE){
-            multiplier = -1;
-        }
+        addRequirements(rotator, telescope, crocodile);
+        //thank you @mikemag for this
+        DoubleSupplier multiplier = () -> gamePiece.get() == GamePiece.CONE ? 1 : -1;
         addCommands(
-            new InstantCommand(()->crocodile.setIntakeSpeed(0.25 * multiplier)),
-            new RotatorToPosition(rotator, telescope, RotatorPosition.HIGH_SCORE).withTimeout(2),
-            new TelescopeToPosition(telescope, TelescopePosition.HIGH_SCORE).withTimeout(2),
-            crocodile.setWristToPositionCommand(WristPosition.CONE_SCORE).withTimeout(2)
-            
+                new InstantCommand(() -> crocodile.setIntakeSpeed(0.25 * multiplier.getAsDouble())),
+                new RotatorToPosition(rotator, telescope, RotatorPosition.HIGH_SCORE).withTimeout(2),
+                new TelescopeToPosition(telescope, TelescopePosition.HIGH_SCORE).withTimeout(2),
+                new ConditionalCommand(
+                    crocodile.setWristToPositionCommand(WristPosition.CONE_SCORE), 
+                    crocodile.setWristToPositionCommand(WristPosition.CUBE_SCORE), 
+                    () -> crocodile.getGamePiece() == GamePiece.CONE)
         );
+        
     }
 }

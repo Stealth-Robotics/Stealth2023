@@ -16,11 +16,10 @@ import frc.robot.subsystems.TelescopeSubsystem.TelescopePosition;
 
 public class StowPresetSequence extends SequentialCommandGroup {
     public StowPresetSequence(TelescopeSubsystem telescope, RotatorSubsystem rotator, CrocodileSubsystem crocodile) {
-        addRequirements(telescope,rotator,crocodile);
+        addRequirements(telescope, rotator, crocodile);
         addCommands(
-            new TelescopeToPosition(telescope, TelescopePosition.RETRACTED).withTimeout(2),
-            new RotatorToPosition(rotator, telescope, 90).withTimeout(2),
-            crocodile.setWristToPositionCommand(WristPosition.CONE_SCORE).withTimeout(2)
-        );
+                new TelescopeToPosition(telescope, TelescopePosition.RETRACTED).withTimeout(2),
+                new RotatorToPosition(rotator, telescope, 90).withTimeout(2),
+                crocodile.setWristToPositionCommand(WristPosition.CONE_SCORE).withTimeout(2));
     }
 }
