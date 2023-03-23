@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.CrocodileSubsystem;
 import java.util.function.BooleanSupplier;
-import frc.robot.subsystems.CrocodileSubsystem.GamePiece;
 
 public class AutoIntakeCommand extends CommandBase {
     private final CrocodileSubsystem crocodileSubsystem;
@@ -14,38 +13,30 @@ public class AutoIntakeCommand extends CommandBase {
     private final Timer timer;
     private final Debouncer debouncer;
     private final BooleanSupplier stopIntake;
-    private final GamePiece gamePiece;
+    private final BooleanSupplier gamePiece;
 
     private boolean wasCancelled = false;
-
+    //set stopIntake to null if you don't want to use it
     public AutoIntakeCommand(CrocodileSubsystem crocodileSubsystem, double speed,
-            BooleanSupplier stopIntake, GamePiece gamePiece) {
+            BooleanSupplier stopIntake, BooleanSupplier gamePiece) {
         this.crocodileSubsystem = crocodileSubsystem;
         this.speed = speed;
         debouncer = new Debouncer(0.5, DebounceType.kFalling);
         timer = new Timer();
         this.stopIntake = stopIntake;
-        crocodileSubsystem.setGamePiece(gamePiece);
-        this.gamePiece = crocodileSubsystem.getGamePiece();
+        this.gamePiece = gamePiece;
         addRequirements(crocodileSubsystem);
     }
-
-    // overload autointke and set stopIntake to null, use for auto
-    public AutoIntakeCommand(CrocodileSubsystem crocodileSubsystem, double speed,
-            GamePiece gamePiece) {
-        this(crocodileSubsystem, speed, null, gamePiece);
+    public AutoIntakeCommand(CrocodileSubsystem crocodileSubsystem, double speed, boolean gamePiece) {
+        this(crocodileSubsystem, speed, null, () -> gamePiece);
     }
 
-    // overload autointake and set gamepiece to getGamePiece
-    public AutoIntakeCommand(CrocodileSubsystem crocodileSubsystem,  double speed,
-            BooleanSupplier stopIntake) {
-        this(crocodileSubsystem, speed, stopIntake, crocodileSubsystem.getGamePiece());
-    }
+
 
     @Override
     public void initialize() {
         // TODO: check if this is the right negation
-        if (gamePiece == GamePiece.CONE) {
+        if (gamePiece.getAsBoolean()) {
             crocodileSubsystem.setIntakeSpeed(speed);
         } else {
             crocodileSubsystem.setIntakeSpeed(-speed);
@@ -57,7 +48,7 @@ public class AutoIntakeCommand extends CommandBase {
         // if outtaking, keep running motors until beam break hasn't been broken for 0.5
         // seconds
 
-        if ((speed < 0 && gamePiece == GamePiece.CONE) || (speed > 0 && gamePiece == GamePiece.CUBE)) {
+        if ((speed < 0 && gamePiece.getAsBoolean()) || (speed > 0 && !gamePiece.getAsBoolean())) {
             if (crocodileSubsystem.getBeamBreak()) {
                 timer.start();
             }

@@ -19,7 +19,7 @@ public class CrocodileSubsystem extends SubsystemBase {
     private final PIDController wristPID;
     private final DutyCycleEncoder wristEncoder;
     private final DigitalInput beamBreak;
-    private GamePiece gamePiece = GamePiece.CONE;
+    private boolean gamePiece = true;
     private final double WRIST_kP = 0.015;
     private final double WRIST_kI = 0.0;
     private final double WRIST_kD = 0.00075;
@@ -29,19 +29,6 @@ public class CrocodileSubsystem extends SubsystemBase {
     private final double ENCODER_OFFSET = 0;
 
     private boolean runPID = true;
-
-    public enum GamePiece {
-        CONE("CONE"), 
-        CUBE("CUBE");
-        private final String name;
-
-        private GamePiece(String name) {
-            this.name = name;
-        }
-        String getData(){
-            return name;
-        }
-    }
 
     public enum WristPosition {
         CONE_PICKUP(160),
@@ -125,11 +112,11 @@ public class CrocodileSubsystem extends SubsystemBase {
         return beamBreak.get();
     }
     
-    public GamePiece getGamePiece() {
+    public boolean getGamePiece() {
         return gamePiece;
     }
 
-    public void setGamePiece(GamePiece gamePiece) {
+    public void setGamePiece(boolean gamePiece) {
         this.gamePiece = gamePiece;
     }
 
@@ -141,7 +128,7 @@ public class CrocodileSubsystem extends SubsystemBase {
     public void periodic() {
         if (runPID) setWristSpeed(MathUtil.clamp(wristPID.calculate(getWristPosition()), -SPEED_LIMIT, SPEED_LIMIT));
         SmartDashboard.putBoolean("Beam Break Status", !getBeamBreak());
-        SmartDashboard.putString("Current Piece Selection", gamePiece.getData());
+        SmartDashboard.putBoolean("Current Piece Selection", getGamePiece());
         // System.out.println(getBeamBreak() + " " + getWristPosition());
     }
 }

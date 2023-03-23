@@ -10,7 +10,6 @@ import frc.robot.commands.TelescopeToPosition;
 import frc.robot.subsystems.CrocodileSubsystem;
 import frc.robot.subsystems.RotatorSubsystem;
 import frc.robot.subsystems.TelescopeSubsystem;
-import frc.robot.subsystems.CrocodileSubsystem.GamePiece;
 import frc.robot.subsystems.CrocodileSubsystem.WristPosition;
 import frc.robot.subsystems.RotatorSubsystem.RotatorPosition;
 import frc.robot.subsystems.TelescopeSubsystem.TelescopePosition;
@@ -23,6 +22,6 @@ public class SubstationPickupPresetSequence extends SequentialCommandGroup {
                 new RotatorToPosition(rotator, telescope, RotatorPosition.SHELF_PICKUP).withTimeout(2),
                 new TelescopeToPosition(telescope, TelescopePosition.SHELF_PICKUP).withTimeout(2),
                 crocodile.setWristToPositionCommand(WristPosition.CONE_SHELF).withTimeout(2),
-                new AutoIntakeCommand(crocodile, 1, button));
+                new AutoIntakeCommand(crocodile, 1, button, () -> crocodile.getGamePiece()));
     }
 }
