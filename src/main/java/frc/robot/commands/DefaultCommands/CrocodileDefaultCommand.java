@@ -9,7 +9,6 @@ import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.CrocodileSubsystem;
-import frc.robot.subsystems.CrocodileSubsystem.GamePiece;
 
 public class CrocodileDefaultCommand extends CommandBase {
     private final CrocodileSubsystem subsystem;
@@ -47,7 +46,7 @@ public class CrocodileDefaultCommand extends CommandBase {
             subsystem.setRunPID(true);
         }        
         //TODO: check if this is the right negation
-        if(subsystem.getGamePiece() == CrocodileSubsystem.GamePiece.CONE){
+        if(subsystem.getGamePiece()){
             subsystem.setIntakeSpeed(trigger.getAsDouble());
         }
         else{

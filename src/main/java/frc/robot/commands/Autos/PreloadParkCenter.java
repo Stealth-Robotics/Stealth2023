@@ -42,8 +42,8 @@ public class PreloadParkCenter extends SequentialCommandGroup {
     this.defaultConfig = new TrajectoryConfig(SharedConstants.AutoConstants.k_MAX_SPEED_MPS,
         SharedConstants.AutoConstants.k_MAX_ACCEL_MPS_SQUARED);
     addCommands(
-        new HighPresetSequence(telescope, rotator, croc, null),
-        new HighPresetSequence(telescope, rotator, croc, null),
+        new HighPresetSequence(telescope, rotator, croc, null, () -> true),
+        new HighPresetSequence(telescope, rotator, croc, null, () -> true),
         new InstantCommand(()->croc.setIntakeSpeed(-1)),
         new WaitCommand(0.25),
         new InstantCommand(()->croc.setIntakeSpeed(0)),
