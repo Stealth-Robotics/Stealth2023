@@ -3,6 +3,7 @@ package frc.robot.commands.Presets;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AutoIntakeCommand;
@@ -22,17 +23,11 @@ public class SubstationPickupPresetSequence extends SequentialCommandGroup {
         addRequirements(telescope, rotator, crocodile);
         addCommands(
                 new RotatorToPosition(rotator, telescope, RotatorPosition.SHELF_PICKUP).withTimeout(2),
-                new TelescopeToPosition(telescope, TelescopePosition.SHELF_PICKUP).withTimeout(2));
-        switch (gamePiece.get()) {
-            case CONE:
-                addCommands(
-                        crocodile.setWristToPositionCommand(WristPosition.CONE_SHELF).withTimeout(2));
-                break;
-            case CUBE:
-                addCommands(
-                        crocodile.setWristToPositionCommand(WristPosition.CUBE_SHELF).withTimeout(2));
-                break;
-        }
-        addCommands(new AutoIntakeCommand(crocodile, 1, button));
+                new TelescopeToPosition(telescope, TelescopePosition.SHELF_PICKUP).withTimeout(2),
+                new ConditionalCommand(
+                    crocodile.setWristToPositionCommand(WristPosition.CONE_SCORE), 
+                    crocodile.setWristToPositionCommand(WristPosition.CUBE_SCORE), 
+                    () -> crocodile.getGamePiece() == GamePiece.CONE),
+                new AutoIntakeCommand(crocodile, 1, button));
     }
 }

@@ -2,6 +2,7 @@ package frc.robot.commands.Presets;
 
 import java.util.function.Supplier;
 
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.RotatorToPosition;
@@ -18,16 +19,10 @@ public class MidPresetSequence extends SequentialCommandGroup {
             Supplier<GamePiece> gamePiece) {
         addRequirements(rotator, telescope, crocodile);
         addCommands(
-                new RotatorToPosition(rotator, telescope, RotatorPosition.HIGH_SCORE).withTimeout(2));
-        switch (gamePiece.get()) {
-            case CONE:
-                addCommands(
-                        crocodile.setWristToPositionCommand(WristPosition.CONE_SCORE).withTimeout(2));
-                break;
-            case CUBE:
-                addCommands(
-                        crocodile.setWristToPositionCommand(WristPosition.CUBE_SCORE).withTimeout(2));
-                break;
-        }
+                new RotatorToPosition(rotator, telescope, RotatorPosition.HIGH_SCORE).withTimeout(2),
+                new ConditionalCommand(
+                    crocodile.setWristToPositionCommand(WristPosition.CONE_SCORE), 
+                    crocodile.setWristToPositionCommand(WristPosition.CUBE_SCORE), 
+                    () -> crocodile.getGamePiece() == GamePiece.CONE));
     }
 }

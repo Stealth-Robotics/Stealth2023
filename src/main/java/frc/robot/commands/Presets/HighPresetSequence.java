@@ -3,6 +3,7 @@ package frc.robot.commands.Presets;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -31,16 +32,12 @@ public class HighPresetSequence extends SequentialCommandGroup {
         addCommands(
                 new InstantCommand(() -> crocodile.setIntakeSpeed(0.25 * multiplier)),
                 new RotatorToPosition(rotator, telescope, RotatorPosition.HIGH_SCORE).withTimeout(2),
-                new TelescopeToPosition(telescope, TelescopePosition.HIGH_SCORE).withTimeout(2));
-        switch (gamePiece.get()) {
-            case CONE:
-                addCommands(
-                        crocodile.setWristToPositionCommand(WristPosition.CONE_SCORE).withTimeout(2));
-                break;
-            case CUBE:
-                addCommands(
-                        crocodile.setWristToPositionCommand(WristPosition.CUBE_SCORE).withTimeout(2));
-                break;
-        }
+                new TelescopeToPosition(telescope, TelescopePosition.HIGH_SCORE).withTimeout(2),
+                new ConditionalCommand(
+                    crocodile.setWristToPositionCommand(WristPosition.CONE_SCORE), 
+                    crocodile.setWristToPositionCommand(WristPosition.CUBE_SCORE), 
+                    () -> crocodile.getGamePiece() == GamePiece.CONE)
+        );
+        
     }
 }
