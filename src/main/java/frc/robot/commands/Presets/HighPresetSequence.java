@@ -19,18 +19,15 @@ import frc.robot.subsystems.TelescopeSubsystem.TelescopePosition;
 
 public class HighPresetSequence extends SequentialCommandGroup {
     private DoubleSupplier intake;
-    private double multiplier = 1;
 
     public HighPresetSequence(TelescopeSubsystem telescope, RotatorSubsystem rotator, CrocodileSubsystem crocodile,
             DoubleSupplier intake, Supplier<GamePiece> gamePiece) {
         this.intake = intake;
         addRequirements(rotator, telescope, crocodile);
-
-        if (gamePiece.get() == GamePiece.CUBE) {
-            multiplier = -1;
-        }
+        //thank you @mikemag for this
+        DoubleSupplier multiplier = () -> gamePiece.get() == GamePiece.CONE ? 1 : -1;
         addCommands(
-                new InstantCommand(() -> crocodile.setIntakeSpeed(0.25 * multiplier)),
+                new InstantCommand(() -> crocodile.setIntakeSpeed(0.25 * multiplier.getAsDouble())),
                 new RotatorToPosition(rotator, telescope, RotatorPosition.HIGH_SCORE).withTimeout(2),
                 new TelescopeToPosition(telescope, TelescopePosition.HIGH_SCORE).withTimeout(2),
                 new ConditionalCommand(
