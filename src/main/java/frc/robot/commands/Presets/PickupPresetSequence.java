@@ -1,6 +1,7 @@
 package frc.robot.commands.Presets;
 
 import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -16,26 +17,26 @@ import frc.robot.subsystems.RotatorSubsystem.RotatorPosition;
 import frc.robot.subsystems.TelescopeSubsystem.TelescopePosition;
 
 public class PickupPresetSequence extends SequentialCommandGroup {
-    public PickupPresetSequence(TelescopeSubsystem telescope, RotatorSubsystem rotator, CrocodileSubsystem crocodile, BooleanSupplier button, BooleanSupplier gamePieice) {
-        addRequirements(telescope,rotator,crocodile);
+    public PickupPresetSequence(TelescopeSubsystem telescope, RotatorSubsystem rotator, CrocodileSubsystem crocodile,
+            BooleanSupplier button, Supplier<GamePiece> gamePieice) {
+        addRequirements(telescope, rotator, crocodile);
         addCommands(
-            new TelescopeToPosition(telescope, TelescopePosition.GROUND_PICKUP).withTimeout(2),
-            new RotatorToPosition(rotator, telescope, RotatorPosition.GROUND_PICKUP).withTimeout(2)
-        );
-        if (gamePieice.getAsBoolean()){
+                new TelescopeToPosition(telescope, TelescopePosition.GROUND_PICKUP).withTimeout(2),
+                new RotatorToPosition(rotator, telescope, RotatorPosition.GROUND_PICKUP).withTimeout(2));
+        if (gamePieice.get() == GamePiece.CONE) {
             addCommands(crocodile.setWristToPositionCommand(WristPosition.CONE_PICKUP).withTimeout(2));
-        }
-        else {
+        } else {
             addCommands(crocodile.setWristToPositionCommand(WristPosition.CUBE_PICKUP).withTimeout(2));
         }
         addCommands(new AutoIntakeCommand(crocodile, 1, button));
     }
-    public PickupPresetSequence(TelescopeSubsystem telescope, RotatorSubsystem rotator, CrocodileSubsystem crocodile, BooleanSupplier button) {
-        addRequirements(telescope,rotator,crocodile);
+
+    public PickupPresetSequence(TelescopeSubsystem telescope, RotatorSubsystem rotator, CrocodileSubsystem crocodile,
+            BooleanSupplier button) {
+        addRequirements(telescope, rotator, crocodile);
         addCommands(
-            new TelescopeToPosition(telescope, TelescopePosition.GROUND_PICKUP).withTimeout(2),
-            new RotatorToPosition(rotator, telescope, RotatorPosition.GROUND_PICKUP).withTimeout(2)
-        );
+                new TelescopeToPosition(telescope, TelescopePosition.GROUND_PICKUP).withTimeout(2),
+                new RotatorToPosition(rotator, telescope, RotatorPosition.GROUND_PICKUP).withTimeout(2));
         addCommands(crocodile.setWristToPositionCommand(WristPosition.CONE_PICKUP).withTimeout(2));
         addCommands(new AutoIntakeCommand(crocodile, 1, button));
     }

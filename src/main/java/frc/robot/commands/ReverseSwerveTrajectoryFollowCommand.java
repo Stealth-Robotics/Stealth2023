@@ -25,10 +25,10 @@ import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
  */
 public class ReverseSwerveTrajectoryFollowCommand extends SwerveTrajectoryFollowCommand {
 
-    public ReverseSwerveTrajectoryFollowCommand(DrivebaseSubsystem drivetrain, String pathFilename, TrajectoryConfig config,
-    boolean isInitial) {
+    public ReverseSwerveTrajectoryFollowCommand(DrivebaseSubsystem drivetrain, String pathFilename,
+            TrajectoryConfig config,
+            boolean isInitial) {
         super(drivetrain, pathFilename, config, true, isInitial);
     }
-
 
 }

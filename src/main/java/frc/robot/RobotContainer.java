@@ -115,7 +115,6 @@ public class RobotContainer {
         () -> (mechController.getRightTriggerAxis() - mechController.getLeftTriggerAxis()),
         (t) -> driverController.getHID().setRumble(RumbleType.kBothRumble, t)));
 
-
     autoChooser.setDefaultOption("CENTER Preload Park", new PreloadParkCenter(swerve, endEffector, rotator, telescope));
     autoChooser.addOption("RIGHT Preload + 1", new PreloadPlusOneRight(swerve, endEffector, rotator, telescope));
     autoChooser.addOption("LEFT Preload + 1", new PreloadPlusOneLeft(swerve, endEffector, rotator, telescope));
@@ -139,11 +138,13 @@ public class RobotContainer {
 
     zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
 
-    mechController.a().onTrue(new PickupPresetSequence(telescope, rotator, endEffector, driverController.y(), () -> (endEffector.getGamePiece() == GamePiece.CONE ? true : false)));
+    mechController.a().onTrue(new PickupPresetSequence(telescope, rotator, endEffector, driverController.y(),
+        () -> endEffector.getGamePiece()));
     mechController.y().onTrue(new StowPresetSequence(telescope, rotator, endEffector));
     mechController.x().onTrue(new HighPresetSequence(telescope, rotator, endEffector,
-        () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis())));
-    mechController.b().onTrue(new MidPresetSequence(telescope, rotator, endEffector));
+        () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
+        () -> endEffector.getGamePiece()));
+    mechController.b().onTrue(new MidPresetSequence(telescope, rotator, endEffector, () -> endEffector.getGamePiece()));
     mechController.povLeft().onTrue(new InstantCommand(() -> telescope.resetEncoder()));
     mechController.button(8).onTrue(new InstantCommand(() -> {
       endEffector.setGamePiece(GamePiece.CONE);
@@ -154,7 +155,8 @@ public class RobotContainer {
       candle.cube();
     }, endEffector));
     mechController.povDown()
-        .onTrue(new SubstationPickupPresetSequence(telescope, rotator, endEffector, driverController.y()));
+        .onTrue(new SubstationPickupPresetSequence(telescope, rotator, endEffector, driverController.y(),
+            () -> endEffector.getGamePiece()));
     driverController.y().onTrue(new AutoIntakeCommand(endEffector, 0.5, driverController.y()));
   }
 
