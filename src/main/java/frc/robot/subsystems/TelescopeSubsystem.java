@@ -27,8 +27,8 @@ public class TelescopeSubsystem extends SubsystemBase {
     // F for telescope PID
     private static final double F_COEFF = 0;
     // The telecope cannot exceed these ticks
-    public static final int UPPER_BOUND = 70000;
-    public static final int LOWER_BOUND = 1000;
+    public static final int UPPER_BOUND = 65000;
+    public static final int LOWER_BOUND = 2000;
 
     public enum TelescopeBoundState {
         // The telescope is within the bounds
@@ -49,14 +49,14 @@ public class TelescopeSubsystem extends SubsystemBase {
     // The current setpoint of the telescope
     private double currentSetpoint;
     // The telescope cannot exceed these ticks
-    private final static int MAXIMUM_TICKS = 75000;
+    private final static int MAXIMUM_TICKS = 69000;
 
     public enum TelescopePosition {
-        GROUND_PICKUP(10000 / MAXIMUM_TICKS), 
-        SHELF_PICKUP(40000 / MAXIMUM_TICKS), 
-        HIGH_SCORE(37349 / MAXIMUM_TICKS), 
-        MID_SCORE(1000 / MAXIMUM_TICKS), 
-        RETRACTED(1000 / MAXIMUM_TICKS);
+        GROUND_PICKUP(10000), 
+        SHELF_PICKUP(40000), 
+        HIGH_SCORE(37349), 
+        MID_SCORE(1000), 
+        RETRACTED(1000);
 
         private final int value;
         private TelescopePosition(int position){
@@ -126,7 +126,7 @@ public class TelescopeSubsystem extends SubsystemBase {
     }
 
     // Converts a percentage of extension to encoder ticks
-    private double percentToTicks(double percent) {
+    public double percentToTicks(double percent) {
         return percent * MAXIMUM_TICKS;
     }
 

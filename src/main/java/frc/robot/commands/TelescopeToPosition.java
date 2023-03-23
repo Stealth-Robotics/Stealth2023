@@ -10,23 +10,27 @@ public class TelescopeToPosition extends CommandBase {
     private final TelescopeSubsystem telescopeSubsystem;
     // Setpoint to run the telescope to
     // In percent of maximum extension
-    private final double percent;
+    private final double ticks;
     
     public TelescopeToPosition(TelescopeSubsystem telescopeSubsystem, double percent) {
         this.telescopeSubsystem = telescopeSubsystem;
         percent = MathUtil.clamp(percent, 0.025, 0.9);
-        this.percent = percent;
+        this.ticks = telescopeSubsystem.percentToTicks(percent);
+
         addRequirements(telescopeSubsystem);
     }
 
     public TelescopeToPosition(TelescopeSubsystem telescopeSubsystem, TelescopePosition position) {
-        this(telescopeSubsystem, position.getValue());
+        this.telescopeSubsystem = telescopeSubsystem;
+        this.ticks = position.getValue();
+
+        addRequirements(telescopeSubsystem);
     }
 
     @Override
     public void initialize() {
         // Set the setpoint to the desired position
-        telescopeSubsystem.setExtensionPercent(percent);
+        telescopeSubsystem.setSetpoint(ticks);
     }
 
     @Override

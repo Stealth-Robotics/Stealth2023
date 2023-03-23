@@ -20,15 +20,12 @@ public class CrocodileSubsystem extends SubsystemBase {
     private final DutyCycleEncoder wristEncoder;
     private final DigitalInput beamBreak;
     private GamePiece gamePiece = GamePiece.CONE;
-    //TODO: Tune PID
     private final double WRIST_kP = 0.015;
     private final double WRIST_kI = 0.0;
     private final double WRIST_kD = 0.00075;
 
-    // TODO: Set speed limit
     public final double SPEED_LIMIT = 0.75;
 
-    // Offset of the encoder. See diagram above for reference
     private final double ENCODER_OFFSET = 0;
 
     private boolean runPID = true;
@@ -46,7 +43,6 @@ public class CrocodileSubsystem extends SubsystemBase {
         }
     }
 
-    // TODO: set to actual position values
     public enum WristPosition {
         CONE_PICKUP(160),
         CUBE_PICKUP(142),
@@ -146,6 +142,6 @@ public class CrocodileSubsystem extends SubsystemBase {
         if (runPID) setWristSpeed(MathUtil.clamp(wristPID.calculate(getWristPosition()), -SPEED_LIMIT, SPEED_LIMIT));
         SmartDashboard.putBoolean("Beam Break Status", !getBeamBreak());
         SmartDashboard.putString("Current Piece Selection", gamePiece.getData());
-        System.out.println(getBeamBreak() + " " + getWristPosition() + " pwr " + MathUtil.clamp(wristPID.calculate(getWristPosition()), -SPEED_LIMIT, SPEED_LIMIT));
+        // System.out.println(getBeamBreak() + " " + getWristPosition());
     }
 }

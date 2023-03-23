@@ -35,8 +35,8 @@ public class RotatorSubsystem extends SubsystemBase {
     private static final double ROTATOR_D_COEFF = 0.075;
     // Feedforward Constants
     private static final double ROTATOR_KS_COEFF = 0;
-    private double ROTATOR_KG_COEFF_RETRACTED = 0.065;
-    private double ROTATOR_KG_COEFF_EXTENDED = 0.07;
+    private double ROTATOR_KG_COEFF_RETRACTED = 0.045;
+    private double ROTATOR_KG_COEFF_EXTENDED = 0.085;
     // Volt Second Per Rad
     private static final double ROTATOR_KV_COEFF = 0;
     // Volt Second Squared Per Rad
@@ -91,7 +91,7 @@ public class RotatorSubsystem extends SubsystemBase {
                 ROTATOR_I_COEFF,
                 ROTATOR_D_COEFF);
 
-        // pid.setTolerance(Math.toRadians(6));
+        pid.setTolerance(Math.toRadians(3.0));
 
         encoder = new DutyCycleEncoder(0);
 
@@ -211,7 +211,7 @@ public class RotatorSubsystem extends SubsystemBase {
             System.out.println("RotatorPIDOnly.periodic: ff: " + ff);
             System.out.println("RotatorPIDOnly.periodic: safe speed: " + safeSpeed);
         }
-        System.out.println(runPID + " rotator " + getMeasurementDegrees() + " SP " + pid.getSetpoint()+ " pwr "+ speed);
+        System.out.println("pwr " + safeSpeed + " rotator " + getMeasurementDegrees() + " SP " + Math.toDegrees(pid.getSetpoint())+ " ff "+ ff);
     }
 
     @Override

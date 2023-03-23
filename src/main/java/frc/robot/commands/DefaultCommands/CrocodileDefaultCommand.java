@@ -41,11 +41,7 @@ public class CrocodileDefaultCommand extends CommandBase {
         }
         else {
             subsystem.setRunPID(true);
-        }
-        if (!subsystem.getBeamBreak()){
-            subsystem.setIntakeSpeed(0.1);
-        }
-        
+        }        
         //TODO: check if this is the right negation
         if(subsystem.getGamePiece() == CrocodileSubsystem.GamePiece.CONE){
             subsystem.setIntakeSpeed(trigger.getAsDouble());
