@@ -42,7 +42,7 @@ public class PreloadPlusOneLeft extends SequentialCommandGroup {
     this.defaultConfig = new TrajectoryConfig(SharedConstants.AutoConstants.k_MAX_SPEED_MPS,
         SharedConstants.AutoConstants.k_MAX_ACCEL_MPS_SQUARED);
     addCommands(
-        new HighPresetSequence(telescope, rotator, croc, null),
+        new HighPresetSequence(telescope, rotator, croc, null, () -> true),
         new InstantCommand(()->croc.setIntakeSpeed(-1)),
         new WaitCommand(0.25),
         new InstantCommand(()->croc.setIntakeSpeed(0)),
@@ -52,7 +52,7 @@ public class PreloadPlusOneLeft extends SequentialCommandGroup {
         ),
         new StowPresetSequence(telescope, rotator, croc),
         new SwerveTrajectoryFollowCommand(driveBase, "preloadPlusOneLeft2", defaultConfig),
-        new HighPresetSequence(telescope, rotator, croc, null),
+        new HighPresetSequence(telescope, rotator, croc, null, () -> true),
         new InstantCommand(()->croc.setIntakeSpeed(-1)),
         new WaitCommand(0.25),
         new StowPresetSequence(telescope, rotator, croc)
