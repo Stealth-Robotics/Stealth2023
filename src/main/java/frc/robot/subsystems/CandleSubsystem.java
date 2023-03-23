@@ -11,17 +11,13 @@ import frc.robot.RobotMap;
 
 public class CandleSubsystem extends SubsystemBase {
 
-    private final int LedCount = 308;
-    private final SingleFadeAnimation coneBlinkAnimation = new SingleFadeAnimation(255, 255, 0, 0, 0.4, LedCount);
-    private final SingleFadeAnimation cubeBlinkAnimation = new SingleFadeAnimation(240, 10, 180, 0, 0.4, LedCount);
+    private final int LedCount = 87;
 
     private final CANdle candle = new CANdle(RobotMap.Candle.CANDLE);
 
-    private Animation toAnimate = new RainbowAnimation(1, 0.5, LedCount);
-
     private int toRed = 0;
     private int toGreen = 0;
-    private int toBlue = 0;
+    private int toBlue = 255;
 
     public CandleSubsystem() {
         CANdleConfiguration config = new CANdleConfiguration();
@@ -34,24 +30,14 @@ public class CandleSubsystem extends SubsystemBase {
         candle.configAllSettings(config);
     }
 
-    public void coneBlink() {
-        toAnimate = coneBlinkAnimation;
-    }
-
-    public void cubeBlink() {
-        toAnimate = cubeBlinkAnimation;
-    }
-
-    public void coneSolid() {
-        toAnimate = null;
+    public void cone() {
 
         toRed = 255;
         toGreen = 255;
         toBlue = 0;
     }
 
-    public void cubeSolid() {
-        toAnimate = null;
+    public void cube() {
 
         toRed = 240;
         toGreen = 10;
@@ -61,13 +47,6 @@ public class CandleSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
 
-        if (toAnimate == null) {
-            candle.setLEDs(toRed, toGreen, toBlue, 0, 0, LedCount);
-        }
-
-        else {
-            candle.animate(toAnimate);
-        }
-
+        candle.setLEDs(toRed, toGreen, toBlue, 0, 0, LedCount);
     }
 }

@@ -31,12 +31,12 @@ public class RotatorSubsystem extends SubsystemBase {
     private static final double MAX_ACCELERATION = 10.0;
     // PID Constants
     private static final double ROTATOR_P_COEFF = 1;
-    private static final double ROTATOR_I_COEFF = 0.0005;
+    private static final double ROTATOR_I_COEFF = 0;
     private static final double ROTATOR_D_COEFF = 0.075;
     // Feedforward Constants
     private static final double ROTATOR_KS_COEFF = 0;
-    private double ROTATOR_KG_COEFF_RETRACTED = 0.045;
-    private double ROTATOR_KG_COEFF_EXTENDED = 0.085;
+    private double ROTATOR_KG_COEFF_RETRACTED = 0.065;
+    private double ROTATOR_KG_COEFF_EXTENDED = 0.070;
     // Volt Second Per Rad
     private static final double ROTATOR_KV_COEFF = 0;
     // Volt Second Squared Per Rad
@@ -61,7 +61,7 @@ public class RotatorSubsystem extends SubsystemBase {
     //TODO: set to actual position values
     public enum RotatorPosition {
         GROUND_PICKUP(72), 
-        SHELF_PICKUP(230), 
+        SHELF_PICKUP(216), 
         HIGH_SCORE(221), 
         MID_SCORE(221), 
         STOW(90);
@@ -91,7 +91,7 @@ public class RotatorSubsystem extends SubsystemBase {
                 ROTATOR_I_COEFF,
                 ROTATOR_D_COEFF);
 
-        pid.setTolerance(Math.toRadians(3.0));
+        pid.setTolerance(Math.toRadians(6.0));
 
         encoder = new DutyCycleEncoder(0);
 
@@ -211,7 +211,7 @@ public class RotatorSubsystem extends SubsystemBase {
             System.out.println("RotatorPIDOnly.periodic: ff: " + ff);
             System.out.println("RotatorPIDOnly.periodic: safe speed: " + safeSpeed);
         }
-        System.out.println("pwr " + safeSpeed + " rotator " + getMeasurementDegrees() + " SP " + Math.toDegrees(pid.getSetpoint())+ " ff "+ ff);
+        // System.out.println("pwr " + safeSpeed + " rotator " + getMeasurementDegrees() + " SP " + Math.toDegrees(pid.getSetpoint())+ " ff "+ ff);
     }
 
     @Override

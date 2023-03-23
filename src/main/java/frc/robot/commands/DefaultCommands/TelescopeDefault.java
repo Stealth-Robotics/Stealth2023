@@ -31,6 +31,7 @@ public class TelescopeDefault extends CommandBase {
         double joystickInput = joystickSupplier.getAsDouble();
         if (override.getAsBoolean()){
             telescopeSubsystem.setSpeed(MathUtil.clamp(joystickInput, -0.3, 0.3));
+            telescopeSubsystem.setRunPID(false);
         }
         else if (Math.abs(joystickInput) > 0.05) {
             if (telescopeSubsystem.inBounds() == TelescopeBoundState.IN_BOUNDS) {

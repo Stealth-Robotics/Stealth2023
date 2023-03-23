@@ -49,7 +49,7 @@ public class PreloadParkCenter extends SequentialCommandGroup {
         new InstantCommand(()->croc.setIntakeSpeed(0)),
         new ParallelCommandGroup(
           new StowPresetSequence(telescope, rotator, croc).withTimeout(3),
-          new SwerveTrajectoryFollowCommand(driveBase, "preloadParkCenter", defaultConfig)
+          new SwerveTrajectoryFollowCommand(driveBase, "preloadParkCenter", defaultConfig, true)
         ),
         new LevelRobot(driveBase)
         /*

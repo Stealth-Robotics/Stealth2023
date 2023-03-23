@@ -8,7 +8,6 @@ import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.CandleSubsystem;
 import frc.robot.subsystems.CrocodileSubsystem;
 import frc.robot.subsystems.CrocodileSubsystem.GamePiece;
 
@@ -19,26 +18,19 @@ public class CrocodileDefaultCommand extends CommandBase {
     private boolean beamBreakTracker = false;
     private final Debouncer debouncer;
     private final Timer timer;
-    private final CandleSubsystem candleSubsystem;
     DoubleConsumer giveHapticFeedback;
 
-    public CrocodileDefaultCommand(CrocodileSubsystem subsystem, CandleSubsystem candle, DoubleSupplier trigger, DoubleSupplier manualWrist,
+    public CrocodileDefaultCommand(CrocodileSubsystem subsystem, DoubleSupplier trigger, DoubleSupplier manualWrist,
             DoubleConsumer giveHapticFeedback) {
         this.subsystem = subsystem;
         this.trigger = trigger;
         this.wristTrigger = manualWrist;
-        this.candleSubsystem = candle;
         timer = new Timer();
         
         debouncer = new Debouncer(0.5, DebounceType.kFalling);
         this.giveHapticFeedback = giveHapticFeedback;
         
-        addRequirements(subsystem, candle);
-    }
-
-    public CrocodileDefaultCommand(CrocodileSubsystem subsystem, DoubleSupplier trigger, DoubleSupplier manualWrist,
-            DoubleConsumer giveHapticFeedback) {
-        this(subsystem, null, trigger, manualWrist, giveHapticFeedback);
+        addRequirements(subsystem);
     }
 
     
@@ -67,15 +59,6 @@ public class CrocodileDefaultCommand extends CommandBase {
             // get current time and do something to rumble
             timer.start();
             beamBreakTracker = true;
-
-            if(subsystem.getGamePiece() == GamePiece.CONE)
-            {
-                candleSubsystem.coneSolid();
-            }
-
-            else {
-                candleSubsystem.cubeSolid();
-            }
 
             giveHapticFeedback.accept(1.0);
         }

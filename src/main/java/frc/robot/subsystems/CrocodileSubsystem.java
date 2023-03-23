@@ -45,19 +45,19 @@ public class CrocodileSubsystem extends SubsystemBase {
 
     public enum WristPosition {
         CONE_PICKUP(160),
-        CUBE_PICKUP(142),
+        CUBE_PICKUP(115),
         CONE_SCORE(89),
         CUBE_SCORE(-1),
-        CONE_SHELF(80),
+        CONE_SHELF(60.5),
         CUBE_SHELF(-1);
 
-        private final int value;
+        private final double value;
 
-        private WristPosition(int position) {
+        private WristPosition(double position) {
             this.value = position;
         }
 
-        public int getValue() {
+        public double getValue() {
             return value;
         }
     }

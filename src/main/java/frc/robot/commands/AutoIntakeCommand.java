@@ -4,7 +4,6 @@ import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.CandleSubsystem;
 import frc.robot.subsystems.CrocodileSubsystem;
 import java.util.function.BooleanSupplier;
 import frc.robot.subsystems.CrocodileSubsystem.GamePiece;
@@ -16,11 +15,10 @@ public class AutoIntakeCommand extends CommandBase {
     private final Debouncer debouncer;
     private final BooleanSupplier stopIntake;
     private final GamePiece gamePiece;
-    private final CandleSubsystem candleSubsystem;
 
     private boolean wasCancelled = false;
 
-    public AutoIntakeCommand(CrocodileSubsystem crocodileSubsystem, CandleSubsystem candleSubsystem, double speed,
+    public AutoIntakeCommand(CrocodileSubsystem crocodileSubsystem, double speed,
             BooleanSupplier stopIntake, GamePiece gamePiece) {
         this.crocodileSubsystem = crocodileSubsystem;
         this.speed = speed;
@@ -29,20 +27,19 @@ public class AutoIntakeCommand extends CommandBase {
         this.stopIntake = stopIntake;
         crocodileSubsystem.setGamePiece(gamePiece);
         this.gamePiece = crocodileSubsystem.getGamePiece();
-        this.candleSubsystem = candleSubsystem;
-        addRequirements(crocodileSubsystem, candleSubsystem);
+        addRequirements(crocodileSubsystem);
     }
 
     // overload autointke and set stopIntake to null, use for auto
-    public AutoIntakeCommand(CrocodileSubsystem crocodileSubsystem, CandleSubsystem candleSubsystem, double speed,
+    public AutoIntakeCommand(CrocodileSubsystem crocodileSubsystem, double speed,
             GamePiece gamePiece) {
-        this(crocodileSubsystem, candleSubsystem, speed, null, gamePiece);
+        this(crocodileSubsystem, speed, null, gamePiece);
     }
 
     // overload autointake and set gamepiece to getGamePiece
-    public AutoIntakeCommand(CrocodileSubsystem crocodileSubsystem, CandleSubsystem candleSubsystem, double speed,
+    public AutoIntakeCommand(CrocodileSubsystem crocodileSubsystem,  double speed,
             BooleanSupplier stopIntake) {
-        this(crocodileSubsystem, candleSubsystem, speed, stopIntake, crocodileSubsystem.getGamePiece());
+        this(crocodileSubsystem, speed, stopIntake, crocodileSubsystem.getGamePiece());
     }
 
     @Override
@@ -88,15 +85,7 @@ public class AutoIntakeCommand extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         crocodileSubsystem.setIntakeSpeed(0);
-        if (!wasCancelled) {
-            if (gamePiece == GamePiece.CONE) {
-                candleSubsystem.coneSolid();
-            }
 
-            else {
-                candleSubsystem.cubeSolid();
-            }
-        }
     }
 
 }

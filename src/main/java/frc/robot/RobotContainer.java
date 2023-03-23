@@ -117,8 +117,8 @@ public class RobotContainer {
 
 
     autoChooser.setDefaultOption("CENTER Preload Park", new PreloadParkCenter(swerve, endEffector, rotator, telescope));
-    autoChooser.addOption("RIGHT Preload + 1", new PreloadPlusOneRight(swerve, endEffector, rotator, telescope, candle));
-    autoChooser.addOption("LEFT Preload + 1", new PreloadPlusOneLeft(swerve, endEffector, rotator, telescope, candle));
+    autoChooser.addOption("RIGHT Preload + 1", new PreloadPlusOneRight(swerve, endEffector, rotator, telescope));
+    autoChooser.addOption("LEFT Preload + 1", new PreloadPlusOneLeft(swerve, endEffector, rotator, telescope));
     SmartDashboard.putData("Selected Autonomous", autoChooser);
 
     // Configure the button bindings
@@ -139,7 +139,7 @@ public class RobotContainer {
 
     zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
 
-    mechController.a().onTrue(new PickupPresetSequence(telescope, rotator, endEffector, candle, driverController.y()));
+    mechController.a().onTrue(new PickupPresetSequence(telescope, rotator, endEffector, driverController.y(), () -> (endEffector.getGamePiece() == GamePiece.CONE ? true : false)));
     mechController.y().onTrue(new StowPresetSequence(telescope, rotator, endEffector));
     mechController.x().onTrue(new HighPresetSequence(telescope, rotator, endEffector,
         () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis())));
@@ -147,15 +147,15 @@ public class RobotContainer {
     mechController.povLeft().onTrue(new InstantCommand(() -> telescope.resetEncoder()));
     mechController.button(8).onTrue(new InstantCommand(() -> {
       endEffector.setGamePiece(GamePiece.CONE);
-      candle.coneBlink();
-    }, endEffector, candle));
+      candle.cone();
+    }, endEffector));
     mechController.button(7).onTrue(new InstantCommand(() -> {
       endEffector.setGamePiece(GamePiece.CUBE);
-      candle.cubeBlink();
-    }, endEffector, candle));
+      candle.cube();
+    }, endEffector));
     mechController.povDown()
-        .onTrue(new SubstationPickupPresetSequence(telescope, rotator, endEffector, candle, driverController.y()));
-    driverController.y().onTrue(new AutoIntakeCommand(endEffector, candle, 0.5, driverController.y()));
+        .onTrue(new SubstationPickupPresetSequence(telescope, rotator, endEffector, driverController.y()));
+    driverController.y().onTrue(new AutoIntakeCommand(endEffector, 0.5, driverController.y()));
   }
 
   public void teleopInit() {
@@ -177,9 +177,9 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // System.out.println("Selected Autonomous: " + autoChooser.getSelected());
-    // return autoChooser.getSelected();
+    return autoChooser.getSelected();
     // return null;
-    return new InstantCommand();
+    // return new InstantCommand();
     // return new BluePreloadOnly(swerve, endEffector, rotator, telescope);
   }
 }

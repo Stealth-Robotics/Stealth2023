@@ -53,7 +53,7 @@ public class TelescopeSubsystem extends SubsystemBase {
 
     public enum TelescopePosition {
         GROUND_PICKUP(10000), 
-        SHELF_PICKUP(40000), 
+        SHELF_PICKUP(30000), 
         HIGH_SCORE(37349), 
         MID_SCORE(1000), 
         RETRACTED(1000);
@@ -196,8 +196,8 @@ public class TelescopeSubsystem extends SubsystemBase {
     }
     @Override
     public void periodic() {
-        System.out.println("Telescope Position: " + getCurrentPosition() + " Telescope Setpoint: "
-                + getSetpoint());
+        // System.out.println("Telescope Position: " + getCurrentPosition() + " Telescope Setpoint: "
+        //         + getSetpoint());
         if (runPID) setSpeed(MathUtil.clamp(pid.calculate(getCurrentPosition()), -0.5, 0.5));
     }
 }
