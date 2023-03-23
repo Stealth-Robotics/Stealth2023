@@ -43,47 +43,46 @@ public class PreloadPlusOneRight extends SequentialCommandGroup {
     this.defaultConfig = new TrajectoryConfig(SharedConstants.AutoConstants.k_MAX_SPEED_MPS,
         SharedConstants.AutoConstants.k_MAX_ACCEL_MPS_SQUARED);
     addCommands(
-        new HighPresetSequence(telescope, rotator, croc, null, () ->GamePiece.CONE),
-        new InstantCommand(()->croc.setIntakeSpeed(-1)),
+        new HighPresetSequence(telescope, rotator, croc, null, () -> GamePiece.CONE),
+        new InstantCommand(() -> croc.setIntakeSpeed(-1)),
         new WaitCommand(0.25),
-        new InstantCommand(()->croc.setIntakeSpeed(0)),
+        new InstantCommand(() -> croc.setIntakeSpeed(0)),
         new ParallelCommandGroup(
-          new PickupPresetSequence(telescope, rotator, croc, null).withTimeout(3),
-          new SwerveTrajectoryFollowCommand(driveBase, "preloadPlusOneRight1", defaultConfig, true)
-        ),
-        new StowPresetSequence(telescope, rotator, croc),
+            new PickupPresetSequence(telescope, rotator, croc, null).withTimeout(3),
+            new SwerveTrajectoryFollowCommand(driveBase, "preloadPlusOneRight1", defaultConfig, true)),
+        new StowPresetSequence(telescope, rotator, croc, () -> 0, () -> GamePiece.CONE),
         new SwerveTrajectoryFollowCommand(driveBase, "preloadPlusOneRight2", defaultConfig),
-        new HighPresetSequence(telescope, rotator, croc, null, () ->GamePiece.CONE),
-        new InstantCommand(()->croc.setIntakeSpeed(-1)),
+        new HighPresetSequence(telescope, rotator, croc, null, () -> GamePiece.CONE),
+        new InstantCommand(() -> croc.setIntakeSpeed(-1)),
         new WaitCommand(0.25),
-        new StowPresetSequence(telescope, rotator, croc)
+        new StowPresetSequence(telescope, rotator, croc, () -> 0, () -> GamePiece.CONE)
 
-        /*
-            * start
-         * rotate telescope to scoring position
-         * extend telescope to top position
-         * move wrist to 90 degrees
-         * drop cone using chomper
-         * move wrist back up to original position
-         * retract arm
-         * rotate arm to standby/pickup position
-         * move forward to the cone
-         * extend arm out
-         * move wrist down to grabbing position
-         * move forward some more while wrist is sucking up cone to pick it up
-         * retract arm in
-         * move back to starting position
-         * more over to the left/right in line up with poles
-         * flip arm over
-         * extend arm to top position
-         * move wrist to 90 degrees
-         * drop cone using chomper
-         * move wrist back up to original position
-         * retract arm back in
-         * rotate arm to standby/pickup position
-             * end
-         */
-        
+    /*
+     * start
+     * rotate telescope to scoring position
+     * extend telescope to top position
+     * move wrist to 90 degrees
+     * drop cone using chomper
+     * move wrist back up to original position
+     * retract arm
+     * rotate arm to standby/pickup position
+     * move forward to the cone
+     * extend arm out
+     * move wrist down to grabbing position
+     * move forward some more while wrist is sucking up cone to pick it up
+     * retract arm in
+     * move back to starting position
+     * more over to the left/right in line up with poles
+     * flip arm over
+     * extend arm to top position
+     * move wrist to 90 degrees
+     * drop cone using chomper
+     * move wrist back up to original position
+     * retract arm back in
+     * rotate arm to standby/pickup position
+     * end
+     */
+
     );
     // grabs any requirements needed for the drivebase from other running commands.
     addRequirements(driveBase);
