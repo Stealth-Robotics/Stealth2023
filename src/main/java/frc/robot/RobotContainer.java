@@ -139,11 +139,16 @@ public class RobotContainer {
     zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
 
     mechController.a().onTrue(new PickupPresetSequence(telescope, rotator, endEffector, driverController.y()));
-    mechController.y().onTrue(new StowPresetSequence(telescope, rotator, endEffector));
+    mechController.y()
+        .onTrue(new StowPresetSequence(telescope, rotator, endEffector,
+            () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
+            () -> endEffector.getGamePiece()));
     mechController.x().onTrue(new HighPresetSequence(telescope, rotator, endEffector,
         () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
         () -> endEffector.getGamePiece()));
-    mechController.b().onTrue(new MidPresetSequence(telescope, rotator, endEffector, () -> endEffector.getGamePiece()));
+    mechController.b().onTrue(new MidPresetSequence(telescope, rotator, endEffector,
+        () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
+        () -> endEffector.getGamePiece()));
     mechController.povLeft().onTrue(new InstantCommand(() -> telescope.resetEncoder()));
     mechController.button(8).onTrue(new InstantCommand(() -> {
       endEffector.setGamePiece(GamePiece.CONE);

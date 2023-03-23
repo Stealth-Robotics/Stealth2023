@@ -6,8 +6,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.CrocodileSubsystem;
 import java.util.function.BooleanSupplier;
-import java.util.function.Supplier;
-
 import frc.robot.subsystems.CrocodileSubsystem.GamePiece;
 
 public class AutoIntakeCommand extends CommandBase {
@@ -21,13 +19,13 @@ public class AutoIntakeCommand extends CommandBase {
     private boolean wasCancelled = false;
 
     public AutoIntakeCommand(CrocodileSubsystem crocodileSubsystem, double speed,
-            BooleanSupplier stopIntake, Supplier<GamePiece> gamePiece) {
+            BooleanSupplier stopIntake, GamePiece gamePiece) {
         this.crocodileSubsystem = crocodileSubsystem;
         this.speed = speed;
         debouncer = new Debouncer(0.5, DebounceType.kFalling);
         timer = new Timer();
         this.stopIntake = stopIntake;
-        crocodileSubsystem.setGamePiece(gamePiece.get());
+        crocodileSubsystem.setGamePiece(gamePiece);
         this.gamePiece = crocodileSubsystem.getGamePiece();
         addRequirements(crocodileSubsystem);
     }
@@ -35,31 +33,34 @@ public class AutoIntakeCommand extends CommandBase {
     // overload autointke and set stopIntake to null, use for auto
     public AutoIntakeCommand(CrocodileSubsystem crocodileSubsystem, double speed,
             GamePiece gamePiece) {
-        this(crocodileSubsystem, speed, null, () -> gamePiece);
+        this(crocodileSubsystem, speed, null, gamePiece);
     }
 
     // overload autointake and set gamepiece to getGamePiece
-    public AutoIntakeCommand(CrocodileSubsystem crocodileSubsystem, double speed,
+    public AutoIntakeCommand(CrocodileSubsystem crocodileSubsystem,  double speed,
             BooleanSupplier stopIntake) {
-        this(crocodileSubsystem, speed, stopIntake, () -> crocodileSubsystem.getGamePiece());
+        this(crocodileSubsystem, speed, stopIntake, crocodileSubsystem.getGamePiece());
     }
 
     @Override
     public void initialize() {
         // TODO: check if this is the right negation
-        if (gamePiece == GamePiece.CONE) {
+        if (crocodileSubsystem.getGamePiece() == GamePiece.CONE) {
             crocodileSubsystem.setIntakeSpeed(speed);
         } else {
             crocodileSubsystem.setIntakeSpeed(-speed);
         }
     }
+    @Override
+    public void execute(){
 
+    }
     @Override
     public boolean isFinished() {
         // if outtaking, keep running motors until beam break hasn't been broken for 0.5
         // seconds
 
-        if ((speed < 0 && gamePiece == GamePiece.CONE) || (speed > 0 && gamePiece == GamePiece.CUBE)) {
+        if ((speed < 0 && crocodileSubsystem.getGamePiece() == GamePiece.CONE) || (speed > 0 && gamePiece == GamePiece.CUBE)) {
             if (crocodileSubsystem.getBeamBreak()) {
                 timer.start();
             }
