@@ -128,7 +128,7 @@ public class CrocodileSubsystem extends SubsystemBase {
     public void periodic() {
         if (runPID) setWristSpeed(MathUtil.clamp(wristPID.calculate(getWristPosition()), -SPEED_LIMIT, SPEED_LIMIT));
         SmartDashboard.putBoolean("Beam Break Status", !getBeamBreak());
-        SmartDashboard.putBoolean("Current Piece Selection", getGamePiece());
+        SmartDashboard.putData("Game Piece,", getGamePiece() ? "Cone" : "Cube");
         // System.out.println(getBeamBreak() + " " + getWristPosition());
     }
 }
