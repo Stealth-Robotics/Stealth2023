@@ -3,6 +3,7 @@ package frc.robot.commands.Presets;
 import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AutoIntakeCommand;
 import frc.robot.commands.RotatorToPosition;
@@ -22,7 +23,7 @@ public class StowPresetSequence extends SequentialCommandGroup {
             new RotatorToPosition(rotator, telescope, 90).withTimeout(2),
             crocodile.setWristToPositionCommand(WristPosition.CONE_SCORE).withTimeout(2)
         );
-        deadlineWith(new InstantCommand(() -> crocodile.setIntakeSpeed(0.25 * multiplier)));
+        deadlineWith(new RunCommand(() -> crocodile.setIntakeSpeed(0.25 * multiplier)));
     }
     public StowPresetSequence(TelescopeSubsystem telescope, RotatorSubsystem rotator, CrocodileSubsystem crocodile) {
         addRequirements(telescope,rotator,crocodile);

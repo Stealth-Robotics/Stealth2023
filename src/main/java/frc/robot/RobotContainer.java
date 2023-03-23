@@ -153,7 +153,7 @@ public class RobotContainer {
       candle.cube();
     }, endEffector));
     mechController.povDown()
-        .onTrue(new SubstationPickupPresetSequence(telescope, rotator, endEffector, driverController.y()));
+        .onTrue(new SubstationPickupPresetSequence(telescope, rotator, endEffector, driverController.y(), () -> endEffector.getGamePiece()));
   }
 
   public void teleopInit() {

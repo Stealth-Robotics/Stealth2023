@@ -6,6 +6,7 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.RotatorToPosition;
 import frc.robot.commands.TelescopeToPosition;
@@ -33,6 +34,6 @@ public class HighPresetSequence extends SequentialCommandGroup {
             crocodile.setWristToPositionCommand(WristPosition.CONE_SCORE).withTimeout(2)
             
         );
-        deadlineWith(new InstantCommand(() -> crocodile.setIntakeSpeed(MathUtil.clamp((0.25 + intake.getAsDouble()), -1, 1) * multiplier)));
+        deadlineWith(new RunCommand(() -> crocodile.setIntakeSpeed(MathUtil.clamp((0.25 + intake.getAsDouble()), -1, 1) * multiplier)));
     }
 }

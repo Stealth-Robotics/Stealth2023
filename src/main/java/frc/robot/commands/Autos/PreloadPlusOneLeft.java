@@ -47,7 +47,7 @@ public class PreloadPlusOneLeft extends SequentialCommandGroup {
         new WaitCommand(0.25),
         new InstantCommand(()->croc.setIntakeSpeed(0)),
         new ParallelCommandGroup(
-          new PickupPresetSequence(telescope, rotator, croc, null, true).withTimeout(3),
+          new PickupPresetSequence(telescope, rotator, croc, null, () -> true).withTimeout(3),
           new SwerveTrajectoryFollowCommand(driveBase, "preloadPlusOneLeft1", defaultConfig, true)
         ),
         new StowPresetSequence(telescope, rotator, croc),
