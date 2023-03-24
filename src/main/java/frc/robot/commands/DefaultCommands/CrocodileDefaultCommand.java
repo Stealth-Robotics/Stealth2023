@@ -38,6 +38,7 @@ public class CrocodileDefaultCommand extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        //WRIST MANUAL CONTROL
         if (Math.abs(wristTrigger.getAsDouble()) > 0.05) {
             subsystem.setWristSpeed(MathUtil.clamp(wristTrigger.getAsDouble(), -0.5, 0.5));
             subsystem.setRunPID(false);
@@ -45,14 +46,22 @@ public class CrocodileDefaultCommand extends CommandBase {
         }
         else {
             subsystem.setRunPID(true);
-        }        
-        //TODO: check if this is the right negation
+        }  
+        //INTAKE
+        double power = trigger.getAsDouble();
+        if (!subsystem.getBeamBreak()){
+            power += 0.25;
+        }
         if(subsystem.getGamePiece() == CrocodileSubsystem.GamePiece.CONE){
-            subsystem.setIntakeSpeed(trigger.getAsDouble());
+            subsystem.setIntakeSpeed(power);
         }
         else{
-            subsystem.setIntakeSpeed(-trigger.getAsDouble());
+            subsystem.setIntakeSpeed(-power);
         }
+        
+
+
+        //RUMBLE STUFF BLEOW
         // sets rumble if beam break is broken for 0.5 seconds and is not already
         // rumbling
         if (!subsystem.getBeamBreak() && !beamBreakTracker) {
