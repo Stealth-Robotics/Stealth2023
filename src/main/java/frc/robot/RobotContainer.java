@@ -12,12 +12,13 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.RotatorSubsystem;
-import frc.robot.subsystems.CandleSubsystem;
 import frc.robot.subsystems.CrocodileSubsystem;
 import frc.robot.commands.*;
 import frc.robot.commands.Autos.PreloadParkCenter;
 import frc.robot.commands.Autos.PreloadPlusOneLeft;
 import frc.robot.commands.Autos.PreloadPlusOneRight;
+import frc.robot.commands.Autos.EXIT_COMMUNITY;
+import frc.robot.commands.Autos.DO_NOTHING;
 import frc.robot.commands.DefaultCommands.CrocodileDefaultCommand;
 import frc.robot.commands.DefaultCommands.RotatorDefaultCommand;
 import frc.robot.commands.DefaultCommands.TeleopDrivebaseDefaultCommand;
@@ -67,7 +68,7 @@ public class RobotContainer {
   private final RotatorSubsystem rotator;
   private final CrocodileSubsystem endEffector;
   private final TelescopeSubsystem telescope;
-  private final CandleSubsystem candle;
+  //private final CandleSubsystem candle;
 
   private UsbCamera camera = CameraServer.startAutomaticCapture();
   private SendableChooser<Command> autoChooser = new SendableChooser<>();
@@ -84,7 +85,7 @@ public class RobotContainer {
     SmartDashboard.putData("Rotator", rotator);
     endEffector = new CrocodileSubsystem();
     SmartDashboard.putData("Intake", endEffector);
-    candle = new CandleSubsystem();
+    //candle = new CandleSubsystem();
 
     camera.setResolution(160, 120);
     camera.setFPS(30);
@@ -118,6 +119,8 @@ public class RobotContainer {
     autoChooser.setDefaultOption("CENTER Preload Park", new PreloadParkCenter(swerve, endEffector, rotator, telescope));
     autoChooser.addOption("RIGHT Preload + 1", new PreloadPlusOneRight(swerve, endEffector, rotator, telescope));
     autoChooser.addOption("LEFT Preload + 1", new PreloadPlusOneLeft(swerve, endEffector, rotator, telescope));
+    autoChooser.addOption("EXIT COMMUNITY", new EXIT_COMMUNITY(swerve, endEffector, rotator, telescope));
+    autoChooser.addOption("DO NOTHING", new DO_NOTHING(swerve, endEffector, rotator, telescope));
     SmartDashboard.putData("Selected Autonomous", autoChooser);
 
     // Configure the button bindings
@@ -152,16 +155,17 @@ public class RobotContainer {
     mechController.povLeft().onTrue(new InstantCommand(() -> telescope.resetEncoder()));
     mechController.button(8).onTrue(new InstantCommand(() -> {
       endEffector.setGamePiece(GamePiece.CONE);
-      candle.cone();
+      //candle.cone();
     }, endEffector));
     mechController.button(7).onTrue(new InstantCommand(() -> {
       endEffector.setGamePiece(GamePiece.CUBE);
-      candle.cube();
+      //candle.cube();
     }, endEffector));
     mechController.povDown()
         .onTrue(new SubstationPickupPresetSequence(telescope, rotator, endEffector, driverController.y(),
             () -> endEffector.getGamePiece()));
-    driverController.y().onTrue(new AutoIntakeCommand(endEffector, 0.5, driverController.y()));
+    // driverController.y().onTrue(new AutoIntakeCommand(endEffector, 0.5, driverController.y()));
+    driverController.leftBumper().onTrue(new AutoIntakeCommand(endEffector, 0.75, driverController.leftBumper()));
   }
 
   public void teleopInit() {

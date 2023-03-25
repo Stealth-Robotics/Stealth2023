@@ -42,7 +42,7 @@ public class RotatorSubsystem extends SubsystemBase {
     // Volt Second Squared Per Rad
     private static final double ROTATOR_KA_COEFF = 0;
     // Offset of the encoder. See diagram above for reference
-    private static final double ENCODER_OFFSET = -157 + 180;// (157.36 - 180);//(0.18439 * 360); //138;
+    private static final double ENCODER_OFFSET = 200;//90-187;//-26 + 180;// (157.36 - 180);//(0.18439 * 360); //138;
     // Bounds of the rotator, degrees
     private static final double HIGH_BOUND = 285;
     private static final double LOW_BOUND = 70;
@@ -62,8 +62,8 @@ public class RotatorSubsystem extends SubsystemBase {
     public enum RotatorPosition {
         GROUND_PICKUP(72), 
         SHELF_PICKUP(216), 
-        HIGH_SCORE(221), 
-        MID_SCORE(221), 
+        HIGH_SCORE(230), 
+        MID_SCORE(230), 
         STOW(90);
 
         private final int value;
@@ -211,7 +211,7 @@ public class RotatorSubsystem extends SubsystemBase {
             System.out.println("RotatorPIDOnly.periodic: ff: " + ff);
             System.out.println("RotatorPIDOnly.periodic: safe speed: " + safeSpeed);
         }
-        // System.out.println("pwr " + safeSpeed + " rotator " + getMeasurementDegrees() + " SP " + Math.toDegrees(pid.getSetpoint())+ " ff "+ ff);
+        // System.out.println(" rotator " + getMeasurementDegrees() + " SP " + Math.toDegrees(pid.getSetpoint())+ " ff "+ ff);
     }
 
     @Override

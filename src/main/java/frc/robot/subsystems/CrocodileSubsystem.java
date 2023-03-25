@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 
 public class CrocodileSubsystem extends SubsystemBase {
     private final WPI_TalonFX intake;
@@ -20,7 +21,7 @@ public class CrocodileSubsystem extends SubsystemBase {
     private final DutyCycleEncoder wristEncoder;
     private final DigitalInput beamBreak;
     private GamePiece gamePiece = GamePiece.CONE;
-    private final double WRIST_kP = 0.015;
+    private final double WRIST_kP = 0.01;
     private final double WRIST_kI = 0.0;
     private final double WRIST_kD = 0.00075;
 
@@ -29,6 +30,8 @@ public class CrocodileSubsystem extends SubsystemBase {
     private final double ENCODER_OFFSET = 0;
 
     private boolean runPID = true;
+
+    private double offset = 0;
 
     public enum GamePiece {
         CONE("CONE"), 
@@ -44,12 +47,12 @@ public class CrocodileSubsystem extends SubsystemBase {
     }
 
     public enum WristPosition {
-        CONE_PICKUP(160),
-        CUBE_PICKUP(115),
-        CONE_SCORE(89),
-        CUBE_SCORE(-1),
-        CONE_SHELF(60.5),
-        CUBE_SHELF(-1);
+        CONE_PICKUP(156),
+        CUBE_PICKUP(113  ),
+        CONE_SCORE(85),
+        CUBE_SCORE(44),
+        CONE_SHELF(56.5),
+        CUBE_SHELF(56.5);
 
         private final double value;
 
@@ -72,7 +75,9 @@ public class CrocodileSubsystem extends SubsystemBase {
         wrist.setNeutralMode(NeutralMode.Brake);
         intake.setInverted(true);
         wrist.setInverted(false);
-        wristPID.setTolerance(5);
+        wristPID.setTolerance(360);
+        // intake.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 35, 60, ENCODER_OFFSET));
+        
     }
 
     public void onInit(){
@@ -116,7 +121,7 @@ public class CrocodileSubsystem extends SubsystemBase {
 
     // In degrees
     public double getWristPosition() {
-        double currentPosition = wristEncoder.getAbsolutePosition();
+        double currentPosition = wristEncoder.getAbsolutePosition() + offset;
         double result = (((currentPosition * 360) - ENCODER_OFFSET) % 360);
         return result;
     }

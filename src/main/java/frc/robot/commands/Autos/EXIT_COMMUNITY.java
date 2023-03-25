@@ -17,7 +17,6 @@ import frc.robot.commands.RotatorToPosition;
 import frc.robot.commands.SwerveTrajectoryFollowCommand;
 import frc.robot.commands.TelescopeToPosition;
 import frc.robot.commands.Presets.HighPresetSequence;
-import frc.robot.commands.Presets.MidPresetSequence;
 import frc.robot.commands.Presets.PickupPresetSequence;
 import frc.robot.commands.Presets.StowPresetSequence;
 import frc.robot.subsystems.CrocodileSubsystem;
@@ -26,39 +25,15 @@ import frc.robot.subsystems.TelescopeSubsystem;
 import frc.robot.subsystems.CrocodileSubsystem.GamePiece;
 import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
 
-public class PreloadPlusOneLeft extends SequentialCommandGroup {
-  // creates variables for the drivebase and defaultconfig.
-  private final DrivebaseSubsystem driveBase;
+public class EXIT_COMMUNITY extends SequentialCommandGroup {
   private final TrajectoryConfig defaultConfig;
-  private final CrocodileSubsystem croc;
-  private final RotatorSubsystem rotator;
-  private final TelescopeSubsystem telescope;
 
-  public PreloadPlusOneLeft(DrivebaseSubsystem driveBase, CrocodileSubsystem croc, RotatorSubsystem rotator,
+  public EXIT_COMMUNITY(DrivebaseSubsystem driveBase, CrocodileSubsystem croc, RotatorSubsystem rotator,
       TelescopeSubsystem telescope) {
-    // assign the drivebase and config file
-    this.driveBase = driveBase;
-    this.croc = croc;
-    this.rotator = rotator;
-    this.telescope = telescope;
-    // sets the config variables to the speed and accel constants.
-    this.defaultConfig = new TrajectoryConfig(SharedConstants.AutoConstants.k_MAX_SPEED_MPS,
+        this.defaultConfig = new TrajectoryConfig(SharedConstants.AutoConstants.k_MAX_SPEED_MPS,
         SharedConstants.AutoConstants.k_MAX_ACCEL_MPS_SQUARED);
     addCommands(
-        new MidPresetSequence(telescope, rotator, croc, null, () -> GamePiece.CONE).withTimeout(2.5),
-        new InstantCommand(() -> croc.setIntakeSpeed(-1)),
-        new WaitCommand(0.25),
-        new InstantCommand(() -> croc.setIntakeSpeed(0)),
-        new ParallelCommandGroup(
-            new PickupPresetSequence(telescope, rotator, croc, null).withTimeout(3),
-            new SwerveTrajectoryFollowCommand(driveBase, "preloadPlusOneLeft1", defaultConfig, true)),
-        new AutoIntakeCommand(croc, 1, GamePiece.CONE),
-        new StowPresetSequence(telescope, rotator, croc, () -> 0, () -> GamePiece.CONE).withTimeout(2.5),
-        new SwerveTrajectoryFollowCommand(driveBase, "preloadPlusOneLeft2", defaultConfig),
-        new MidPresetSequence(telescope, rotator, croc, null, () -> GamePiece.CONE).withTimeout(2.5),
-        new InstantCommand(() -> croc.setIntakeSpeed(-1)),
-        new WaitCommand(0.25),
-        new StowPresetSequence(telescope, rotator, croc, () -> 0, () -> GamePiece.CONE).withTimeout(2.5)
+        new SwerveTrajectoryFollowCommand(driveBase, "moveOut", defaultConfig, true)
 
     /*
      * start

@@ -11,11 +11,13 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.SharedConstants;
 import frc.robot.RobotMap.Crocodile;
+import frc.robot.commands.AutoIntakeCommand;
 import frc.robot.commands.ResetTelescope;
 import frc.robot.commands.RotatorToPosition;
 import frc.robot.commands.SwerveTrajectoryFollowCommand;
 import frc.robot.commands.TelescopeToPosition;
 import frc.robot.commands.Presets.HighPresetSequence;
+import frc.robot.commands.Presets.MidPresetSequence;
 import frc.robot.commands.Presets.PickupPresetSequence;
 import frc.robot.commands.Presets.StowPresetSequence;
 import frc.robot.subsystems.CrocodileSubsystem;
@@ -43,19 +45,20 @@ public class PreloadPlusOneRight extends SequentialCommandGroup {
     this.defaultConfig = new TrajectoryConfig(SharedConstants.AutoConstants.k_MAX_SPEED_MPS,
         SharedConstants.AutoConstants.k_MAX_ACCEL_MPS_SQUARED);
     addCommands(
-        new HighPresetSequence(telescope, rotator, croc, null, () -> GamePiece.CONE),
+        new MidPresetSequence(telescope, rotator, croc, null, () -> GamePiece.CONE).withTimeout(2.5),
         new InstantCommand(() -> croc.setIntakeSpeed(-1)),
         new WaitCommand(0.25),
         new InstantCommand(() -> croc.setIntakeSpeed(0)),
         new ParallelCommandGroup(
-            new PickupPresetSequence(telescope, rotator, croc, null).withTimeout(3),
+            new PickupPresetSequence(telescope, rotator, croc, null).withTimeout(3).withTimeout(2.5),
             new SwerveTrajectoryFollowCommand(driveBase, "preloadPlusOneRight1", defaultConfig, true)),
-        new StowPresetSequence(telescope, rotator, croc, () -> 0, () -> GamePiece.CONE),
+        new AutoIntakeCommand(croc, 1, GamePiece.CONE),
+        new StowPresetSequence(telescope, rotator, croc, () -> 0, () -> GamePiece.CONE).withTimeout(2.5),
         new SwerveTrajectoryFollowCommand(driveBase, "preloadPlusOneRight2", defaultConfig),
-        new HighPresetSequence(telescope, rotator, croc, null, () -> GamePiece.CONE),
+        new MidPresetSequence(telescope, rotator, croc, null, () -> GamePiece.CONE).withTimeout(2.5),
         new InstantCommand(() -> croc.setIntakeSpeed(-1)),
         new WaitCommand(0.25),
-        new StowPresetSequence(telescope, rotator, croc, () -> 0, () -> GamePiece.CONE)
+        new StowPresetSequence(telescope, rotator, croc, () -> 0, () -> GamePiece.CONE).withTimeout(2.5)
 
     /*
      * start

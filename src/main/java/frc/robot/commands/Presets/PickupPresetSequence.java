@@ -25,9 +25,8 @@ public class PickupPresetSequence extends SequentialCommandGroup {
                 new TelescopeToPosition(telescope, TelescopePosition.GROUND_PICKUP).withTimeout(2),
                 new RotatorToPosition(rotator, telescope, RotatorPosition.GROUND_PICKUP).withTimeout(2),
                 new ConditionalCommand(
-                    crocodile.setWristToPositionCommand(WristPosition.CONE_PICKUP), 
-                    crocodile.setWristToPositionCommand(WristPosition.CUBE_PICKUP), 
-                    () -> crocodile.getGamePiece() == GamePiece.CONE),
-                new AutoIntakeCommand(crocodile, 1, button));
+                        crocodile.setWristToPositionCommand(WristPosition.CONE_PICKUP),
+                        crocodile.setWristToPositionCommand(WristPosition.CUBE_PICKUP),
+                        () -> crocodile.getGamePiece() == GamePiece.CONE).withTimeout(2.5));
     }
 }

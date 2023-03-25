@@ -13,7 +13,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
@@ -27,20 +26,31 @@ import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
 public class SwerveTrajectoryFollowCommand extends CommandBase {
 
     private final DrivebaseSubsystem drivetrain;
-    private PathPlannerTrajectory trajectory;
+    private final Trajectory trajectory;
     private Timer timer = new Timer();
     private Pose2d initialPathPlannerPose = null;
-    private boolean isInitial;
+
+    public SwerveTrajectoryFollowCommand(DrivebaseSubsystem drivetrain, Trajectory trajectory) {
+        this.drivetrain = drivetrain;
+        this.trajectory = trajectory;
+
+        addRequirements(drivetrain);
+    }
 
     public SwerveTrajectoryFollowCommand(DrivebaseSubsystem drivetrain, String pathFilename, TrajectoryConfig config,
             boolean isReversed, boolean isInitial) {
         this.drivetrain = drivetrain;
-        this.isInitial = isInitial;
         addRequirements(drivetrain);
 
         PathPlannerTrajectory ppTrajectory = PathPlanner.loadPath(pathFilename, config.getMaxVelocity(),
                 config.getMaxAcceleration(), isReversed);
         this.trajectory = ppTrajectory;
+
+        if (isInitial) {
+            initialPathPlannerPose = new Pose2d(
+                    ppTrajectory.getInitialPose().getTranslation(),
+                    ppTrajectory.getInitialState().holonomicRotation);
+        }
     }
 
     public SwerveTrajectoryFollowCommand(DrivebaseSubsystem drivetrain, String pathFilename, TrajectoryConfig config,
@@ -55,15 +65,6 @@ public class SwerveTrajectoryFollowCommand extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-
-        trajectory = PathPlannerTrajectory.transformTrajectoryForAlliance(trajectory, DriverStation.getAlliance());
-
-        if (isInitial) {
-            initialPathPlannerPose = new Pose2d(
-                    trajectory.getInitialPose().getTranslation(),
-                    trajectory.getInitialState().holonomicRotation);
-        }
-
         if (initialPathPlannerPose != null) {
             drivetrain.resetOdometry(initialPathPlannerPose);
         }
@@ -104,7 +105,7 @@ public class SwerveTrajectoryFollowCommand extends CommandBase {
         timer.stop();
     }
 
-    // Returns true when the command should end.
+    // Returns true when the command should   end.
     @Override
     public boolean isFinished() {
         // the path is time parametrized and takes a certain number of seconds

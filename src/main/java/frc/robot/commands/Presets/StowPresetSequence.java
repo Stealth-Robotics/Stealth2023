@@ -20,13 +20,19 @@ import frc.robot.subsystems.CrocodileSubsystem.WristPosition;
 import frc.robot.subsystems.TelescopeSubsystem.TelescopePosition;
 
 public class StowPresetSequence extends SequentialCommandGroup {
+    Command runIntake;
     public StowPresetSequence(TelescopeSubsystem telescope, RotatorSubsystem rotator, CrocodileSubsystem crocodile, DoubleSupplier intake, Supplier<GamePiece> gamePiece) {
         addRequirements(telescope, rotator, crocodile);
 
         //Thank you @mikemag for this
         DoubleSupplier multiplier = () -> gamePiece.get() == GamePiece.CONE ? 1 : -1;
-        Command runIntake = new RunCommand(() -> crocodile.setIntakeSpeed(
+        if (intake != null){
+            runIntake = new RunCommand(() -> crocodile.setIntakeSpeed(
                 MathUtil.clamp((0.25 + intake.getAsDouble()), -1, 1) * multiplier.getAsDouble()));
+        }
+        else {
+            runIntake = new InstantCommand();
+        }
 
         addCommands(
             new SequentialCommandGroup(
@@ -34,7 +40,7 @@ public class StowPresetSequence extends SequentialCommandGroup {
                 new TelescopeToPosition(telescope, TelescopePosition.RETRACTED).withTimeout(2),
                 new RotatorToPosition(rotator, telescope, 90).withTimeout(2),
                 crocodile.setWristToPositionCommand(WristPosition.CONE_SCORE).withTimeout(2)
-            ).deadlineWith(runIntake)
+            ).withTimeout(2.5).deadlineWith(runIntake)
         );
     }
 }

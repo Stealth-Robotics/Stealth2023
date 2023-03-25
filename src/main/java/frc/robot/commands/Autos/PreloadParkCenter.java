@@ -17,6 +17,7 @@ import frc.robot.commands.RotatorToPosition;
 import frc.robot.commands.SwerveTrajectoryFollowCommand;
 import frc.robot.commands.TelescopeToPosition;
 import frc.robot.commands.Presets.HighPresetSequence;
+import frc.robot.commands.Presets.MidPresetSequence;
 import frc.robot.commands.Presets.StowPresetSequence;
 import frc.robot.subsystems.CrocodileSubsystem;
 import frc.robot.subsystems.RotatorSubsystem;
@@ -43,13 +44,12 @@ public class PreloadParkCenter extends SequentialCommandGroup {
     this.defaultConfig = new TrajectoryConfig(SharedConstants.AutoConstants.k_MAX_SPEED_MPS,
         SharedConstants.AutoConstants.k_MAX_ACCEL_MPS_SQUARED);
     addCommands(
-        new HighPresetSequence(telescope, rotator, croc, null, () -> GamePiece.CONE),
-        new HighPresetSequence(telescope, rotator, croc, null, () -> GamePiece.CONE),
+        new MidPresetSequence(telescope, rotator, croc, null, () -> GamePiece.CONE).withTimeout(2.5),
         new InstantCommand(() -> croc.setIntakeSpeed(-1)),
         new WaitCommand(0.25),
         new InstantCommand(() -> croc.setIntakeSpeed(0)),
         new ParallelCommandGroup(
-            new StowPresetSequence(telescope, rotator, croc, () -> 0, () -> GamePiece.CONE).withTimeout(3),
+            new StowPresetSequence(telescope, rotator, croc, () -> 0, () -> GamePiece.CONE).withTimeout(3).withTimeout(2.5),
             new SwerveTrajectoryFollowCommand(driveBase, "preloadParkCenter", defaultConfig, true)),
         new LevelRobot(driveBase)
     /*
