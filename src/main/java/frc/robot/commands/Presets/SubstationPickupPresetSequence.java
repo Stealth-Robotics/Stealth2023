@@ -12,14 +12,14 @@ import frc.robot.commands.TelescopeToPosition;
 import frc.robot.subsystems.CrocodileSubsystem;
 import frc.robot.subsystems.RotatorSubsystem;
 import frc.robot.subsystems.TelescopeSubsystem;
-import frc.robot.subsystems.CrocodileSubsystem.GamePiece;
+import frc.robot.subsystems.Gamepiece;
 import frc.robot.subsystems.CrocodileSubsystem.WristPosition;
 import frc.robot.subsystems.RotatorSubsystem.RotatorPosition;
 import frc.robot.subsystems.TelescopeSubsystem.TelescopePosition;
 
 public class SubstationPickupPresetSequence extends SequentialCommandGroup {
     public SubstationPickupPresetSequence(TelescopeSubsystem telescope, RotatorSubsystem rotator,
-            CrocodileSubsystem crocodile, BooleanSupplier button, Supplier<GamePiece> gamePiece) {
+            CrocodileSubsystem crocodile, BooleanSupplier button, Supplier<Gamepiece> gamePiece) {
         addRequirements(telescope, rotator, crocodile);
         addCommands(
                 new RotatorToPosition(rotator, telescope, RotatorPosition.SHELF_PICKUP).withTimeout(2),

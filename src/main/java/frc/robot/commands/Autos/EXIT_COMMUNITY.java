@@ -22,7 +22,7 @@ import frc.robot.commands.Presets.StowPresetSequence;
 import frc.robot.subsystems.CrocodileSubsystem;
 import frc.robot.subsystems.RotatorSubsystem;
 import frc.robot.subsystems.TelescopeSubsystem;
-import frc.robot.subsystems.CrocodileSubsystem.GamePiece;
+import frc.robot.subsystems.Gamepiece;
 import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
 
 public class EXIT_COMMUNITY extends SequentialCommandGroup {

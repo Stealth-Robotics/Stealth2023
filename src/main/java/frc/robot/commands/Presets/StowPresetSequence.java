@@ -15,19 +15,20 @@ import frc.robot.commands.TelescopeToPosition;
 import frc.robot.subsystems.CrocodileSubsystem;
 import frc.robot.subsystems.RotatorSubsystem;
 import frc.robot.subsystems.TelescopeSubsystem;
-import frc.robot.subsystems.CrocodileSubsystem.GamePiece;
+import frc.robot.subsystems.Gamepiece;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.CrocodileSubsystem.WristPosition;
 import frc.robot.subsystems.TelescopeSubsystem.TelescopePosition;
 
 public class StowPresetSequence extends SequentialCommandGroup {
     Command runIntake;
-    public StowPresetSequence(TelescopeSubsystem telescope, RotatorSubsystem rotator, CrocodileSubsystem crocodile, DoubleSupplier intake, Supplier<GamePiece> gamePiece) {
+    public StowPresetSequence(TelescopeSubsystem telescope, RotatorSubsystem rotator, CrocodileSubsystem crocodile, DoubleSupplier intake, IntakeSubsystem intakeSubsystem, Supplier<Gamepiece> gamePiece) {
         addRequirements(telescope, rotator, crocodile);
 
         //Thank you @mikemag for this
-        DoubleSupplier multiplier = () -> gamePiece.get() == GamePiece.CONE ? 1 : -1;
+        DoubleSupplier multiplier = () -> gamePiece.get() == Gamepiece.CONE ? 1 : -1;
         if (intake != null){
-            runIntake = new RunCommand(() -> crocodile.setIntakeSpeed(
+            runIntake = new RunCommand(() -> intakeSubsystem.setIntakeSpeed(
                 MathUtil.clamp((0.25 + intake.getAsDouble()), -1, 1) * multiplier.getAsDouble()));
         }
         else {
@@ -36,7 +37,7 @@ public class StowPresetSequence extends SequentialCommandGroup {
 
         addCommands(
             new SequentialCommandGroup(
-                new InstantCommand(() -> crocodile.setIntakeSpeed(0.25 * multiplier.getAsDouble())),
+                new InstantCommand(() -> intakeSubsystem.setIntakeSpeed(0.25 * multiplier.getAsDouble())),
                 new TelescopeToPosition(telescope, TelescopePosition.RETRACTED).withTimeout(2),
                 new RotatorToPosition(rotator, telescope, 90).withTimeout(2),
                 crocodile.setWristToPositionCommand(WristPosition.CONE_SCORE).withTimeout(2)

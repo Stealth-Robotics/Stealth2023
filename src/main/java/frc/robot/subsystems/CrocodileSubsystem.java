@@ -20,7 +20,7 @@ public class CrocodileSubsystem extends SubsystemBase {
     private final PIDController wristPID;
     private final DutyCycleEncoder wristEncoder;
     private final DigitalInput beamBreak;
-    private GamePiece gamePiece = GamePiece.CONE;
+    private Gamepiece gamePiece = Gamepiece.CONE;
     private final double WRIST_kP = 0.01;
     private final double WRIST_kI = 0.0;
     private final double WRIST_kD = 0.00075;
@@ -32,19 +32,6 @@ public class CrocodileSubsystem extends SubsystemBase {
     private boolean runPID = true;
 
     private double offset = 0;
-
-    public enum GamePiece {
-        CONE("CONE"), 
-        CUBE("CUBE");
-        private final String name;
-
-        private GamePiece(String name) {
-            this.name = name;
-        }
-        String getData(){
-            return name;
-        }
-    }
 
     public enum WristPosition {
         CONE_PICKUP(156),
@@ -130,11 +117,11 @@ public class CrocodileSubsystem extends SubsystemBase {
         return beamBreak.get();
     }
     
-    public GamePiece getGamePiece() {
+    public Gamepiece getGamePiece() {
         return gamePiece;
     }
 
-    public void setGamePiece(GamePiece gamePiece) {
+    public void setGamePiece(Gamepiece gamePiece) {
         this.gamePiece = gamePiece;
     }
 

@@ -15,7 +15,8 @@ import frc.robot.commands.TelescopeToPosition;
 import frc.robot.subsystems.CrocodileSubsystem;
 import frc.robot.subsystems.RotatorSubsystem;
 import frc.robot.subsystems.TelescopeSubsystem;
-import frc.robot.subsystems.CrocodileSubsystem.GamePiece;
+import frc.robot.subsystems.Gamepiece;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.CrocodileSubsystem.WristPosition;
 import frc.robot.subsystems.RotatorSubsystem.RotatorPosition;
 import frc.robot.subsystems.TelescopeSubsystem.TelescopePosition;
@@ -24,11 +25,12 @@ public class HighPresetSequence extends SequentialCommandGroup {
     private DoubleSupplier intake;
     private Command runIntake;
     public HighPresetSequence(TelescopeSubsystem telescope, RotatorSubsystem rotator, CrocodileSubsystem crocodile,
-            DoubleSupplier intake, Supplier<GamePiece> gamePiece) {
+            IntakeSubsystem intakeSubsystem, DoubleSupplier intake, Supplier<Gamepiece> piece) 
+    {
         this.intake = intake;
         addRequirements(rotator, telescope, crocodile);
         //thank you @mikemag for this
-        DoubleSupplier multiplier = () -> gamePiece.get() == GamePiece.CONE ? 1 : -1;
+        DoubleSupplier multiplier = () -> piece.get() == Gamepiece.CONE ? 1 : -1;
         
         if (intake != null){
             runIntake = new RunCommand(() -> crocodile.setIntakeSpeed(
@@ -46,7 +48,7 @@ public class HighPresetSequence extends SequentialCommandGroup {
                 new ConditionalCommand(
                     crocodile.setWristToPositionCommand(WristPosition.CONE_SCORE), 
                     crocodile.setWristToPositionCommand(WristPosition.CUBE_SCORE), 
-                    () -> crocodile.getGamePiece() == GamePiece.CONE).withTimeout(1.5)
+                    () -> intakeSubsystem.getGamePiece() == Gamepiece.CONE).withTimeout(1.5)
             ).deadlineWith(runIntake)
         );
         
