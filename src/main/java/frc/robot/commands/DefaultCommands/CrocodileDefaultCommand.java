@@ -45,7 +45,7 @@ public class CrocodileDefaultCommand extends CommandBase {
             subsystem.setToCurrentPosition();
         }
         else {
-            subsystem.setRunPID(true);
+            //subsystem.setRunPID(true);
         }  
         //INTAKE
         double power = trigger.getAsDouble();
