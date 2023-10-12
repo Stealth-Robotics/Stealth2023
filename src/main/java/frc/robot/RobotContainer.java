@@ -156,10 +156,12 @@ public class RobotContainer {
     mechController.povLeft().onTrue(new InstantCommand(() -> telescope.resetEncoder()));
     mechController.button(8).onTrue(new InstantCommand(() -> {
       endEffector.setGamePiece(Gamepiece.CONE);
+      intake.setGamePiece(Gamepiece.CONE);
       //candle.cone();
     }, endEffector));
     mechController.button(7).onTrue(new InstantCommand(() -> {
       endEffector.setGamePiece(Gamepiece.CUBE);
+      intake.setGamePiece(Gamepiece.CUBE);
       //candle.cube();
     }, endEffector));
     mechController.povDown()
