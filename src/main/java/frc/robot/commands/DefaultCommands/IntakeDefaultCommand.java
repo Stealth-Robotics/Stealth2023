@@ -20,6 +20,7 @@ public class IntakeDefaultCommand extends CommandBase{
     @Override
     public void execute() {
         double power = trigger.getAsDouble();
+        //negate intake power if cube
         double multiplier = intake.getGamePiece() == Gamepiece.CONE ? 1 : -1;
         //something is in the intake
         if(!intake.getBeamBreak()){

@@ -87,6 +87,7 @@ public class RobotContainer {
     SmartDashboard.putData("Rotator", rotator);
     endEffector = new CrocodileSubsystem();
     SmartDashboard.putData("Intake", endEffector);
+    intake = new IntakeSubsystem();
     //candle = new CandleSubsystem();
 
     camera.setResolution(160, 120);
@@ -114,13 +115,11 @@ public class RobotContainer {
 
     endEffector.setDefaultCommand(new CrocodileDefaultCommand(
         endEffector,
-        () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
-        () -> (mechController.getRightTriggerAxis() - mechController.getLeftTriggerAxis()),
-        (t) -> driverController.getHID().setRumble(RumbleType.kBothRumble, t)));
+        () -> (mechController.getRightTriggerAxis() - mechController.getLeftTriggerAxis())));
 
-    autoChooser.setDefaultOption("CENTER Preload Park", new PreloadParkCenter(swerve, endEffector, rotator, telescope));
-    autoChooser.addOption("RIGHT Preload + 1", new PreloadPlusOneRight(swerve, endEffector, rotator, telescope));
-    autoChooser.addOption("LEFT Preload + 1", new PreloadPlusOneLeft(swerve, endEffector, rotator, telescope));
+    autoChooser.setDefaultOption("CENTER Preload Park", new PreloadParkCenter(swerve, endEffector, rotator, telescope, intake));
+    autoChooser.addOption("RIGHT Preload + 1", new PreloadPlusOneRight(swerve, endEffector, rotator, telescope, intake));
+    autoChooser.addOption("LEFT Preload + 1", new PreloadPlusOneLeft(swerve, endEffector, rotator, telescope, intake));
     autoChooser.addOption("EXIT COMMUNITY", new EXIT_COMMUNITY(swerve, endEffector, rotator, telescope));
     autoChooser.addOption("DO NOTHING", new DO_NOTHING(swerve, endEffector, rotator, telescope));
     SmartDashboard.putData("Selected Autonomous", autoChooser);
@@ -143,15 +142,15 @@ public class RobotContainer {
 
     zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
 
-    mechController.a().onTrue(new PickupPresetSequence(telescope, rotator, endEffector, driverController.y()));
+    mechController.a().onTrue(new PickupPresetSequence(telescope, rotator, endEffector, intake, driverController.y()));
     mechController.y()
-        .onTrue(new StowPresetSequence(telescope, rotator, endEffector,
+        .onTrue(new StowPresetSequence(telescope, rotator, endEffector, intake,
             () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
             () -> endEffector.getGamePiece()));
-    mechController.x().onTrue(new HighPresetSequence(telescope, rotator, endEffector,
+    mechController.x().onTrue(new HighPresetSequence(telescope, rotator, endEffector, intake,
         () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
         () -> endEffector.getGamePiece()));
-    mechController.b().onTrue(new MidPresetSequence(telescope, rotator, endEffector,
+    mechController.b().onTrue(new MidPresetSequence(telescope, rotator, endEffector, intake,
         () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
         () -> endEffector.getGamePiece()));
     mechController.povLeft().onTrue(new InstantCommand(() -> telescope.resetEncoder()));
@@ -164,7 +163,7 @@ public class RobotContainer {
       //candle.cube();
     }, endEffector));
     mechController.povDown()
-        .onTrue(new SubstationPickupPresetSequence(telescope, rotator, endEffector, driverController.y(),
+        .onTrue(new SubstationPickupPresetSequence(telescope, rotator, endEffector, intake, driverController.y(),
             () -> endEffector.getGamePiece()));
     // driverController.y().onTrue(new AutoIntakeCommand(endEffector, 0.5, driverController.y()));
     driverController.leftBumper().onTrue(new AutoIntakeCommand(intake, 0.75, driverController.leftBumper()));
@@ -194,4 +193,5 @@ public class RobotContainer {
     // return new InstantCommand();
     // return new BluePreloadOnly(swerve, endEffector, rotator, telescope);
   }
+
 }

@@ -23,7 +23,8 @@ import frc.robot.commands.Presets.StowPresetSequence;
 import frc.robot.subsystems.CrocodileSubsystem;
 import frc.robot.subsystems.RotatorSubsystem;
 import frc.robot.subsystems.TelescopeSubsystem;
-import frc.robot.subsystems.CrocodileSubsystem.GamePiece;
+import frc.robot.subsystems.Gamepiece;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
 
 public class PreloadPlusOneRight extends SequentialCommandGroup {
@@ -33,32 +34,34 @@ public class PreloadPlusOneRight extends SequentialCommandGroup {
   private final CrocodileSubsystem croc;
   private final RotatorSubsystem rotator;
   private final TelescopeSubsystem telescope;
+  private final IntakeSubsystem intake;
 
   public PreloadPlusOneRight(DrivebaseSubsystem driveBase, CrocodileSubsystem croc, RotatorSubsystem rotator,
-      TelescopeSubsystem telescope) {
+      TelescopeSubsystem telescope, IntakeSubsystem intake) {
     // assign the drivebase and config file
     this.driveBase = driveBase;
     this.croc = croc;
     this.rotator = rotator;
     this.telescope = telescope;
+    this.intake = intake;
     // sets the config variables to the speed and accel constants.
     this.defaultConfig = new TrajectoryConfig(SharedConstants.AutoConstants.k_MAX_SPEED_MPS,
         SharedConstants.AutoConstants.k_MAX_ACCEL_MPS_SQUARED);
     addCommands(
-        new MidPresetSequence(telescope, rotator, croc, null, () -> GamePiece.CONE).withTimeout(2.5),
-        new InstantCommand(() -> croc.setIntakeSpeed(-1)),
+        new MidPresetSequence(telescope, rotator, croc, intake, null, () -> Gamepiece.CONE).withTimeout(2.5),
+        new InstantCommand(() -> intake.setIntakeSpeed(-1)),
         new WaitCommand(0.25),
-        new InstantCommand(() -> croc.setIntakeSpeed(0)),
+        new InstantCommand(() -> intake.setIntakeSpeed(0)),
         new ParallelCommandGroup(
-            new PickupPresetSequence(telescope, rotator, croc, null).withTimeout(3).withTimeout(2.5),
+            new PickupPresetSequence(telescope, rotator, croc, intake, null).withTimeout(3).withTimeout(2.5),
             new SwerveTrajectoryFollowCommand(driveBase, "preloadPlusOneRight1", defaultConfig, true)),
-        new AutoIntakeCommand(croc, 1, GamePiece.CONE),
-        new StowPresetSequence(telescope, rotator, croc, () -> 0, () -> GamePiece.CONE).withTimeout(2.5),
+        new AutoIntakeCommand(intake, 1, Gamepiece.CONE),
+        new StowPresetSequence(telescope, rotator, croc, intake, () -> 0, () -> Gamepiece.CONE).withTimeout(2.5),
         new SwerveTrajectoryFollowCommand(driveBase, "preloadPlusOneRight2", defaultConfig),
-        new MidPresetSequence(telescope, rotator, croc, null, () -> GamePiece.CONE).withTimeout(2.5),
-        new InstantCommand(() -> croc.setIntakeSpeed(-1)),
+        new MidPresetSequence(telescope, rotator, croc, intake, null, () -> Gamepiece.CONE).withTimeout(2.5),
+        new InstantCommand(() -> intake.setIntakeSpeed(-1)),
         new WaitCommand(0.25),
-        new StowPresetSequence(telescope, rotator, croc, () -> 0, () -> GamePiece.CONE).withTimeout(2.5)
+        new StowPresetSequence(telescope, rotator, croc, intake, () -> 0, () -> Gamepiece.CONE).withTimeout(2.5)
 
     /*
      * start

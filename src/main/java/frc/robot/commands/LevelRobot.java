@@ -4,7 +4,6 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.SharedConstants;
 import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
 
 public class LevelRobot extends CommandBase {

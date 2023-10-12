@@ -19,7 +19,6 @@ public class CrocodileDefaultCommand extends CommandBase {
     public CrocodileDefaultCommand(CrocodileSubsystem subsystem, DoubleSupplier manualWrist) {
         this.subsystem = subsystem;
         this.wristTrigger = manualWrist;
-        
         addRequirements(subsystem);
     }
 
@@ -32,6 +31,7 @@ public class CrocodileDefaultCommand extends CommandBase {
         if (Math.abs(wristTrigger.getAsDouble()) > 0.05) {
             subsystem.setWristSpeed(MathUtil.clamp(wristTrigger.getAsDouble(), -0.5, 0.5));
             subsystem.setRunPID(false);
+            //set to current position, won't switch to PID till loop aftere trigger is released
             subsystem.setToCurrentPosition();
         }
         else {
