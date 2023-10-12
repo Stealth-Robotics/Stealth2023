@@ -144,9 +144,11 @@ public class CrocodileSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (runPID) setWristSpeed(MathUtil.clamp(wristPID.calculate(getWristPosition()), -SPEED_LIMIT, SPEED_LIMIT));
+        //if (runPID) setWristSpeed(MathUtil.clamp(wristPID.calculate(getWristPosition()), -SPEED_LIMIT, SPEED_LIMIT));
         SmartDashboard.putBoolean("Beam Break Status", !getBeamBreak());
         SmartDashboard.putString("Current Piece Selection", gamePiece.getData());
+        System.out.println("wrist pos: " + getWristPosition());
+        System.out.println("beam break: " + getBeamBreak());
         // System.out.println(getBeamBreak() + " " + getWristPosition());
     }
 }

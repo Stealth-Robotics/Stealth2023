@@ -46,6 +46,7 @@ public class CrocodileDefaultCommand extends CommandBase {
         }
         else {
             //subsystem.setRunPID(true);
+            subsystem.setWristSpeed(0);
         }  
         //INTAKE
         double power = trigger.getAsDouble();
