@@ -4,25 +4,11 @@
 
 package frc.robot.commands.Autos;
 
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.SharedConstants;
-import frc.robot.RobotMap.Crocodile;
-import frc.robot.commands.AutoIntakeCommand;
-import frc.robot.commands.ResetTelescope;
-import frc.robot.commands.RotatorToPosition;
-import frc.robot.commands.SwerveTrajectoryFollowCommand;
-import frc.robot.commands.TelescopeToPosition;
-import frc.robot.commands.Presets.HighPresetSequence;
-import frc.robot.commands.Presets.PickupPresetSequence;
-import frc.robot.commands.Presets.StowPresetSequence;
 import frc.robot.subsystems.CrocodileSubsystem;
 import frc.robot.subsystems.RotatorSubsystem;
 import frc.robot.subsystems.TelescopeSubsystem;
-import frc.robot.subsystems.Gamepiece;
 import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
 
 public class DO_NOTHING extends SequentialCommandGroup {

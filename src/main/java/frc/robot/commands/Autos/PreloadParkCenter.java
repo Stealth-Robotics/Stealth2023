@@ -10,13 +10,8 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.SharedConstants;
-import frc.robot.RobotMap.Crocodile;
 import frc.robot.commands.LevelRobot;
-import frc.robot.commands.ResetTelescope;
-import frc.robot.commands.RotatorToPosition;
 import frc.robot.commands.SwerveTrajectoryFollowCommand;
-import frc.robot.commands.TelescopeToPosition;
-import frc.robot.commands.Presets.HighPresetSequence;
 import frc.robot.commands.Presets.MidPresetSequence;
 import frc.robot.commands.Presets.StowPresetSequence;
 import frc.robot.subsystems.CrocodileSubsystem;
@@ -28,21 +23,11 @@ import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
 
 public class PreloadParkCenter extends SequentialCommandGroup {
   // creates variables for the drivebase and defaultconfig.
-  private final DrivebaseSubsystem driveBase;
   private final TrajectoryConfig defaultConfig;
-  private final CrocodileSubsystem croc;
-  private final RotatorSubsystem rotator;
-  private final TelescopeSubsystem telescope;
-  private final IntakeSubsystem intake;
 
   public PreloadParkCenter(DrivebaseSubsystem driveBase, CrocodileSubsystem croc, RotatorSubsystem rotator,
       TelescopeSubsystem telescope, IntakeSubsystem intake) {
-    // assign the drivebase and config file
-    this.driveBase = driveBase;
-    this.croc = croc;
-    this.rotator = rotator;
-    this.telescope = telescope;
-    this.intake = intake;
+    
     // sets the config variables to the speed and accel constants.
     this.defaultConfig = new TrajectoryConfig(SharedConstants.AutoConstants.k_MAX_SPEED_MPS,
         SharedConstants.AutoConstants.k_MAX_ACCEL_MPS_SQUARED);

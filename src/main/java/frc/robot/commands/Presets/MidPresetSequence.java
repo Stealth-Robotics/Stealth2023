@@ -7,19 +7,16 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.RotatorToPosition;
-import frc.robot.commands.TelescopeToPosition;
 import frc.robot.subsystems.CrocodileSubsystem;
-import frc.robot.subsystems.RotatorSubsystem;
-import frc.robot.subsystems.TelescopeSubsystem;
+import frc.robot.subsystems.CrocodileSubsystem.WristPosition;
 import frc.robot.subsystems.Gamepiece;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.CrocodileSubsystem.WristPosition;
+import frc.robot.subsystems.RotatorSubsystem;
 import frc.robot.subsystems.RotatorSubsystem.RotatorPosition;
-import frc.robot.subsystems.TelescopeSubsystem.TelescopePosition;
+import frc.robot.subsystems.TelescopeSubsystem;
 
 public class MidPresetSequence extends SequentialCommandGroup {
     Command runIntake;

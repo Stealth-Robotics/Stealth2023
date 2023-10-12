@@ -16,8 +16,6 @@ public class AutoIntakeCommand extends CommandBase {
     private final BooleanSupplier stopIntake;
     private final Gamepiece gamePiece;
 
-    private boolean wasCancelled = false;
-
     public AutoIntakeCommand(IntakeSubsystem intakeSubsystem, double speed,
             BooleanSupplier stopIntake, Gamepiece gamePiece) {
         this.intakeSubsystem = intakeSubsystem;
@@ -78,7 +76,6 @@ public class AutoIntakeCommand extends CommandBase {
         // if none of the above, return the value of stopIntake which is bound to a
         // button, unless it is null
         if (stopIntake != null) {
-            wasCancelled = stopIntake.getAsBoolean();
             return stopIntake.getAsBoolean();
         }
         return false;
