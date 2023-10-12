@@ -15,11 +15,9 @@ import frc.robot.RobotMap;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 
 public class CrocodileSubsystem extends SubsystemBase {
-    private final WPI_TalonFX intake;
     private final WPI_TalonFX wrist;
     private final PIDController wristPID;
     private final DutyCycleEncoder wristEncoder;
-    private final DigitalInput beamBreak;
     private Gamepiece gamePiece = Gamepiece.CONE;
     private final double WRIST_kP = 0.01;
     private final double WRIST_kI = 0.0;
@@ -53,14 +51,10 @@ public class CrocodileSubsystem extends SubsystemBase {
     }
 
     public CrocodileSubsystem() {
-        intake = new WPI_TalonFX(RobotMap.Crocodile.INTAKE);
         wrist = new WPI_TalonFX(RobotMap.Crocodile.WRIST);
         wristPID = new PIDController(WRIST_kP, WRIST_kI, WRIST_kD);
-        wristEncoder = new DutyCycleEncoder(RobotMap.Crocodile.WRIST_ENCODER_ID);
-        beamBreak = new DigitalInput(RobotMap.Crocodile.BEAM_BREAK_ID);
-        intake.setNeutralMode(NeutralMode.Brake);
+        wristEncoder = new DutyCycleEncoder(RobotMap.Crocodile.WRIST_ENCODER_ID);;
         wrist.setNeutralMode(NeutralMode.Brake);
-        intake.setInverted(true);
         wrist.setInverted(false);
         wristPID.setTolerance(360);
         // intake.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 35, 60, ENCODER_OFFSET));
@@ -74,10 +68,6 @@ public class CrocodileSubsystem extends SubsystemBase {
     public void setToCurrentPosition() {
         setWristSetpoint(getWristPosition());
     } 
-
-    public void setIntakeSpeed(double speed) {
-        intake.set(speed);
-    }
 
     public void setWristSpeed(double speed) {
         wrist.set(speed);
@@ -112,10 +102,6 @@ public class CrocodileSubsystem extends SubsystemBase {
         double result = (((currentPosition * 360) - ENCODER_OFFSET) % 360);
         return result;
     }
-
-    public boolean getBeamBreak() {
-        return beamBreak.get();
-    }
     
     public Gamepiece getGamePiece() {
         return gamePiece;
@@ -132,7 +118,6 @@ public class CrocodileSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         if (runPID) setWristSpeed(MathUtil.clamp(wristPID.calculate(getWristPosition()), -SPEED_LIMIT, SPEED_LIMIT));
-        SmartDashboard.putBoolean("Beam Break Status", !getBeamBreak());
         SmartDashboard.putString("Current Piece Selection", gamePiece.getData());
         // System.out.println(getBeamBreak() + " " + getWristPosition());
     }

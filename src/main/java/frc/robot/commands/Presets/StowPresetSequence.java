@@ -22,7 +22,7 @@ import frc.robot.subsystems.TelescopeSubsystem.TelescopePosition;
 
 public class StowPresetSequence extends SequentialCommandGroup {
     Command runIntake;
-    public StowPresetSequence(TelescopeSubsystem telescope, RotatorSubsystem rotator, CrocodileSubsystem crocodile, DoubleSupplier intake, IntakeSubsystem intakeSubsystem, Supplier<Gamepiece> gamePiece) {
+    public StowPresetSequence(TelescopeSubsystem telescope, RotatorSubsystem rotator, CrocodileSubsystem crocodile, IntakeSubsystem intakeSubsystem, DoubleSupplier intake,  Supplier<Gamepiece> gamePiece) {
         addRequirements(telescope, rotator, crocodile);
 
         //Thank you @mikemag for this

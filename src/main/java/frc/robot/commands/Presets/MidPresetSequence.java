@@ -39,7 +39,7 @@ public class MidPresetSequence extends SequentialCommandGroup {
         
         addCommands(
             new SequentialCommandGroup(
-                new InstantCommand(() -> crocodile.setIntakeSpeed(0.25 * multiplier.getAsDouble())),
+                new InstantCommand(() -> intakeSubsystem.setIntakeSpeed(0.25 * multiplier.getAsDouble())),
                 new RotatorToPosition(rotator, telescope, RotatorPosition.HIGH_SCORE).withTimeout(2),
                 new ConditionalCommand(
                     crocodile.setWristToPositionCommand(WristPosition.CONE_SCORE), 

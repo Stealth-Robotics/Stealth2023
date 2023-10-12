@@ -33,7 +33,7 @@ public class HighPresetSequence extends SequentialCommandGroup {
         DoubleSupplier multiplier = () -> piece.get() == Gamepiece.CONE ? 1 : -1;
         
         if (intake != null){
-            runIntake = new RunCommand(() -> crocodile.setIntakeSpeed(
+            runIntake = new RunCommand(() -> intakeSubsystem.setIntakeSpeed(
                 MathUtil.clamp((0.25 + intake.getAsDouble()), -1, 1) * multiplier.getAsDouble()));
         }
         else {
@@ -42,7 +42,7 @@ public class HighPresetSequence extends SequentialCommandGroup {
         
         addCommands(
             new SequentialCommandGroup(
-                new InstantCommand(() -> crocodile.setIntakeSpeed(0.25 * multiplier.getAsDouble())),
+                new InstantCommand(() -> intakeSubsystem.setIntakeSpeed(0.25 * multiplier.getAsDouble())),
                 new RotatorToPosition(rotator, telescope, RotatorPosition.HIGH_SCORE).withTimeout(2),
                 new TelescopeToPosition(telescope, TelescopePosition.HIGH_SCORE).withTimeout(2),
                 new ConditionalCommand(

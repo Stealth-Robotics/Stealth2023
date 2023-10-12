@@ -29,7 +29,8 @@ import frc.robot.commands.Presets.PickupPresetSequence;
 import frc.robot.commands.Presets.StowPresetSequence;
 import frc.robot.commands.Presets.SubstationPickupPresetSequence;
 import frc.robot.subsystems.TelescopeSubsystem;
-import frc.robot.subsystems.CrocodileSubsystem.GamePiece;
+import frc.robot.subsystems.Gamepiece;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.CrocodileSubsystem.WristPosition;
 import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
 
@@ -68,6 +69,7 @@ public class RobotContainer {
   private final RotatorSubsystem rotator;
   private final CrocodileSubsystem endEffector;
   private final TelescopeSubsystem telescope;
+  private final IntakeSubsystem intake;
   //private final CandleSubsystem candle;
 
   private UsbCamera camera = CameraServer.startAutomaticCapture();
@@ -154,18 +156,18 @@ public class RobotContainer {
         () -> endEffector.getGamePiece()));
     mechController.povLeft().onTrue(new InstantCommand(() -> telescope.resetEncoder()));
     mechController.button(8).onTrue(new InstantCommand(() -> {
-      endEffector.setGamePiece(GamePiece.CONE);
+      endEffector.setGamePiece(Gamepiece.CONE);
       //candle.cone();
     }, endEffector));
     mechController.button(7).onTrue(new InstantCommand(() -> {
-      endEffector.setGamePiece(GamePiece.CUBE);
+      endEffector.setGamePiece(Gamepiece.CUBE);
       //candle.cube();
     }, endEffector));
     mechController.povDown()
         .onTrue(new SubstationPickupPresetSequence(telescope, rotator, endEffector, driverController.y(),
             () -> endEffector.getGamePiece()));
     // driverController.y().onTrue(new AutoIntakeCommand(endEffector, 0.5, driverController.y()));
-    driverController.leftBumper().onTrue(new AutoIntakeCommand(endEffector, 0.75, driverController.leftBumper()));
+    driverController.leftBumper().onTrue(new AutoIntakeCommand(intake, 0.75, driverController.leftBumper()));
   }
 
   public void teleopInit() {
