@@ -35,8 +35,8 @@ public class RotatorSubsystem extends SubsystemBase {
     private static final double ROTATOR_D_COEFF = 0.075;
     // Feedforward Constants
     private static final double ROTATOR_KS_COEFF = 0;
-    private double ROTATOR_KG_COEFF_RETRACTED = 0.065;
-    private double ROTATOR_KG_COEFF_EXTENDED = 0.070;
+    private double ROTATOR_KG_COEFF_RETRACTED = 0.06;
+    private double ROTATOR_KG_COEFF_EXTENDED = 0.065;
     // Volt Second Per Rad
     private static final double ROTATOR_KV_COEFF = 0;
     // Volt Second Squared Per Rad
@@ -62,7 +62,7 @@ public class RotatorSubsystem extends SubsystemBase {
     public enum RotatorPosition {
         GROUND_PICKUP(72), 
         SHELF_PICKUP(216), 
-        HIGH_SCORE(230), 
+        HIGH_SCORE(218), 
         MID_SCORE(230), 
         STOW(90);
 
@@ -210,6 +210,9 @@ public class RotatorSubsystem extends SubsystemBase {
             System.out.println("RotatorPIDOnly.periodic: speed: " + speed);
             System.out.println("RotatorPIDOnly.periodic: ff: " + ff);
             System.out.println("RotatorPIDOnly.periodic: safe speed: " + safeSpeed);
+            System.out.println(runPID);
+            System.out.println("extension: " + telescope.getExtensionPercent());
+            System.out.println(Math.toDegrees(getMeasurementRadians()));
         }
         // System.out.println(" rotator " + getMeasurementDegrees() + " SP " + Math.toDegrees(pid.getSetpoint())+ " ff "+ ff);
     }

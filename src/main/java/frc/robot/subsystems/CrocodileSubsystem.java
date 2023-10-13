@@ -31,8 +31,8 @@ public class CrocodileSubsystem extends SubsystemBase {
     public enum WristPosition {
         CONE_PICKUP(156),
         CUBE_PICKUP(113  ),
-        CONE_SCORE(85),
-        CUBE_SCORE(44),
+        CONE_SCORE(2.5),
+        CUBE_SCORE(2.5),
         CONE_SHELF(56.5),
         CUBE_SHELF(56.5);
 
@@ -114,8 +114,13 @@ public class CrocodileSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (runPID) setWristSpeed(MathUtil.clamp(wristPID.calculate(getWristPosition()), -SPEED_LIMIT, SPEED_LIMIT));
+        double speed = MathUtil.clamp(wristPID.calculate(getWristPosition()), -SPEED_LIMIT, SPEED_LIMIT);
+        if (runPID) setWristSpeed(speed);
         SmartDashboard.putString("Current Piece Selection", gamePiece.getData());
+        System.out.println("wrist " + getWristPosition());
+        // System.out.println("wrist setpoint: " + getWristSetpoint());
+        // System.out.println("speed: " + speed);
+        // System.out.println(runPID);
         // System.out.println(getBeamBreak() + " " + getWristPosition());
     }
 }

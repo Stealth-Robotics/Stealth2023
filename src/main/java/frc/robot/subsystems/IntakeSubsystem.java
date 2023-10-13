@@ -14,6 +14,7 @@ public class IntakeSubsystem extends SubsystemBase{
     public IntakeSubsystem(){
         intake = new WPI_TalonFX(RobotMap.Crocodile.INTAKE);
         beamBreak = new DigitalInput(RobotMap.Crocodile.BEAM_BREAK_ID);
+        intake.setInverted(true);
     }
 
     public void setIntakeSpeed(double speed) {

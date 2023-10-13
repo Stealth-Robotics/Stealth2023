@@ -18,6 +18,7 @@ import frc.robot.commands.Autos.PreloadParkCenter;
 import frc.robot.commands.Autos.PreloadPlusOneLeft;
 import frc.robot.commands.Autos.PreloadPlusOneRight;
 import frc.robot.commands.DefaultCommands.CrocodileDefaultCommand;
+import frc.robot.commands.DefaultCommands.IntakeDefaultCommand;
 import frc.robot.commands.DefaultCommands.RotatorDefaultCommand;
 import frc.robot.commands.DefaultCommands.TeleopDrivebaseDefaultCommand;
 import frc.robot.commands.DefaultCommands.TelescopeDefault;
@@ -115,6 +116,11 @@ public class RobotContainer {
     endEffector.setDefaultCommand(new CrocodileDefaultCommand(
         endEffector,
         () -> (mechController.getRightTriggerAxis() - mechController.getLeftTriggerAxis())));
+
+    intake.setDefaultCommand(new IntakeDefaultCommand(
+      intake,
+      () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis())
+    ));
 
     autoChooser.setDefaultOption("CENTER Preload Park", new PreloadParkCenter(swerve, endEffector, rotator, telescope, intake));
     autoChooser.addOption("RIGHT Preload + 1", new PreloadPlusOneRight(swerve, endEffector, rotator, telescope, intake));

@@ -195,7 +195,7 @@ public class TelescopeSubsystem extends SubsystemBase {
     }
     @Override
     public void periodic() {
-        // System.out.println("Telescope Position: " + getCurrentPosition() + " Telescope Setpoint: " + getSetpoint());
+        System.out.println("Telescope Position: " + getCurrentPosition() + " Telescope Setpoint: " + getSetpoint());
         if (runPID) setSpeed(MathUtil.clamp(pid.calculate(getCurrentPosition()), -0.5, 0.5));
     }
 }
