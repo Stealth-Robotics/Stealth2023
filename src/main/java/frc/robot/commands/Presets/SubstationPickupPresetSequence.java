@@ -36,7 +36,7 @@ public class SubstationPickupPresetSequence extends SequentialCommandGroup {
                     crocodile.setWristToPositionCommand(WristPosition.CUBE_SCORE),
                     () -> (intake.getGamePiece() == Gamepiece.CONE)
                     
-                ).withTimeout(2.5)
+                ).withTimeout(2.5).andThen(new InstantCommand(() -> crocodile.setToCurrentPosition()))
             )
         );
     }
