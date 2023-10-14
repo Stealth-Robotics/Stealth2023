@@ -61,7 +61,7 @@ public class RotatorSubsystem extends SubsystemBase {
     //TODO: set to actual position values
     public enum RotatorPosition {
         GROUND_PICKUP(73), 
-        SHELF_PICKUP(123), 
+        SHELF_PICKUP(127), 
         HIGH_SCORE(216), 
         MID_SCORE(217), 
         CUBE_HIGH(222),
