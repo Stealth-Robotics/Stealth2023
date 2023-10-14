@@ -2,6 +2,7 @@ package frc.robot.commands.Presets;
 
 import java.util.function.BooleanSupplier;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.RotatorToPosition;
 import frc.robot.commands.TelescopeToPosition;
@@ -23,7 +24,7 @@ public class PickupPresetSequence extends SequentialCommandGroup {
                 new RotatorToPosition(rotator, telescope, RotatorPosition.GROUND_PICKUP).withTimeout(2),
                 new ConditionalCommand(
                         crocodile.setWristToPositionCommand(WristPosition.CONE_PICKUP),
-                        crocodile.setWristToPositionCommand(WristPosition.CUBE_PICKUP),
+                        new InstantCommand(() -> crocodile.setWristSetpoint(WristPosition.CUBE_PICKUP.getValue())),
                         () -> intakeSubsystem.getGamePiece() == Gamepiece.CONE).withTimeout(2.5));
     }
 }

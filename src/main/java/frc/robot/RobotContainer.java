@@ -177,13 +177,13 @@ public class RobotContainer {
   }
 
   public void teleopInit() {
-    telescope.onInit();
+    //telescope.onInit();
     rotator.onInit();
     endEffector.onInit();
   }
 
   public void autonomousInit() {
-    telescope.onInit();
+    //telescope.onInit();
     rotator.onInit();
     endEffector.onInit();
   }

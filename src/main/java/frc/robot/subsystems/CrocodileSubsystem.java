@@ -22,18 +22,19 @@ public class CrocodileSubsystem extends SubsystemBase {
 
     public final double SPEED_LIMIT = 0.75;
 
-    private final double ENCODER_OFFSET = 0;
+    private final double ENCODER_OFFSET = 212; //200;
 
     private boolean runPID = true;
 
     private double offset = 0;
 
     public enum WristPosition {
-        CONE_PICKUP(156),
-        CUBE_PICKUP(113  ),
-        CONE_SCORE(2.5),
-        CUBE_SCORE(2.5),
-        CONE_SHELF(56.5),
+        CONE_PICKUP(123.3),
+        CUBE_PICKUP(123.3),
+        CONE_SCORE(58),
+        CUBE_SCORE(24.5),
+        CONE_SHELF(130),
+        CONE_STOW(6),
         CUBE_SHELF(56.5);
 
         private final double value;

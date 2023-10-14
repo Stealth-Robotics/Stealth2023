@@ -4,6 +4,7 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AutoIntakeCommand;
 import frc.robot.commands.RotatorToPosition;
@@ -27,11 +28,11 @@ public class SubstationPickupPresetSequence extends SequentialCommandGroup {
                 new RotatorToPosition(rotator, telescope, RotatorPosition.SHELF_PICKUP).withTimeout(2),
                 new TelescopeToPosition(telescope, TelescopePosition.SHELF_PICKUP).withTimeout(2),
                 new ConditionalCommand(
-                        crocodile.setWristToPositionCommand(WristPosition.CONE_SCORE),
+                        new InstantCommand(() -> crocodile.setWristSetpoint(WristPosition.CONE_SHELF.getValue())),
                         crocodile.setWristToPositionCommand(WristPosition.CUBE_SCORE),
                         () -> intake.getGamePiece() == Gamepiece.CONE).withTimeout(2.5)
             //TODO: TUNE SPEED
-            ).alongWith(new AutoIntakeCommand(intake, 0.75, stopIntake))        
+            )    
         );
     }
 }

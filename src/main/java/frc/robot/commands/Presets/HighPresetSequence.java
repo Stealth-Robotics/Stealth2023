@@ -36,12 +36,22 @@ public class HighPresetSequence extends SequentialCommandGroup {
         else {
             runIntake = new InstantCommand();
         }
+        Command teleRotator = new ConditionalCommand(
+            new SequentialCommandGroup(
+                new RotatorToPosition(rotator, telescope, RotatorPosition.HIGH_SCORE).withTimeout(2),
+                new TelescopeToPosition(telescope, TelescopePosition.HIGH_SCORE).withTimeout(2)
+            ),
+            new SequentialCommandGroup(
+                new RotatorToPosition(rotator, telescope, RotatorPosition.CUBE_HIGH).withTimeout(2),
+                new TelescopeToPosition(telescope, TelescopePosition.CUBE_HIGH).withTimeout(2)
+            ),
+            () -> intakeSubsystem.getGamePiece() == Gamepiece.CONE
+        );
         
         addCommands(
             new SequentialCommandGroup(
                 new InstantCommand(() -> intakeSubsystem.setIntakeSpeed(0.25 * multiplier.getAsDouble())),
-                new RotatorToPosition(rotator, telescope, RotatorPosition.HIGH_SCORE).withTimeout(2),
-                new TelescopeToPosition(telescope, TelescopePosition.HIGH_SCORE).withTimeout(2),
+                teleRotator,
                 new ConditionalCommand(
                     new InstantCommand(() -> crocodile.setWristSetpoint(WristPosition.CONE_SCORE.getValue())),
                     new InstantCommand(() -> crocodile.setWristSetpoint(WristPosition.CUBE_SCORE.getValue())), 

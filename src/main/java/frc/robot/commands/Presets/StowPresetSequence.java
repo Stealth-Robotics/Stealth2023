@@ -16,6 +16,7 @@ import frc.robot.subsystems.TelescopeSubsystem;
 import frc.robot.subsystems.Gamepiece;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.CrocodileSubsystem.WristPosition;
+import frc.robot.subsystems.RotatorSubsystem.RotatorPosition;
 import frc.robot.subsystems.TelescopeSubsystem.TelescopePosition;
 
 public class StowPresetSequence extends SequentialCommandGroup {
@@ -37,8 +38,8 @@ public class StowPresetSequence extends SequentialCommandGroup {
             new SequentialCommandGroup(
                 new InstantCommand(() -> intakeSubsystem.setIntakeSpeed(0.25 * multiplier.getAsDouble())),
                 new TelescopeToPosition(telescope, TelescopePosition.RETRACTED).withTimeout(2),
-                new RotatorToPosition(rotator, telescope, 90).withTimeout(2),
-                crocodile.setWristToPositionCommand(WristPosition.CONE_SCORE).withTimeout(2)
+                new RotatorToPosition(rotator, telescope, RotatorPosition.STOW.getValue()).withTimeout(2),
+                new InstantCommand(() -> crocodile.setWristSetpoint(WristPosition.CONE_STOW.getValue()))
             ).withTimeout(2.5).deadlineWith(runIntake)
         );
     }

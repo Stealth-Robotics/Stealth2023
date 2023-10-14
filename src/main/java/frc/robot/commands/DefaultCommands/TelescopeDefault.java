@@ -10,11 +10,13 @@ import frc.robot.subsystems.TelescopeSubsystem.TelescopeBoundState;
 
 public class TelescopeDefault extends CommandBase {
 
+    boolean setpointSet = true;
+
     private TelescopeSubsystem telescopeSubsystem;
     private DoubleSupplier joystickSupplier;
     private BooleanSupplier override;
     public TelescopeDefault(TelescopeSubsystem telescopeSubsystem, DoubleSupplier joystickSupplier, BooleanSupplier override) {
-        this.telescopeSubsystem = telescopeSubsystem;
+    this.telescopeSubsystem = telescopeSubsystem;
         this.joystickSupplier = joystickSupplier;
         this.override = override;
         addRequirements(telescopeSubsystem);
@@ -32,8 +34,9 @@ public class TelescopeDefault extends CommandBase {
         if (override.getAsBoolean()){
             telescopeSubsystem.setSpeed(MathUtil.clamp(joystickInput, -0.3, 0.3));
             telescopeSubsystem.setRunPID(false);
+            setpointSet = false;
         }
-        else if (Math.abs(joystickInput) > 0.05) {
+        else if (Math.abs(joystickInput) > 0.1) {
             if (telescopeSubsystem.inBounds() == TelescopeBoundState.IN_BOUNDS) {
                 telescopeSubsystem.setSpeed(MathUtil.clamp(joystickInput, -0.3, 0.3));
             } else if (telescopeSubsystem.inBounds() == TelescopeBoundState.OVER_UPPER_BOUND) {
@@ -42,8 +45,10 @@ public class TelescopeDefault extends CommandBase {
                 telescopeSubsystem.setSpeed(MathUtil.clamp(joystickInput, 0, 0.3));
             }
             telescopeSubsystem.setRunPID(false);
-        } else {
+            setpointSet = false;
+        } else if (!setpointSet) {
             telescopeSubsystem.setRunPID(true);
+            setpointSet = true;
 
             telescopeSubsystem.setToCurrentPosition();
         }
