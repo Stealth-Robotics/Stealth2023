@@ -22,7 +22,7 @@ public class CrocodileSubsystem extends SubsystemBase {
 
     public final double SPEED_LIMIT = 0.75;
 
-    private final double ENCODER_OFFSET = 212; //200;
+    private final double ENCODER_OFFSET = 39; //200;
 
     private boolean runPID = true;
 
@@ -115,8 +115,10 @@ public class CrocodileSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        double speed = MathUtil.clamp(wristPID.calculate(getWristPosition()), -SPEED_LIMIT, SPEED_LIMIT);
-        if (runPID) setWristSpeed(speed);
+        if (runPID) {
+            double speed = MathUtil.clamp(wristPID.calculate(getWristPosition()), -SPEED_LIMIT, SPEED_LIMIT);
+            setWristSpeed(speed);
+        } 
         SmartDashboard.putString("Current Piece Selection", gamePiece.getData());
         System.out.println("wrist " + getWristPosition());
         // System.out.println("wrist setpoint: " + getWristSetpoint());

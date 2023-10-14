@@ -23,7 +23,7 @@ public class CrocodileDefaultCommand extends CommandBase {
     @Override
     public void execute() {
         //WRIST MANUAL CONTROL
-        if (Math.abs(wristTrigger.getAsDouble()) > 0.05) {
+        if (Math.abs(wristTrigger.getAsDouble()) > 0.1) {
             subsystem.setWristSpeed(MathUtil.clamp(wristTrigger.getAsDouble(), -0.5, 0.5));
             subsystem.setRunPID(false);
             //set to current position, won't switch to PID till loop aftere trigger is released
