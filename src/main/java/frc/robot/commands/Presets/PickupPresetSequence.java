@@ -30,7 +30,7 @@ public class PickupPresetSequence extends SequentialCommandGroup {
                     crocodile.setWristToPositionCommand(WristPosition.CONE_PICKUP),
                     new InstantCommand(() -> crocodile.setWristSetpoint(WristPosition.CUBE_PICKUP.getValue())),
                     () -> (intakeSubsystem.getGamePiece() == Gamepiece.CONE)
-                ).withTimeout(2.5).andThen(new InstantCommand(() -> crocodile.setToCurrentPosition()))
+                ).withTimeout(2.5)
             )
         );
     }
