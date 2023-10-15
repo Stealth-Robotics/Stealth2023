@@ -15,6 +15,7 @@ import frc.robot.commands.AutoIntakeCommand;
 import frc.robot.commands.Autos.DO_NOTHING;
 import frc.robot.commands.Autos.EXIT_COMMUNITY;
 import frc.robot.commands.Autos.PreloadCubeExit;
+import frc.robot.commands.Autos.PreloadCubeRight;
 import frc.robot.commands.Autos.PreloadParkCenter;
 import frc.robot.commands.Autos.PreloadPlusOneLeft;
 import frc.robot.commands.Autos.PreloadPlusOneRight;
@@ -129,6 +130,7 @@ public class RobotContainer {
     autoChooser.addOption("EXIT COMMUNITY", new EXIT_COMMUNITY(swerve, endEffector, rotator, telescope));
     autoChooser.addOption("DO NOTHING", new DO_NOTHING(swerve, endEffector, rotator, telescope));
     autoChooser.addOption("preload cube exit", new PreloadCubeExit(swerve, endEffector, rotator, telescope, intake));
+    autoChooser.addOption("preloadright", new PreloadCubeRight(swerve, endEffector, rotator, telescope, intake));
     SmartDashboard.putData("Selected Autonomous", autoChooser);
 
     // Configure the button bindings

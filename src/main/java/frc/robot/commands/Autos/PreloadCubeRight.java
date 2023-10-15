@@ -23,27 +23,28 @@ import frc.robot.subsystems.Gamepiece;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
 
-public class PreloadParkCenter extends SequentialCommandGroup {
+public class PreloadCubeRight extends SequentialCommandGroup {
   // creates variables for the drivebase and defaultconfig.
   private final TrajectoryConfig defaultConfig;
 
-  public PreloadParkCenter(DrivebaseSubsystem driveBase, CrocodileSubsystem croc, RotatorSubsystem rotator,
+  public PreloadCubeRight(DrivebaseSubsystem driveBase, CrocodileSubsystem croc, RotatorSubsystem rotator,
       TelescopeSubsystem telescope, IntakeSubsystem intake) {
-      intake.setGamePiece(Gamepiece.CUBE);
-      croc.setGamePiece(Gamepiece.CUBE);
+    
     // sets the config variables to the speed and accel constants.
+    intake.setGamePiece(Gamepiece.CUBE);
+    croc.setGamePiece(Gamepiece.CUBE);
     this.defaultConfig = new TrajectoryConfig(SharedConstants.AutoConstants.k_MAX_SPEED_MPS,
         SharedConstants.AutoConstants.k_MAX_ACCEL_MPS_SQUARED);
     addCommands(
-      new HighPresetSequence(telescope, rotator, croc, intake, null, () -> Gamepiece.CUBE).withTimeout(2.5),
-      new RunCommand(() -> intake.setIntakeSpeed(0.45), intake).withTimeout(1),
-      
-      new InstantCommand(() -> intake.setIntakeSpeed(0), intake),
+        new HighPresetSequence(telescope, rotator, croc, intake, null, () -> Gamepiece.CUBE).withTimeout(2.5),
+        new RunCommand(() -> intake.setIntakeSpeed(0.45), intake).withTimeout(1),
+        
+        new InstantCommand(() -> intake.setIntakeSpeed(0), intake),
         new ParallelCommandGroup(
-            new StowPresetSequence(telescope, rotator, croc, intake, () -> 0, () -> Gamepiece.CUBE).withTimeout(3).withTimeout(2.5)
-            ),
-        new SwerveTrajectoryFollowCommand(driveBase, "preloadParkCenter", defaultConfig, true),
-        new LevelRobot(driveBase)
+            new StowPresetSequence(telescope, rotator, croc, intake, () -> 0, () -> Gamepiece.CUBE).withTimeout(3).withTimeout(2.5),
+            new SwerveTrajectoryFollowCommand(driveBase, "moveOutRight", defaultConfig, true)
+          )
+        
     /*
      * start
      * rotate telescope to scoring position

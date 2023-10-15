@@ -53,7 +53,7 @@ public class HighPresetSequence extends SequentialCommandGroup {
                 new InstantCommand(() -> intakeSubsystem.setIntakeSpeed(0.25 * multiplier.getAsDouble())),
                 teleRotator,
                 new ConditionalCommand(
-                    new InstantCommand(() -> crocodile.setWristSetpoint(WristPosition.CONE_SCORE.getValue())),
+                    new InstantCommand(() -> crocodile.setWristSetpoint(WristPosition.CONE_HIGH.getValue())),
                     new InstantCommand(() -> crocodile.setWristSetpoint(WristPosition.CUBE_SCORE.getValue())), 
                     () -> intakeSubsystem.getGamePiece() == Gamepiece.CONE).withTimeout(1.5)
             ).deadlineWith(runIntake)

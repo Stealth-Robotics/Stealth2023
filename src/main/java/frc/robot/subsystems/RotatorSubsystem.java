@@ -35,8 +35,8 @@ public class RotatorSubsystem extends SubsystemBase {
     private static final double ROTATOR_D_COEFF = 0.075;
     // Feedforward Constants
     private static final double ROTATOR_KS_COEFF = 0;
-    private double ROTATOR_KG_COEFF_RETRACTED = 0.06;
-    private double ROTATOR_KG_COEFF_EXTENDED = 0.065;
+    private double ROTATOR_KG_COEFF_RETRACTED = 0.065;
+    private double ROTATOR_KG_COEFF_EXTENDED = 0.085;
     // Volt Second Per Rad
     private static final double ROTATOR_KV_COEFF = 0;
     // Volt Second Squared Per Rad
@@ -62,7 +62,7 @@ public class RotatorSubsystem extends SubsystemBase {
     public enum RotatorPosition {
         GROUND_PICKUP(73), 
         SHELF_PICKUP(127), 
-        HIGH_SCORE(216), 
+        HIGH_SCORE(222), 
         MID_SCORE(217), 
         CUBE_HIGH(222),
         CUBE_MID(232),

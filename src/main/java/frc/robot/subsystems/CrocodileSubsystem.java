@@ -31,9 +31,10 @@ public class CrocodileSubsystem extends SubsystemBase {
     public enum WristPosition {
         CONE_PICKUP(123.3),
         CUBE_PICKUP(123.3),
-        CONE_SCORE(58),
+        CONE_SCORE(35),
+        CONE_HIGH(39),
         CUBE_SCORE(24.5),
-        CONE_SHELF(130),
+        CONE_SHELF(137),
         CONE_STOW(6),
         CUBE_SHELF(56.5);
 

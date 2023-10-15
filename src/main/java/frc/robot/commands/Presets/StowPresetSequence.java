@@ -44,7 +44,7 @@ public class StowPresetSequence extends SequentialCommandGroup {
                     new RotatorToPosition(rotator, telescope, RotatorPosition.STOW.getValue()).withTimeout(2)
                 ).withTimeout(3.0).deadlineWith(runIntake),
                 new SequentialCommandGroup(
-                    new WaitCommand(1.0),
+                    new WaitCommand(0.25),
                     new InstantCommand(() -> crocodile.setWristSetpoint(WristPosition.CONE_STOW.getValue()))
                 )
             )
