@@ -151,7 +151,7 @@ public class RobotContainer {
 
     zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
 
-    mechController.a().onTrue(new PickupPresetSequence(telescope, rotator, endEffector, intake, driverController.y()));
+    mechController.a().onTrue(new PickupPresetSequence(telescope, rotator, endEffector, intake));
     mechController.y()
         .onTrue(new StowPresetSequence(telescope, rotator, endEffector, intake,
             () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
@@ -177,7 +177,7 @@ public class RobotContainer {
         .onTrue(new SubstationPickupPresetSequence(telescope, rotator, endEffector, intake, driverController.y(),
             () -> endEffector.getGamePiece()));
     // driverController.y().onTrue(new AutoIntakeCommand(endEffector, 0.5, driverController.y()));
-    driverController.leftBumper().onTrue(new AutoIntakeCommand(intake, 0.75, driverController.leftBumper()));
+    driverController.leftBumper().onTrue(new AutoIntakeCommand(intake, 0.75, driverController.x()));
   }
 
   public void teleopInit() {

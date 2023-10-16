@@ -40,10 +40,14 @@ public class PreloadParkCenter extends SequentialCommandGroup {
       
       new InstantCommand(() -> intake.setIntakeSpeed(0), intake),
         new ParallelCommandGroup(
-            new StowPresetSequence(telescope, rotator, croc, intake, () -> 0, () -> Gamepiece.CUBE).withTimeout(3).withTimeout(2.5)
-            ),
+            new StowPresetSequence(telescope, rotator, croc, intake, () -> 0, () -> Gamepiece.CUBE).withTimeout(3)
+        ),
+        new InstantCommand(() -> intake.setIntakeSpeed(0), intake),
+
         new SwerveTrajectoryFollowCommand(driveBase, "preloadParkCenter", defaultConfig, true),
-        new LevelRobot(driveBase)
+        new WaitCommand(0.5),
+        new LevelRobot(driveBase),
+        new WaitCommand(0.75)
     /*
      * start
      * rotate telescope to scoring position

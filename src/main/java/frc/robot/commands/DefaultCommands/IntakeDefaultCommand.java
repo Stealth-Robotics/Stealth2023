@@ -23,8 +23,8 @@ public class IntakeDefaultCommand extends CommandBase{
         //negate intake power if cube
         double multiplier = intake.getGamePiece() == Gamepiece.CONE ? 1 : -1;
         //something is in the intake
-        if(!intake.getBeamBreak()){
-            power += 0.25;
+        if(!intake.getBeamBreak() && Math.abs(power) < 0.05){
+            power += 0.15;
         }
 
 

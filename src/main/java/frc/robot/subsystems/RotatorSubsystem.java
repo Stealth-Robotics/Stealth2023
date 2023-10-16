@@ -61,12 +61,12 @@ public class RotatorSubsystem extends SubsystemBase {
     //TODO: set to actual position values
     public enum RotatorPosition {
         GROUND_PICKUP(73), 
-        SHELF_PICKUP(127), 
+        SHELF_PICKUP(122), 
         HIGH_SCORE(222), 
         MID_SCORE(217), 
         CUBE_HIGH(222),
         CUBE_MID(232),
-        STOW(76);
+        STOW(74);
 
         private final int value;
         private RotatorPosition(int position){
@@ -216,7 +216,7 @@ public class RotatorSubsystem extends SubsystemBase {
             System.out.println("extension: " + telescope.getExtensionPercent());
             System.out.println(Math.toDegrees(getMeasurementRadians()));
         }
-        //System.out.println("rotator pos: " + getMeasurementDegrees());
+        System.out.println("rotator pos: " + getMeasurementDegrees());
         // System.out.println(" rotator " + getMeasurementDegrees() + " SP " + Math.toDegrees(pid.getSetpoint())+ " ff "+ ff);
     }
 

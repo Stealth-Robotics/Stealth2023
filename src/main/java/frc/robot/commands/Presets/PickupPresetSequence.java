@@ -18,7 +18,7 @@ import frc.robot.subsystems.TelescopeSubsystem.TelescopePosition;
 
 public class PickupPresetSequence extends SequentialCommandGroup {
     public PickupPresetSequence(TelescopeSubsystem telescope, RotatorSubsystem rotator, CrocodileSubsystem crocodile,
-            IntakeSubsystem intakeSubsystem, BooleanSupplier button) {
+            IntakeSubsystem intakeSubsystem) {
         addRequirements(telescope, rotator, crocodile);
         addCommands(
             new ParallelCommandGroup(

@@ -57,28 +57,7 @@ public class AutoIntakeCommand extends CommandBase {
     public boolean isFinished() {
         // if outtaking, keep running motors until beam break hasn't been broken for 0.5
         // seconds
-
-        if ((speed < 0 && intakeSubsystem.getGamePiece() == Gamepiece.CONE) || (speed > 0 && gamePiece == Gamepiece.CUBE)) {
-            if (intakeSubsystem.getBeamBreak()) {
-                timer.start();
-            }
-            if (timer.hasElapsed(0.5)) {
-                timer.stop();
-                timer.reset();
-                return true;
-            }
-        }
-        // otherwise, keep running motors until beam break has been broken for 0.5
-        // seconds
-        else if (!debouncer.calculate(intakeSubsystem.getBeamBreak())) {
-            return true;
-        }
-        // if none of the above, return the value of stopIntake which is bound to a
-        // button, unless it is null
-        if (stopIntake != null) {
-            return stopIntake.getAsBoolean();
-        }
-        return false;
+        return !intakeSubsystem.getBeamBreak() || stopIntake.getAsBoolean();
 
     }
 

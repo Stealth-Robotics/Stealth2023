@@ -39,7 +39,7 @@ public class PreloadPlusOneRight extends SequentialCommandGroup {
         new WaitCommand(0.25),
         new InstantCommand(() -> intake.setIntakeSpeed(0)),
         new ParallelCommandGroup(
-            new PickupPresetSequence(telescope, rotator, croc, intake, null).withTimeout(3).withTimeout(2.5),
+            //new PickupPresetSequence(telescope, rotator, croc, intake, null).withTimeout(3).withTimeout(2.5),
             new SwerveTrajectoryFollowCommand(driveBase, "preloadPlusOneRight1", defaultConfig, true)),
         new AutoIntakeCommand(intake, 1, Gamepiece.CONE),
         new StowPresetSequence(telescope, rotator, croc, intake, () -> 0, () -> Gamepiece.CONE).withTimeout(2.5),

@@ -15,6 +15,7 @@ import frc.robot.commands.LevelRobot;
 import frc.robot.commands.SwerveTrajectoryFollowCommand;
 import frc.robot.commands.Presets.HighPresetSequence;
 import frc.robot.commands.Presets.MidPresetSequence;
+import frc.robot.commands.Presets.PickupPresetSequence;
 import frc.robot.commands.Presets.StowPresetSequence;
 import frc.robot.subsystems.CrocodileSubsystem;
 import frc.robot.subsystems.RotatorSubsystem;
@@ -41,9 +42,14 @@ public class PreloadCubeExit extends SequentialCommandGroup {
         
         new InstantCommand(() -> intake.setIntakeSpeed(0), intake),
         new ParallelCommandGroup(
-            new StowPresetSequence(telescope, rotator, croc, intake, () -> 0, () -> Gamepiece.CUBE).withTimeout(3).withTimeout(2.5),
-            new SwerveTrajectoryFollowCommand(driveBase, "moveOutCubeLeft", defaultConfig, true)
-          )
+          new SwerveTrajectoryFollowCommand(driveBase, "moveOutCubeLeft", defaultConfig, true),
+          new StowPresetSequence(telescope, rotator, croc, intake, ()-> 0, () -> Gamepiece.CUBE)
+        ),
+        new PickupPresetSequence(telescope, rotator, croc, intake).withTimeout(3).withTimeout(2.5),
+        new ParallelCommandGroup(new RunCommand(() -> intake.setIntakeSpeed(.75), intake),
+        new SwerveTrajectoryFollowCommand(driveBase, "intakeForward", defaultConfig, false)).withTimeout(3),
+        new StowPresetSequence(telescope, rotator, croc, intake, () -> 0, () -> Gamepiece.CUBE)
+
         
     /*
      * start
