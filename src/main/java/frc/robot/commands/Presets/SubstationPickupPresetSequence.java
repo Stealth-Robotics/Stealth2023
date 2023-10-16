@@ -37,7 +37,7 @@ public class SubstationPickupPresetSequence extends SequentialCommandGroup {
                     () -> (intake.getGamePiece() == Gamepiece.CONE)
                     
                 ).withTimeout(2.5)
-            )
+            ).until(stopIntake)
         );
     }
 }

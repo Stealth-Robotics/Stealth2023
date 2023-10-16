@@ -175,7 +175,15 @@ public class RobotContainer {
     }, endEffector));
     mechController.povDown()
         .onTrue(new SubstationPickupPresetSequence(telescope, rotator, endEffector, intake, driverController.y(),
-            () -> endEffector.getGamePiece()));
+            () -> endEffector.getGamePiece())
+            .andThen(new AutoIntakeCommand(intake, 1, driverController.x()))
+            .andThen(new StowPresetSequence(telescope, rotator, endEffector, intake,
+                () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
+                () -> endEffector.getGamePiece())
+            )
+    
+            
+    );
     // driverController.y().onTrue(new AutoIntakeCommand(endEffector, 0.5, driverController.y()));
     driverController.leftBumper().onTrue(new AutoIntakeCommand(intake, 0.75, driverController.x()));
   }
