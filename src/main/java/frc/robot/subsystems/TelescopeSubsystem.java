@@ -51,7 +51,8 @@ public class TelescopeSubsystem extends SubsystemBase {
     private final static int MAXIMUM_TICKS = 69000;
 
     public enum TelescopePosition {
-        GROUND_PICKUP(4254), 
+        GROUND_PICKUP(7000), 
+        SUBSTATION_UPRIGHT(47000),
         SHELF_PICKUP(13764), 
         HIGH_SCORE(65616), 
         MID_SCORE(4842), 
@@ -199,10 +200,11 @@ public class TelescopeSubsystem extends SubsystemBase {
     }
     @Override
     public void periodic() {
-        //System.out.println("Telescope Position: " + getCurrentPosition() + " Telescope Setpoint: " + getSetpoint());
-        double speed = MathUtil.clamp(pid.calculate(getCurrentPosition()), -0.5, 0.5);
+        System.out.println("Telescope Position: " + getCurrentPosition() + " Telescope Setpoint: " + getSetpoint());
+        double speed = MathUtil.clamp(pid.calculate(getCurrentPosition()), -0.75, 0.75);
         
         if (runPID) setSpeed(speed);
         
     }
+
 }

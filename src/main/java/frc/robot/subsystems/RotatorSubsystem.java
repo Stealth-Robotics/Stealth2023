@@ -35,8 +35,8 @@ public class RotatorSubsystem extends SubsystemBase {
     private static final double ROTATOR_D_COEFF = 0.075;
     // Feedforward Constants
     private static final double ROTATOR_KS_COEFF = 0;
-    private double ROTATOR_KG_COEFF_RETRACTED = 0.065;
-    private double ROTATOR_KG_COEFF_EXTENDED = 0.085;
+    private double ROTATOR_KG_COEFF_RETRACTED = 0.060;
+    private double ROTATOR_KG_COEFF_EXTENDED = 0.100;
     // Volt Second Per Rad
     private static final double ROTATOR_KV_COEFF = 0;
     // Volt Second Squared Per Rad
@@ -60,13 +60,14 @@ public class RotatorSubsystem extends SubsystemBase {
 
     //TODO: set to actual position values
     public enum RotatorPosition {
-        GROUND_PICKUP(73), 
+        GROUND_PICKUP(72), 
+        SHELF_UPRIGHT(212),
         SHELF_PICKUP(122), 
         HIGH_SCORE(222), 
         MID_SCORE(217), 
         CUBE_HIGH(222),
         CUBE_MID(232),
-        STOW(74);
+        STOW(70);
 
         private final int value;
         private RotatorPosition(int position){
@@ -93,7 +94,7 @@ public class RotatorSubsystem extends SubsystemBase {
                 ROTATOR_I_COEFF,
                 ROTATOR_D_COEFF);
 
-        pid.setTolerance(Math.toRadians(6.0));
+        pid.setTolerance(Math.toRadians(3.0));
 
         encoder = new DutyCycleEncoder(0);
 
