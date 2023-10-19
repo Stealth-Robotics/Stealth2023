@@ -28,6 +28,9 @@ public class CrocodileSubsystem extends SubsystemBase {
 
     private double offset = 0;
 
+    private final double LOWER_BOUND = 102;
+    private final double UPPER_BOUND = 0;
+
     public enum WristPosition {
         CONE_PICKUP(123.3),
         CUBE_PICKUP(102),
@@ -48,6 +51,12 @@ public class CrocodileSubsystem extends SubsystemBase {
         public double getValue() {
             return value;
         }
+    }
+
+    public enum WristBoundState{
+        IN_BOUNDS,
+        OVER_UPPER_BOUND,
+        UNDER_LOWER_BOUND
     }
 
     public CrocodileSubsystem() {
@@ -113,6 +122,16 @@ public class CrocodileSubsystem extends SubsystemBase {
 
     public void setRunPID(boolean set) {
         runPID = set;
+    }
+
+    public WristBoundState inBounds(){
+        if(getWristPosition() > UPPER_BOUND){
+            return WristBoundState.OVER_UPPER_BOUND;
+        } else if(getWristPosition() < LOWER_BOUND){
+            return WristBoundState.UNDER_LOWER_BOUND;
+        } else {
+            return WristBoundState.IN_BOUNDS;
+        }
     }
 
     @Override

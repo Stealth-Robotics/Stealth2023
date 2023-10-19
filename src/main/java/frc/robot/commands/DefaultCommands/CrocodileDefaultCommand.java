@@ -1,19 +1,23 @@
 package frc.robot.commands.DefaultCommands;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.CrocodileSubsystem;
+import frc.robot.subsystems.CrocodileSubsystem.WristBoundState;
 
 public class CrocodileDefaultCommand extends CommandBase {
     private final CrocodileSubsystem subsystem;
     private final DoubleSupplier wristTrigger;
+    private final BooleanSupplier override;
     
 
-    public CrocodileDefaultCommand(CrocodileSubsystem subsystem, DoubleSupplier manualWrist) {
+    public CrocodileDefaultCommand(CrocodileSubsystem subsystem, DoubleSupplier manualWrist, BooleanSupplier override) {
         this.subsystem = subsystem;
         this.wristTrigger = manualWrist;
+        this.override = override;
         addRequirements(subsystem);
     }
 
@@ -23,13 +27,25 @@ public class CrocodileDefaultCommand extends CommandBase {
     @Override
     public void execute() {
         //WRIST MANUAL CONTROL
-        if (Math.abs(wristTrigger.getAsDouble()) > 0.1) {
+        double triggerInput = wristTrigger.getAsDouble();
+        if(override.getAsBoolean()){
             subsystem.setWristSpeed(MathUtil.clamp(wristTrigger.getAsDouble(), -0.5, 0.5));
             subsystem.setRunPID(false);
-            //set to current position, won't switch to PID till loop aftere trigger is released
-            subsystem.setToCurrentPosition();
+        }
+        //TODO: CHECK IF THIS WORKS
+        if (Math.abs(triggerInput) > 0.1) {
+            if(subsystem.inBounds() == WristBoundState.IN_BOUNDS) {
+                subsystem.setWristSpeed(MathUtil.clamp(wristTrigger.getAsDouble(), -0.5, 0.5));
+            } else if (subsystem.inBounds() == WristBoundState.OVER_UPPER_BOUND) {
+                subsystem.setWristSpeed(MathUtil.clamp(wristTrigger.getAsDouble(), -0.5, 0));
+            } else if (subsystem.inBounds() == WristBoundState.UNDER_LOWER_BOUND) {
+                subsystem.setWristSpeed(MathUtil.clamp(wristTrigger.getAsDouble(), 0, 0.5));
+            }
+            subsystem.setRunPID(false);
         }
         else {
+            //set to current position, won't switch to PID till loop aftere trigger is released
+            subsystem.setToCurrentPosition();
             subsystem.setRunPID(true);
         }          
     }
