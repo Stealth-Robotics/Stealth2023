@@ -118,9 +118,13 @@ public class RobotContainer {
             () -> -mechController.getLeftY(),
             mechController.leftBumper()));
 
-    endEffector.setDefaultCommand(new CrocodileDefaultCommand(
+    endEffector.setDefaultCommand(
+      new CrocodileDefaultCommand(
         endEffector,
-        () -> (mechController.getRightTriggerAxis() - mechController.getLeftTriggerAxis())));
+        () -> (mechController.getRightTriggerAxis() - mechController.getLeftTriggerAxis()),
+        mechController.leftBumper()
+      )
+    );
 
     intake.setDefaultCommand(new IntakeDefaultCommand(
       intake,
