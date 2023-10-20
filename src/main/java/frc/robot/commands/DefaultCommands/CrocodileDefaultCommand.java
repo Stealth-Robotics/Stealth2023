@@ -28,12 +28,12 @@ public class CrocodileDefaultCommand extends CommandBase {
     public void execute() {
         //WRIST MANUAL CONTROL
         double triggerInput = wristTrigger.getAsDouble();
-        if(override.getAsBoolean()){
+        if(override.getAsBoolean() && Math.abs(triggerInput) > 0.1){
             subsystem.setWristSpeed(MathUtil.clamp(wristTrigger.getAsDouble(), -0.5, 0.5));
             subsystem.setRunPID(false);
         }
         //TODO: CHECK IF THIS WORKS
-        if (Math.abs(triggerInput) > 0.1) {
+        else if (Math.abs(triggerInput) > 0.1) {
             if(subsystem.inBounds() == WristBoundState.IN_BOUNDS) {
                 subsystem.setWristSpeed(MathUtil.clamp(wristTrigger.getAsDouble(), -0.5, 0.5));
             } else if (subsystem.inBounds() == WristBoundState.OVER_UPPER_BOUND) {
