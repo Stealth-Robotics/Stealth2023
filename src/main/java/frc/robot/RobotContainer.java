@@ -10,8 +10,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AutoIntakeCommand;
+import frc.robot.commands.DriveSetSpeedCommand;
 import frc.robot.commands.Autos.DO_NOTHING;
 import frc.robot.commands.Autos.EXIT_COMMUNITY;
 import frc.robot.commands.Autos.PreloadCubeExit;
@@ -36,7 +36,6 @@ import frc.robot.subsystems.Gamepiece;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.RotatorSubsystem;
 import frc.robot.subsystems.TelescopeSubsystem;
-import frc.robot.subsystems.CrocodileSubsystem.WristPosition;
 import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
 
 /**
@@ -93,7 +92,7 @@ public class RobotContainer {
     endEffector = new CrocodileSubsystem();
     SmartDashboard.putData("Intake", endEffector);
     intake = new IntakeSubsystem();
-    candle = new CandleSubsystem();
+    candle = new CandleSubsystem(() -> endEffector.getGamePiece(), () -> intake.getBeamBreak());
 
     camera.setResolution(160, 120);
     camera.setFPS(30);
@@ -165,12 +164,17 @@ public class RobotContainer {
     () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
     () -> endEffector.getGamePiece())));
     mechController.y()
-        .onTrue(new StowPresetSequence(telescope, rotator, endEffector, intake,
+        .onTrue(
+          new DriveSetSpeedCommand(swerve, 1).andThen(
+          new StowPresetSequence(telescope, rotator, endEffector, intake,
             () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
-            () -> endEffector.getGamePiece()));
-    mechController.x().onTrue(new HighPresetSequence(telescope, rotator, endEffector, intake,
+            () -> endEffector.getGamePiece())));
+    mechController.x().onTrue(new DriveSetSpeedCommand(swerve, 0.5)
+      .andThen(new HighPresetSequence(telescope, rotator, endEffector, intake,
         () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
-        () -> endEffector.getGamePiece()));
+        () -> endEffector.getGamePiece())
+      )
+    );
     mechController.b().onTrue(new MidPresetSequence(telescope, rotator, endEffector, intake,
         () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
         () -> endEffector.getGamePiece()));
@@ -178,12 +182,12 @@ public class RobotContainer {
     mechController.button(8).onTrue(new InstantCommand(() -> {
       endEffector.setGamePiece(Gamepiece.CONE);
       intake.setGamePiece(Gamepiece.CONE);
-      candle.coneSolid();
+      //candle.coneSolid();
     }, endEffector));
     mechController.button(7).onTrue(new InstantCommand(() -> {
       endEffector.setGamePiece(Gamepiece.CUBE);
       intake.setGamePiece(Gamepiece.CUBE);
-      candle.cubeSolid();
+      //candle.cubeSolid();
     }, endEffector));
     mechController.povDown()
         .onTrue(new SubstationPickupPresetSequence(telescope, rotator, endEffector, intake, driverController.leftBumper(),

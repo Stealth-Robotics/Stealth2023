@@ -22,24 +22,22 @@ public class CrocodileSubsystem extends SubsystemBase {
 
     public final double SPEED_LIMIT = 0.75;
 
-    private final double ENCODER_OFFSET = 39; //200;
+    private final double ENCODER_OFFSET = 42; //200;
 
     private boolean runPID = true;
 
-    private double offset = 0;
-
-    private final double LOWER_BOUND = 102;
+    private final double LOWER_BOUND = 125;
     private final double UPPER_BOUND = 0;
 
     public enum WristPosition {
         CONE_PICKUP(123.3),
         CUBE_PICKUP(102),
-        SUBSTATION_UPRIGHT(26),
-        CONE_SCORE(35),
-        CONE_HIGH(39),
+        SUBSTATION_UPRIGHT(23),
+        CONE_SCORE(42),
+        CONE_HIGH(42),
         CUBE_SCORE(24.5),
         CONE_SHELF(137),
-        CONE_STOW(6),
+        CONE_STOW(-1.5),
         CUBE_SHELF(56.5);
 
         private final double value;
@@ -107,7 +105,7 @@ public class CrocodileSubsystem extends SubsystemBase {
 
     // In degrees
     public double getWristPosition() {
-        double currentPosition = wristEncoder.getAbsolutePosition() + offset;
+        double currentPosition = wristEncoder.getAbsolutePosition();
         double result = (((currentPosition * 360) - ENCODER_OFFSET) % 360);
         return result;
     }
@@ -142,6 +140,8 @@ public class CrocodileSubsystem extends SubsystemBase {
         } 
         SmartDashboard.putString("Current Piece Selection", gamePiece.getData());
         System.out.println("wrist " + getWristPosition());
+        System.out.println("setpoitn: " + getWristSetpoint());
+        System.out.println(runPID);
         // System.out.println("wrist setpoint: " + getWristSetpoint());
         // System.out.println("speed: " + speed);
         // System.out.println(runPID);

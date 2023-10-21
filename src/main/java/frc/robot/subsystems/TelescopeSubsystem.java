@@ -55,7 +55,7 @@ public class TelescopeSubsystem extends SubsystemBase {
         SUBSTATION_UPRIGHT(47000),
         SHELF_PICKUP(13764), 
         HIGH_SCORE(65616), 
-        MID_SCORE(4842), 
+        MID_SCORE(5250), 
         CUBE_HIGH(44622),
         CUBE_MID(15768),
         RETRACTED(2000);
@@ -200,7 +200,7 @@ public class TelescopeSubsystem extends SubsystemBase {
     }
     @Override
     public void periodic() {
-        System.out.println("Telescope Position: " + getCurrentPosition() + " Telescope Setpoint: " + getSetpoint());
+        //System.out.println("Telescope Position: " + getCurrentPosition() + " Telescope Setpoint: " + getSetpoint());
         double speed = MathUtil.clamp(pid.calculate(getCurrentPosition()), -0.75, 0.75);
         
         if (runPID) setSpeed(speed);

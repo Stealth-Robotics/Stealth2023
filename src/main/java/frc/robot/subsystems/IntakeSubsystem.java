@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -16,6 +17,7 @@ public class IntakeSubsystem extends SubsystemBase{
         intake = new WPI_TalonFX(RobotMap.Crocodile.INTAKE);
         beamBreak = new DigitalInput(RobotMap.Crocodile.BEAM_BREAK_ID);
         intake.setInverted(true);
+        intake.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 40, 30, 1.5));
     }
 
     public void setIntakeSpeed(double speed) {

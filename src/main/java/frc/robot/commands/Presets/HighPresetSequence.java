@@ -7,6 +7,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.RotatorToPosition;
@@ -17,6 +18,7 @@ import frc.robot.subsystems.Gamepiece;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.RotatorSubsystem;
 import frc.robot.subsystems.RotatorSubsystem.RotatorPosition;
+import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
 import frc.robot.subsystems.TelescopeSubsystem;
 import frc.robot.subsystems.TelescopeSubsystem.TelescopePosition;
 
@@ -51,11 +53,13 @@ public class HighPresetSequence extends SequentialCommandGroup {
         addCommands(
             new SequentialCommandGroup(
                 new InstantCommand(() -> intakeSubsystem.setIntakeSpeed(0.25 * multiplier.getAsDouble())),
-                teleRotator,
-                new ConditionalCommand(
-                    new InstantCommand(() -> crocodile.setWristSetpoint(WristPosition.CONE_HIGH.getValue())),
-                    new InstantCommand(() -> crocodile.setWristSetpoint(WristPosition.CUBE_SCORE.getValue())), 
-                    () -> intakeSubsystem.getGamePiece() == Gamepiece.CONE).withTimeout(1.5)
+                new ParallelCommandGroup(
+                    teleRotator,
+                    new ConditionalCommand(
+                        new InstantCommand(() -> crocodile.setWristSetpoint(WristPosition.CONE_HIGH.getValue())),
+                        new InstantCommand(() -> crocodile.setWristSetpoint(WristPosition.CUBE_SCORE.getValue())), 
+                        () -> intakeSubsystem.getGamePiece() == Gamepiece.CONE).withTimeout(1.5)
+                )
             ).deadlineWith(runIntake)
         );
         

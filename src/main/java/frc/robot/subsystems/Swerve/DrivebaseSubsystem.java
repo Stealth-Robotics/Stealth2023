@@ -7,6 +7,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
+
 import com.ctre.phoenix.sensors.Pigeon2;
 
 import edu.wpi.first.math.controller.HolonomicDriveController;
@@ -42,6 +43,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
             thetaController);
 
     private Field2d field2d;
+
+    private double speedMultiplier = 1;
 
     public DrivebaseSubsystem() {
         pcw = new PhotonVisionCameraWrapper();
@@ -79,14 +82,14 @@ public class DrivebaseSubsystem extends SubsystemBase {
         SwerveModuleState[] swerveModuleStates = SharedConstants.DrivebaseConstants.SWERVE_KINEMATICS
                 .toSwerveModuleStates(
                         fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                                translation.getX(),
-                                translation.getY(),
-                                rotation,
+                                translation.getX() * speedMultiplier,
+                                translation.getY() * speedMultiplier,
+                                rotation * speedMultiplier,
                                 getGyroscopeRotation())
                                 : new ChassisSpeeds(
-                                        translation.getX(),
-                                        translation.getY(),
-                                        rotation));
+                                        translation.getX() * speedMultiplier,
+                                        translation.getY()* speedMultiplier,
+                                        rotation * speedMultiplier));
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SharedConstants.DrivebaseConstants.MAX_SPEED);
 
         for (SwerveModule mod : mSwerveMods) {
@@ -160,6 +163,10 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
     public double getYawAsDouble() {
         return gyro.getYaw();
+    }
+
+    public void setMultiplier(double multiplier){
+        speedMultiplier = multiplier;
     }
 
     public double getPitchAsDouble() {
