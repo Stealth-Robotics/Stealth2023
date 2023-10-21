@@ -205,5 +205,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
             //SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getPosition().angle.getDegrees());
             //SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
         //}
+
+        System.out.println("Drivebase Roll: " + getRollAsDouble());
+        System.out.println("Drivebase Pitch: " + getPitchAsDouble());
     }
 }

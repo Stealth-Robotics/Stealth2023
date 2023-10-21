@@ -11,7 +11,7 @@ public class LevelRobot extends CommandBase {
     // Constants for the PID
     private static final double PID_kP = 1;
     private static final double PID_kI = 0.001;
-    private static final double PID_kD = 0.07;
+    private static final double PID_kD = 0.05;
 
     private Timer timer;
     boolean disableExecute = false;
@@ -36,25 +36,33 @@ public class LevelRobot extends CommandBase {
 
         timer = new Timer();
 
-        pid.setTolerance(1.35);
+        pid.setTolerance(20.0);
         pid.setSetpoint(0);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        // Get the pitch and the roll from the gyro
-        double roll = drive.getRollAsDouble();
-        double pitch = drive.getPitchAsDouble();
-        // Calculate the movement based on the sum of the pitch and roll, that way it
-        // will zero both
-        double calculationMovement = pid.calculate(pitch + roll, 0);
-        // Clamp the movement to the max speed
-        calculationMovement = MathUtil.clamp(calculationMovement, -LEVELING_DRIVE_SPEED_LIMIT,
-                LEVELING_DRIVE_SPEED_LIMIT);
-        // Set the speed based on the calculation
-        if(!disableExecute){
-            drive.drive(new Translation2d(-calculationMovement, 0), 0, false, true);
+
+        if (!pid.atSetpoint()) {
+            // Get the pitch and the roll from the gyro
+            double roll = drive.getRollAsDouble();
+            double pitch = drive.getPitchAsDouble();
+            // Calculate the movement based on the sum of the pitch and roll, that way it
+            // will zero both
+            double calculationMovement = pid.calculate(pitch + roll, 0);
+            // Clamp the movement to the max speed
+            calculationMovement = MathUtil.clamp(calculationMovement, -LEVELING_DRIVE_SPEED_LIMIT,
+                    LEVELING_DRIVE_SPEED_LIMIT);
+            // Set the speed based on the calculation
+            if (!disableExecute) {
+                drive.drive(new Translation2d(-calculationMovement, 0), 0, false, true);
+            }
+
+            System.out.println("Error" + pid.getPositionError());
+            System.out.println("Velocity Error" + pid.getVelocityError());
+
+            System.out.println("Calculation: " + -calculationMovement);
         }
     }
 
@@ -67,26 +75,26 @@ public class LevelRobot extends CommandBase {
     @Override
     public boolean isFinished() {
         // Stop if we are at the setpoint
-        if(pid.atSetpoint())
-        {
-            timer.start();
-            //drive.drive(new Translation2d(0, 0), 0, false, true);
-            disableExecute = true;
-            
-        }
+        return pid.atSetpoint();
+        // if(pid.atSetpoint())
+        // {
+        // timer.start();
+        // //drive.drive(new Translation2d(0, 0), 0, false, true);
+        // disableExecute = true;
 
-        else {
-            timer.reset();
-            disableExecute = false;
-        }
+        // }
 
-        if(pid.atSetpoint() && timer.get() >= 2)
-        {
-            return true;
-        }
-        
-        return false;
-        
+        // else {
+        // timer.reset();
+        // disableExecute = false;
+        // }
+
+        // if(pid.atSetpoint() && timer.get() >= 2)
+        // {
+        // return true;
+        // }
+
+        // return false;
 
     }
 

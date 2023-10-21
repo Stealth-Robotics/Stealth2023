@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AutoIntakeCommand;
 import frc.robot.commands.DriveSetSpeedCommand;
+import frc.robot.commands.LevelRobotPulse;
 import frc.robot.commands.Autos.DO_NOTHING;
 import frc.robot.commands.Autos.EXIT_COMMUNITY;
 import frc.robot.commands.Autos.PreloadCubeExit;
@@ -24,6 +25,7 @@ import frc.robot.commands.Autos.PreloadOnly;
 import frc.robot.commands.Autos.PreloadParkCenter;
 import frc.robot.commands.Autos.PreloadPlusOneLeft;
 import frc.robot.commands.Autos.PreloadPlusOneRight;
+//import frc.robot.commands.Autos.RedExitPreloadBump;
 import frc.robot.commands.DefaultCommands.CrocodileDefaultCommand;
 import frc.robot.commands.DefaultCommands.IntakeDefaultCommand;
 import frc.robot.commands.DefaultCommands.RotatorDefaultCommand;
@@ -143,6 +145,8 @@ public class RobotContainer {
     autoChooser.addOption("preload cube exit", new PreloadCubeExit(swerve, endEffector, rotator, telescope, intake));
     autoChooser.addOption("preloadright", new PreloadCubeRight(swerve, endEffector, rotator, telescope, intake));
     autoChooser.addOption("preloadOnly", new PreloadOnly(swerve, endEffector, rotator, telescope, intake));
+    //autoChooser.addOption("preloadRedLeft", new RedExitPreloadBump(swerve, endEffector, rotator, telescope, intake));
+
     SmartDashboard.putData("Selected Autonomous", autoChooser);
 
     // Configure the button bindings
@@ -163,12 +167,13 @@ public class RobotContainer {
 
     driverController.povDown().onTrue(new InstantCommand(() -> swerve.zeroGyro()));
 
-    mechController.a().onTrue(new PickupPresetSequence(telescope, rotator, endEffector, intake)
+    mechController.a().onTrue(new PickupPresetSequence(telescope, rotator, endEffector, intake));
     //.andThen(new InstantCommand(() -> endEffector.setWristSetpoint(WristPosition.CUBE_PICKUP.getValue())))
-    .andThen(new AutoIntakeCommand(intake, 0.8, driverController.x()))
-    .andThen(new StowPresetSequence(telescope, rotator, endEffector, intake,
-    () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
-    () -> endEffector.getGamePiece())));
+    // .andThen(new AutoIntakeCommand(intake, 0.8, driverController.x()))
+    // .andThen(new StowPresetSequence(telescope, rotator, endEffector, intake,
+    // () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
+    // () -> endEffector.getGamePiece())));
+    driverController.b().whileTrue(new LevelRobotPulse(swerve)); 
     mechController.y()
         .onTrue(
           new DriveSetSpeedCommand(swerve, 1).andThen(
