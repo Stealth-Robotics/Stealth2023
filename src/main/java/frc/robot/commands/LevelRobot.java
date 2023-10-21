@@ -3,20 +3,16 @@ package frc.robot.commands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
 
 public class LevelRobot extends CommandBase {
     // Constants for the PID
-    private static final double PID_kP = 1;
+    private static final double PID_kP = 0.1;
     private static final double PID_kI = 0.001;
-    private static final double PID_kD = 0.07;
-
-    private Timer timer;
-    boolean disableExecute = false;
+    private static final double PID_kD = 0.05;
     // Dont allow it to go faster than 70% motor speed
-    private static final double LEVELING_DRIVE_SPEED_LIMIT = 0.75;
+    private static final double LEVELING_DRIVE_SPEED_LIMIT = 0.6;
 
     private final DrivebaseSubsystem drive;
     // Construct the PID controller
@@ -33,10 +29,7 @@ public class LevelRobot extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-
-        timer = new Timer();
-
-        pid.setTolerance(1.35);
+        pid.setTolerance(1);
         pid.setSetpoint(0);
     }
 
@@ -53,9 +46,8 @@ public class LevelRobot extends CommandBase {
         calculationMovement = MathUtil.clamp(calculationMovement, -LEVELING_DRIVE_SPEED_LIMIT,
                 LEVELING_DRIVE_SPEED_LIMIT);
         // Set the speed based on the calculation
-        if(!disableExecute){
-            drive.drive(new Translation2d(-calculationMovement, 0), 0, false, true);
-        }
+        drive.drive(new Translation2d(-calculationMovement, 0), 0, false, true);
+
     }
 
     @Override
@@ -67,27 +59,7 @@ public class LevelRobot extends CommandBase {
     @Override
     public boolean isFinished() {
         // Stop if we are at the setpoint
-        if(pid.atSetpoint())
-        {
-            timer.start();
-            //drive.drive(new Translation2d(0, 0), 0, false, true);
-            disableExecute = true;
-            
-        }
-
-        else {
-            timer.reset();
-            disableExecute = false;
-        }
-
-        if(pid.atSetpoint() && timer.get() >= 2)
-        {
-            return true;
-        }
-        
-        return false;
-        
-
+        return pid.atSetpoint();
     }
 
 }
