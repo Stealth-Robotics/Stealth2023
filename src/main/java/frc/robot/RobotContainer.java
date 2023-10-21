@@ -203,11 +203,12 @@ public class RobotContainer {
     mechController.povUp()
         .onTrue(new SubstationUpright(telescope, rotator, endEffector, intake, driverController.leftBumper(),
             () -> endEffector.getGamePiece())
-            .andThen(new AutoIntakeCommand(intake, 1, driverController.x()))
+            .andThen(new AutoIntakeCommand(intake, 1, driverController.x()).asProxy())
             .andThen(new StowPresetSequence(telescope, rotator, endEffector, intake,
                 () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
                 () -> endEffector.getGamePiece())
-            )
+      )
+        
     
             
     );
