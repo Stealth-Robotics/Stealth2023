@@ -4,6 +4,8 @@ import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+
 import java.util.function.BooleanSupplier;
 import frc.robot.subsystems.Gamepiece;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -64,7 +66,6 @@ public class AutoIntakeCommand extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         intakeSubsystem.setIntakeSpeed(0);
-
     }
 
 }

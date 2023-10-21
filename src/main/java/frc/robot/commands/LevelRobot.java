@@ -9,14 +9,14 @@ import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
 
 public class LevelRobot extends CommandBase {
     // Constants for the PID
-    private static final double PID_kP = 0.5;
+    private static final double PID_kP = 1;
     private static final double PID_kI = 0.001;
-    private static final double PID_kD = 0.05;
+    private static final double PID_kD = 0.07;
 
     private Timer timer;
     boolean disableExecute = false;
     // Dont allow it to go faster than 70% motor speed
-    private static final double LEVELING_DRIVE_SPEED_LIMIT = 0.6;
+    private static final double LEVELING_DRIVE_SPEED_LIMIT = 0.75;
 
     private final DrivebaseSubsystem drive;
     // Construct the PID controller
@@ -36,7 +36,7 @@ public class LevelRobot extends CommandBase {
 
         timer = new Timer();
 
-        pid.setTolerance(0.5);
+        pid.setTolerance(1.35);
         pid.setSetpoint(0);
     }
 

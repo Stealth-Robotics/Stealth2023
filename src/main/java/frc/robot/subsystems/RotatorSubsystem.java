@@ -35,8 +35,8 @@ public class RotatorSubsystem extends SubsystemBase {
     private static final double ROTATOR_D_COEFF = 0.075;
     // Feedforward Constants
     private static final double ROTATOR_KS_COEFF = 0;
-    private double ROTATOR_KG_COEFF_RETRACTED = 0.055;
-    private double ROTATOR_KG_COEFF_EXTENDED = 0.100;
+    private double ROTATOR_KG_COEFF_RETRACTED = 0.050;
+    private double ROTATOR_KG_COEFF_EXTENDED = 0.110;
     // Volt Second Per Rad
     private static final double ROTATOR_KV_COEFF = 0;
     // Volt Second Squared Per Rad
@@ -204,6 +204,9 @@ public class RotatorSubsystem extends SubsystemBase {
         double speed = pid.calculate(getMeasurementRadians());
         // Constrain the calculation to the safe speed
         double safeSpeed = MathUtil.clamp(speed + ff, -speedLimit, speedLimit);
+        if(getSetpoint() >= 72){
+            runPID = true;
+        }
         // Set the speed of the rotator
         if (runPID) setSpeed(safeSpeed);
         // System.out.println("Result " + ff);

@@ -52,9 +52,9 @@ public class TelescopeSubsystem extends SubsystemBase {
 
     public enum TelescopePosition {
         GROUND_PICKUP(7000), 
-        SUBSTATION_UPRIGHT(47000),
+        SUBSTATION_UPRIGHT(46400),
         SHELF_PICKUP(13764), 
-        HIGH_SCORE(65616), 
+        HIGH_SCORE(66000), 
         MID_SCORE(5250), 
         CUBE_HIGH(44622),
         CUBE_MID(15768),

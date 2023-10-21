@@ -41,7 +41,8 @@ public class StowPresetSequence extends SequentialCommandGroup {
                 new SequentialCommandGroup(
                     new InstantCommand(() -> intakeSubsystem.setIntakeSpeed(0.25 * multiplier.getAsDouble())),
                     new TelescopeToPosition(telescope, TelescopePosition.RETRACTED).withTimeout(2),
-                    new RotatorToPosition(rotator, telescope, RotatorPosition.STOW.getValue()).withTimeout(2)
+                    new RotatorToPosition(rotator, telescope, RotatorPosition.STOW.getValue()).withTimeout(2),
+                    new InstantCommand(() -> rotator.setRunPID(false))
                 ).withTimeout(3.0).deadlineWith(runIntake),
                 new SequentialCommandGroup(
                     new WaitCommand(0.25),

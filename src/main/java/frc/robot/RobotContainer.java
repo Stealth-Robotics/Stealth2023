@@ -8,7 +8,11 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandGroupBase;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ProxyCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AutoIntakeCommand;
 import frc.robot.commands.DriveSetSpeedCommand;
@@ -16,6 +20,7 @@ import frc.robot.commands.Autos.DO_NOTHING;
 import frc.robot.commands.Autos.EXIT_COMMUNITY;
 import frc.robot.commands.Autos.PreloadCubeExit;
 import frc.robot.commands.Autos.PreloadCubeRight;
+import frc.robot.commands.Autos.PreloadOnly;
 import frc.robot.commands.Autos.PreloadParkCenter;
 import frc.robot.commands.Autos.PreloadPlusOneLeft;
 import frc.robot.commands.Autos.PreloadPlusOneRight;
@@ -137,6 +142,7 @@ public class RobotContainer {
     autoChooser.addOption("DO NOTHING", new DO_NOTHING(swerve, endEffector, rotator, telescope));
     autoChooser.addOption("preload cube exit", new PreloadCubeExit(swerve, endEffector, rotator, telescope, intake));
     autoChooser.addOption("preloadright", new PreloadCubeRight(swerve, endEffector, rotator, telescope, intake));
+    autoChooser.addOption("preloadOnly", new PreloadOnly(swerve, endEffector, rotator, telescope, intake));
     SmartDashboard.putData("Selected Autonomous", autoChooser);
 
     // Configure the button bindings
@@ -159,7 +165,7 @@ public class RobotContainer {
 
     mechController.a().onTrue(new PickupPresetSequence(telescope, rotator, endEffector, intake)
     //.andThen(new InstantCommand(() -> endEffector.setWristSetpoint(WristPosition.CUBE_PICKUP.getValue())))
-    .andThen(new AutoIntakeCommand(intake, 0.8, driverController.leftBumper()))
+    .andThen(new AutoIntakeCommand(intake, 0.8, driverController.x()))
     .andThen(new StowPresetSequence(telescope, rotator, endEffector, intake,
     () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
     () -> endEffector.getGamePiece())));
@@ -190,7 +196,7 @@ public class RobotContainer {
       //candle.cubeSolid();
     }, endEffector));
     mechController.povDown()
-        .onTrue(new SubstationPickupPresetSequence(telescope, rotator, endEffector, intake, driverController.leftBumper(),
+        .onTrue(new SubstationPickupPresetSequence(telescope, rotator, endEffector, intake, driverController.x(),
             () -> endEffector.getGamePiece())
             .andThen(new AutoIntakeCommand(intake, 1, driverController.x()))
             .andThen(new StowPresetSequence(telescope, rotator, endEffector, intake,
@@ -200,18 +206,20 @@ public class RobotContainer {
     
             
     );
+    SequentialCommandGroup commandGroup = new SequentialCommandGroup(
+      new AutoIntakeCommand(intake, 1, driverController.x())
+      
+    ).andThen(new InstantCommand(() -> CommandScheduler.getInstance().schedule(
+      new StowPresetSequence(telescope, rotator, endEffector, intake,
+      () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
+      () -> endEffector.getGamePiece()))
+    ));
     mechController.povUp()
-        .onTrue(new SubstationUpright(telescope, rotator, endEffector, intake, driverController.leftBumper(),
+        .onTrue(new SubstationUpright(telescope, rotator, endEffector, intake, driverController.x(),
             () -> endEffector.getGamePiece()).asProxy()
-            .andThen(new AutoIntakeCommand(intake, 1, driverController.leftBumper()))
-            .andThen(new StowPresetSequence(telescope, rotator, endEffector, intake,
-                () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
-                () -> endEffector.getGamePiece())
-      )
-        
-    
             
     );
+    driverController.povUp().onTrue(commandGroup);
     // driverController.y().onTrue(new AutoIntakeCommand(endEffector, 0.5, driverController.y()));
     //driverController.leftBumper().onTrue(new AutoIntakeCommand(intake, 0.75, driverController.x()));
   }
