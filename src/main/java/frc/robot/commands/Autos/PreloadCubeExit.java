@@ -46,7 +46,7 @@ public class PreloadCubeExit extends SequentialCommandGroup {
           new StowPresetSequence(telescope, rotator, croc, intake, ()-> 0, () -> Gamepiece.CUBE)
         ),
         new PickupPresetSequence(telescope, rotator, croc, intake).withTimeout(3).withTimeout(2.5),
-        new ParallelCommandGroup(new RunCommand(() -> intake.setIntakeSpeed(.75), intake),
+        new ParallelCommandGroup(new RunCommand(() -> intake.setIntakeSpeed(-0.75), intake),
         new SwerveTrajectoryFollowCommand(driveBase, "intakeForward", defaultConfig, false)).withTimeout(3),
         new StowPresetSequence(telescope, rotator, croc, intake, () -> 0, () -> Gamepiece.CUBE)
 
