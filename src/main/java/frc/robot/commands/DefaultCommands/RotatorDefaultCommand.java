@@ -67,7 +67,7 @@ public class RotatorDefaultCommand extends CommandBase {
             //     return;
             // if (joystickVal > 0 && rotator.getMeasurementDegrees() > 250)
             //     return;
-         if (Math.abs(joystickVal) > 0.05){
+         if (Math.abs(joystickVal) > 0.1){
             rotator.setSpeed(MathUtil.clamp(joystickVal * 0.5, -0.5, 0.5));
             rotator.setRunPID(false);
          }

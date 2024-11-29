@@ -14,15 +14,23 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.RotatorSubsystem;
 import frc.robot.subsystems.CrocodileSubsystem;
 import frc.robot.commands.*;
-import frc.robot.commands.Autos.BluePreloadOnly;
-import frc.robot.commands.Autos.BluePreloadParkCenter;
-import frc.robot.commands.Autos.RedPreloadOnly;
-import frc.robot.commands.Autos.RedPreloadParkCenter;
+import frc.robot.commands.Autos.PreloadParkCenter;
+import frc.robot.commands.Autos.PreloadPlusOneLeft;
+import frc.robot.commands.Autos.PreloadPlusOneRight;
+import frc.robot.commands.Autos.EXIT_COMMUNITY;
+import frc.robot.commands.Autos.DO_NOTHING;
 import frc.robot.commands.DefaultCommands.CrocodileDefaultCommand;
 import frc.robot.commands.DefaultCommands.RotatorDefaultCommand;
 import frc.robot.commands.DefaultCommands.TeleopDrivebaseDefaultCommand;
 import frc.robot.commands.DefaultCommands.TelescopeDefault;
+import frc.robot.commands.Presets.HighPresetSequence;
+import frc.robot.commands.Presets.MidPresetSequence;
+import frc.robot.commands.Presets.PickupPresetSequence;
+import frc.robot.commands.Presets.StowPresetSequence;
+import frc.robot.commands.Presets.SubstationPickupPresetSequence;
 import frc.robot.subsystems.TelescopeSubsystem;
+import frc.robot.subsystems.CrocodileSubsystem.GamePiece;
+import frc.robot.subsystems.CrocodileSubsystem.WristPosition;
 import frc.robot.subsystems.Swerve.DrivebaseSubsystem;
 
 /**
@@ -60,6 +68,7 @@ public class RobotContainer {
   private final RotatorSubsystem rotator;
   private final CrocodileSubsystem endEffector;
   private final TelescopeSubsystem telescope;
+  //private final CandleSubsystem candle;
 
   private UsbCamera camera = CameraServer.startAutomaticCapture();
   private SendableChooser<Command> autoChooser = new SendableChooser<>();
@@ -71,8 +80,12 @@ public class RobotContainer {
 
     swerve = new DrivebaseSubsystem();
     telescope = new TelescopeSubsystem();
-    rotator = new RotatorSubsystem();
+    SmartDashboard.putData("Telescope", telescope);
+    rotator = new RotatorSubsystem(telescope);
+    SmartDashboard.putData("Rotator", rotator);
     endEffector = new CrocodileSubsystem();
+    SmartDashboard.putData("Intake", endEffector);
+    //candle = new CandleSubsystem();
 
     camera.setResolution(160, 120);
     camera.setFPS(30);
@@ -94,19 +107,21 @@ public class RobotContainer {
     telescope.setDefaultCommand(
         new TelescopeDefault(
             telescope,
-            () -> -mechController.getLeftY()));
+            () -> -mechController.getLeftY(),
+            mechController.leftBumper()));
 
     endEffector.setDefaultCommand(new CrocodileDefaultCommand(
         endEffector,
         () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
+        () -> (mechController.getRightTriggerAxis() - mechController.getLeftTriggerAxis()),
         (t) -> driverController.getHID().setRumble(RumbleType.kBothRumble, t)));
-    // autoChooser.setDefaultOption("Blue 1+Park", new BluePreloadParkCenter(swerve, endEffector, rotator, telescope));
-    // autoChooser.addOption("Blue Preload", new BluePreloadOnly(swerve, endEffector, rotator, telescope));
-    // autoChooser.addOption("Red 1+Park", new RedPreloadParkCenter(swerve, endEffector, rotator, telescope));
-    // autoChooser.addOption("Red Preload", new RedPreloadOnly(swerve, endEffector, rotator, telescope));
 
+    autoChooser.setDefaultOption("CENTER Preload Park", new PreloadParkCenter(swerve, endEffector, rotator, telescope));
+    autoChooser.addOption("RIGHT Preload + 1", new PreloadPlusOneRight(swerve, endEffector, rotator, telescope));
+    autoChooser.addOption("LEFT Preload + 1", new PreloadPlusOneLeft(swerve, endEffector, rotator, telescope));
+    autoChooser.addOption("EXIT COMMUNITY", new EXIT_COMMUNITY(swerve, endEffector, rotator, telescope));
+    autoChooser.addOption("DO NOTHING", new DO_NOTHING(swerve, endEffector, rotator, telescope));
     SmartDashboard.putData("Selected Autonomous", autoChooser);
-
 
     // Configure the button bindings
     configureButtonBindings();
@@ -126,24 +141,43 @@ public class RobotContainer {
 
     zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
 
-    // mechController.a().onTrue(new RotatorToPosition(rotator, telescope, 230));
-    mechController.y().onTrue(new RotatorToPosition(rotator, telescope, 200));
-    mechController.x().onTrue(new TelescopeToPosition(telescope, 0.9));
-    mechController.b().onTrue(new InstantCommand(() -> telescope.resetEncoder()));
-    driverController.y().onTrue(new AutoIntakeCommand(endEffector, 0.5));
-    driverController.x().onTrue(new AutoIntakeCommand(endEffector, -0.5));
+    mechController.a().onTrue(new PickupPresetSequence(telescope, rotator, endEffector, driverController.y()));
+    mechController.y()
+        .onTrue(new StowPresetSequence(telescope, rotator, endEffector,
+            () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
+            () -> endEffector.getGamePiece()));
+    mechController.x().onTrue(new HighPresetSequence(telescope, rotator, endEffector,
+        () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
+        () -> endEffector.getGamePiece()));
+    mechController.b().onTrue(new MidPresetSequence(telescope, rotator, endEffector,
+        () -> (driverController.getRightTriggerAxis() - driverController.getLeftTriggerAxis()),
+        () -> endEffector.getGamePiece()));
+    mechController.povLeft().onTrue(new InstantCommand(() -> telescope.resetEncoder()));
+    mechController.button(8).onTrue(new InstantCommand(() -> {
+      endEffector.setGamePiece(GamePiece.CONE);
+      //candle.cone();
+    }, endEffector));
+    mechController.button(7).onTrue(new InstantCommand(() -> {
+      endEffector.setGamePiece(GamePiece.CUBE);
+      //candle.cube();
+    }, endEffector));
+    mechController.povDown()
+        .onTrue(new SubstationPickupPresetSequence(telescope, rotator, endEffector, driverController.y(),
+            () -> endEffector.getGamePiece()));
+    // driverController.y().onTrue(new AutoIntakeCommand(endEffector, 0.5, driverController.y()));
+    driverController.leftBumper().onTrue(new AutoIntakeCommand(endEffector, 0.75, driverController.leftBumper()));
   }
 
   public void teleopInit() {
-    telescope.setToCurrentPosition();
-    rotator.setToCurrentPosition();
-    endEffector.setToCurrentPosition();
+    telescope.onInit();
+    rotator.onInit();
+    endEffector.onInit();
   }
 
   public void autonomousInit() {
-    telescope.setToCurrentPosition();
-    rotator.setToCurrentPosition();
-    endEffector.setToCurrentPosition();
+    telescope.onInit();
+    rotator.onInit();
+    endEffector.onInit();
   }
 
   /**
@@ -153,9 +187,9 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // System.out.println("Selected Autonomous: " + autoChooser.getSelected());
-    // return autoChooser.getSelected();
+    return autoChooser.getSelected();
     // return null;
-    return new InstantCommand();
-    //return new BluePreloadOnly(swerve, endEffector, rotator, telescope);
+    // return new InstantCommand();
+    // return new BluePreloadOnly(swerve, endEffector, rotator, telescope);
   }
 }

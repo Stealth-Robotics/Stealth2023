@@ -13,7 +13,7 @@ public class LevelRobot extends CommandBase {
     private static final double PID_kI = 0.001;
     private static final double PID_kD = 0.05;
     // Dont allow it to go faster than 70% motor speed
-    private static final double LEVELING_DRIVE_SPEED_LIMIT = 0.7;
+    private static final double LEVELING_DRIVE_SPEED_LIMIT = 0.6;
 
     private final DrivebaseSubsystem drive;
     // Construct the PID controller

@@ -53,6 +53,15 @@ public class SwerveTrajectoryFollowCommand extends CommandBase {
         }
     }
 
+    public SwerveTrajectoryFollowCommand(DrivebaseSubsystem drivetrain, String pathFilename, TrajectoryConfig config,
+            boolean isInitial) {
+        this(drivetrain, pathFilename, config, false, isInitial);
+    }
+
+    public SwerveTrajectoryFollowCommand(DrivebaseSubsystem drivetrain, String pathFilename, TrajectoryConfig config) {
+        this(drivetrain, pathFilename, config, false, false);
+    }
+
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
@@ -96,7 +105,7 @@ public class SwerveTrajectoryFollowCommand extends CommandBase {
         timer.stop();
     }
 
-    // Returns true when the command should end.
+    // Returns true when the command should   end.
     @Override
     public boolean isFinished() {
         // the path is time parametrized and takes a certain number of seconds
