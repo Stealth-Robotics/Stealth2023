@@ -139,12 +139,8 @@ public class RotatorSubsystem extends SubsystemBase {
     public boolean atSetpoint() {
         return pid.atSetpoint();
     }
-
-    public void togglePID() {
-        runPID = !runPID;
-    }
-
-    public void setRunPID(boolean set) {
+  
+    public void setRunPID(boolean set){
         runPID = set;
     }
 
